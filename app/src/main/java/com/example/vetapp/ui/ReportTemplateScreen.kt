@@ -29,13 +29,12 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import com.example.vetapp.reports.FieldType
-import com.example.vetapp.reports.FormField
-import com.example.vetapp.ui.viewmodels.ReportTemplateViewModel
+import com.example.vetapp.reports.ReportTemplateField
 
 @Composable
 fun ReportTemplateScreen(
 ) {
-    var formItems by remember { mutableStateOf(listOf<FormField>()) }
+    var formItems by remember { mutableStateOf(listOf<ReportTemplateField>()) }
     var showDialog by remember { mutableStateOf(false) }
     var label by remember { mutableStateOf("") }
     var selectedType by remember { mutableStateOf("Type 1") }
@@ -79,7 +78,7 @@ fun ReportTemplateScreen(
 @Composable
 fun AddItemDialog(
     onDismiss:() -> Unit,
-    onSave: (FormField) -> Unit,
+    onSave: (ReportTemplateField) -> Unit,
     currentLabel: String,
     onLabelChange: (String) -> Unit,
     selectedType: String,
@@ -144,7 +143,7 @@ fun AddItemDialog(
                     Button(
                         onClick = {
                             // Create the new FormField and save it using onSave
-                            val newField = FormField(
+                            val newField = ReportTemplateField(
                                 label = currentLabel,
                                 fieldType = FieldType.valueOf(selectedType) // Convert string to FieldType
                             )
