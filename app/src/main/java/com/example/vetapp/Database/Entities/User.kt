@@ -3,7 +3,9 @@ package com.example.vetapp.Database.Entities
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-@Entity
+@Entity(tableName = "user_table")
 data class User(
-    @PrimaryKey val uid: Int,
+    @PrimaryKey(autoGenerate = true) val uid: Int = 0,
+    val name: String,
+    val email: String,
 )
