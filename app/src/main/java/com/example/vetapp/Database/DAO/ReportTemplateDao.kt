@@ -9,9 +9,12 @@ import com.example.vetapp.Database.Entities.ReportTemplateField
 
 @Dao
 interface ReportTemplateDao {
-    @Query("SELECT * FROM User")
+    @Query("SELECT * FROM ReportTemplateField")
     fun getAll(): LiveData<List<ReportTemplateField>>
 
     @Insert
     fun insertAll(vararg users: ReportTemplateField)
+
+    @Query("SELECT * FROM REPORTTEMPLATEFIELD WHERE reportId = :id")
+    fun getReportById(id: Int): LiveData<List<ReportTemplateField>>
 }
