@@ -12,6 +12,7 @@ import dagger.Component
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -20,7 +21,7 @@ class ReportsRepository @Inject constructor(
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO,
     private val reportDao : ReportsDao) : IReportsRepository  {
 
-        override fun reportsObservable(): LiveData<List<Reports>> {
+        override fun reportsObservable(): Flow<List<Reports>> {
             return reportDao.getAll()
         }
 

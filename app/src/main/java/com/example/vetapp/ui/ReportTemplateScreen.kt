@@ -19,13 +19,16 @@ import com.example.vetapp.Database.Entities.Reports
 import com.example.vetapp.reports.ReportTemplateField
 import com.example.vetapp.viewmodels.ReportViewModel
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.asLiveData
 import com.example.vetapp.ui.componets.reports.AddReportDialog
 
 @Composable
 fun ReportTemplateScreen(viewModel: ReportViewModel = hiltViewModel()
 ) {
-    var reports by remember { mutableStateOf(listOf<Reports>()) }
-    var formItems by remember { mutableStateOf(listOf<ReportTemplateField>()) }
+
+    val reportState = viewModel.reportTemplateFields.asLiveData()
+    val reports = viewModel.reports.asLiveData()
+    //var formItems by remember { mutableStateOf(listOf<ReportTemplateField>()) }
     var showDialog by remember { mutableStateOf(false) }
     var label by remember { mutableStateOf("") }
     var selectedType by remember { mutableStateOf("Type 1") }
@@ -44,7 +47,7 @@ fun ReportTemplateScreen(viewModel: ReportViewModel = hiltViewModel()
 
         // Show the list of form items
         Spacer(modifier = Modifier.height(16.dp))
-        reports.forEach { item ->
+        reports.value?.forEach { item ->
             Text("${item.Name}")
         }
     }
@@ -54,8 +57,8 @@ fun ReportTemplateScreen(viewModel: ReportViewModel = hiltViewModel()
         AddReportDialog(
             onDismiss = { showDialog = false },
             onSave = { newItem ->
-                formItems = formItems + newItem
-                showDialog = false
+                //reportState = reportState + newItem
+                //showDialog = false
             },
             currentLabel = label,
             onLabelChange = { label = it },

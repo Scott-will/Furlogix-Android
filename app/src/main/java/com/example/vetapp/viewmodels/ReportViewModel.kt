@@ -16,6 +16,7 @@ class ReportViewModel @Inject constructor(
     private val reportRepository : IReportsRepository) : ViewModel()
 {
     val reportTemplateFields = reportTemplateRepository.ReportTemplateObservable()
+    val reports = reportRepository.reportsObservable()
 
     fun insert(reportTemplateField: List<ReportTemplateField>, name : String ){
         //insert report

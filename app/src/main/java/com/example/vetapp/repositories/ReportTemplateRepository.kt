@@ -10,6 +10,7 @@ import com.example.vetapp.injectionModules.ReportsRepositoryModule
 import dagger.Component
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -19,7 +20,7 @@ class ReportTemplateRepository @Inject constructor(
     private val reportTemplateDao :ReportTemplateDao) : IReportTemplateRepository {
         //private val reportTemplateDao : ReportTemplateDao = AppDatabase.getDatabase(VetApplication.applicationContext()).reportTemplateDao()
 
-        override fun ReportTemplateObservable() : LiveData<List<ReportTemplateField>> {
+        override fun ReportTemplateObservable() : Flow<List<ReportTemplateField>> {
             return reportTemplateDao.getAll()
         }
 
@@ -27,7 +28,7 @@ class ReportTemplateRepository @Inject constructor(
             return reportTemplateDao.insertAll()
         }
 
-        override fun GetReportById(id: Int): LiveData<List<ReportTemplateField>> {
+        override fun GetReportById(id: Int): Flow<List<ReportTemplateField>> {
             return reportTemplateDao.getReportById(id)
         }
 

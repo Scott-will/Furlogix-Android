@@ -6,11 +6,12 @@ import androidx.room.Insert
 import androidx.room.Query
 import com.example.vetapp.Database.Entities.ReportTemplateField
 import com.example.vetapp.Database.Entities.Reports
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface ReportsDao {
     @Query("SELECT * FROM Reports")
-    fun getAll(): LiveData<List<Reports>>
+    fun getAll(): Flow<List<Reports>>
 
     @Insert
     fun insert(vararg reports: Reports)

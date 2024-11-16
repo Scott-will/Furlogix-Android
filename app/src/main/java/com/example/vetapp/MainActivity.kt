@@ -17,7 +17,7 @@ import com.example.vetapp.ui.CreateAccountScreen
 import com.example.vetapp.ui.DashboardScreen
 import com.example.vetapp.ui.ReportTemplateScreen
 
-class MainActivity : ComponentActivity() {
+class MainActivity : ComponentActivity()  {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         //init database
