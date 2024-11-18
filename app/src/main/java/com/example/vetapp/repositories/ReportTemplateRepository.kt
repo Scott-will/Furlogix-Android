@@ -1,13 +1,7 @@
 package com.example.vetapp.repositories
 
-import android.database.Observable
-import androidx.lifecycle.LiveData
-import com.example.vetapp.Database.AppDatabase
 import com.example.vetapp.Database.DAO.ReportTemplateDao
 import com.example.vetapp.Database.Entities.ReportTemplateField
-import com.example.vetapp.VetApplication
-import com.example.vetapp.injectionModules.ReportsRepositoryModule
-import dagger.Component
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -18,17 +12,16 @@ import javax.inject.Singleton
 class ReportTemplateRepository @Inject constructor(
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO,
     private val reportTemplateDao :ReportTemplateDao) : IReportTemplateRepository {
-        //private val reportTemplateDao : ReportTemplateDao = AppDatabase.getDatabase(VetApplication.applicationContext()).reportTemplateDao()
 
         override fun ReportTemplateObservable() : Flow<List<ReportTemplateField>> {
             return reportTemplateDao.getAll()
         }
 
-        override fun insertReportTemplateFields(reportTemplateFields : List<ReportTemplateField>){
+        override suspend fun insertReportTemplateFields(reportTemplateFields : List<ReportTemplateField>){
             return reportTemplateDao.insertAll()
         }
 
-        override fun GetReportById(id: Int): Flow<List<ReportTemplateField>> {
+        override suspend fun GetReportById(id: Int): Flow<List<ReportTemplateField>> {
             return reportTemplateDao.getReportById(id)
         }
 

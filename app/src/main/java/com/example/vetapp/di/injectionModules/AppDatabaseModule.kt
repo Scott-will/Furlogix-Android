@@ -1,4 +1,4 @@
-package com.example.vetapp.injectionModules
+package com.example.vetapp.di.injectionModules
 
 import android.content.Context
 import androidx.room.Room

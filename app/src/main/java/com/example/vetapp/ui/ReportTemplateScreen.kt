@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -15,8 +16,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.example.vetapp.Database.Entities.Reports
-import com.example.vetapp.reports.ReportTemplateField
 import com.example.vetapp.viewmodels.ReportViewModel
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.asLiveData
@@ -26,9 +25,8 @@ import com.example.vetapp.ui.componets.reports.AddReportDialog
 fun ReportTemplateScreen(viewModel: ReportViewModel = hiltViewModel()
 ) {
 
-    val reportState = viewModel.reportTemplateFields.asLiveData()
-    val reports = viewModel.reports.asLiveData()
-    //var formItems by remember { mutableStateOf(listOf<ReportTemplateField>()) }
+    val reportState = viewModel.reportTemplateFields.collectAsState()
+    val reports = viewModel.reports.collectAsState()
     var showDialog by remember { mutableStateOf(false) }
     var label by remember { mutableStateOf("") }
     var selectedType by remember { mutableStateOf("Type 1") }
@@ -44,10 +42,16 @@ fun ReportTemplateScreen(viewModel: ReportViewModel = hiltViewModel()
         Button(onClick = { showDialog = true }, modifier = Modifier.align(Alignment.CenterHorizontally)) {
             Text("Add New Item")
         }
-
+        Spacer(modifier = Modifier.height(16.dp))
+        Button(
+            onClick = { viewModel.insert(emptyList(), "Test") },
+            modifier = Modifier.align(Alignment.CenterHorizontally)
+        ){
+            Text("Add Report Test")
+        }
         // Show the list of form items
         Spacer(modifier = Modifier.height(16.dp))
-        reports.value?.forEach { item ->
+        reports.value.forEach { item ->
             Text("${item.Name}")
         }
     }

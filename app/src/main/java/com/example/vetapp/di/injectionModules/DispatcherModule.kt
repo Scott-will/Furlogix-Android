@@ -1,4 +1,4 @@
-package com.example.vetapp.injectionModules
+package com.example.vetapp.di.injectionModules
 
 import dagger.Module
 import dagger.Provides

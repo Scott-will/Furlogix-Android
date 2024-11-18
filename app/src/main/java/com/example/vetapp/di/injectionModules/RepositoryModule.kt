@@ -1,23 +1,21 @@
-package com.example.vetapp.injectionModules
+package com.example.vetapp.di.injectionModules
 
-import androidx.lifecycle.LiveData
 import com.example.vetapp.Database.AppDatabase
+import com.example.vetapp.Database.DAO.ReportTemplateDao
 import com.example.vetapp.Database.DAO.ReportsDao
-import com.example.vetapp.Database.Entities.Reports
+import com.example.vetapp.repositories.IReportTemplateRepository
 import com.example.vetapp.repositories.IReportsRepository
+import com.example.vetapp.repositories.ReportTemplateRepository
 import com.example.vetapp.repositories.ReportsRepository
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
-import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-abstract class ReportsRepositoryModule {
+abstract class RepositoryModule {
 
     // Bind ReportsRepository interface to its implementation
     @Binds
@@ -28,5 +26,13 @@ abstract class ReportsRepositoryModule {
         fun provideReportsDao(database: AppDatabase): ReportsDao {
             return database.reportsDao()
         }
+
+        @Provides
+        fun provideReportTemplateDao(database: AppDatabase): ReportTemplateDao {
+            return database.reportTemplateDao()
+        }
     }
+
+    @Binds
+    abstract fun bindReportTemplateRepository(reportsRepository: ReportTemplateRepository): IReportTemplateRepository
 }

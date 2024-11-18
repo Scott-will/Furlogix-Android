@@ -16,7 +16,9 @@ import com.example.vetapp.ui.LoginScreen
 import com.example.vetapp.ui.CreateAccountScreen
 import com.example.vetapp.ui.DashboardScreen
 import com.example.vetapp.ui.ReportTemplateScreen
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity()  {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
