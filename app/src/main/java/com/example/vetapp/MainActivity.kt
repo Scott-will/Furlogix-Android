@@ -15,8 +15,11 @@ import com.example.vetapp.ui.navigation.Screen
 import com.example.vetapp.ui.LoginScreen
 import com.example.vetapp.ui.CreateAccountScreen
 import com.example.vetapp.ui.DashboardScreen
+import com.example.vetapp.ui.ReportTemplateScreen
+import dagger.hilt.android.AndroidEntryPoint
 
-class MainActivity : ComponentActivity() {
+@AndroidEntryPoint
+class MainActivity : ComponentActivity()  {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         //init database
@@ -37,9 +40,10 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun VetApp() {
     val navController = rememberNavController()
-    NavHost(navController = navController, startDestination = Screen.Login.route) {
+    NavHost(navController = navController, startDestination = Screen.ReportsTemplate.route) {
         composable(Screen.Login.route) { LoginScreen(navController) }
         composable(Screen.CreateAccount.route) { CreateAccountScreen(navController) }
         composable(Screen.Dashboard.route) { DashboardScreen() }
+        composable(Screen.ReportsTemplate.route) { ReportTemplateScreen() }
     }
 }
