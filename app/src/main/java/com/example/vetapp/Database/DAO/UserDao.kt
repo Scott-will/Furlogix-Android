@@ -27,4 +27,13 @@ interface UserDao {
 
     @Query("SELECT * FROM user_table WHERE uid = :userId")
     fun getUserById(userId: Int): User?
+
+    @Query("SELECT * FROM user_table WHERE name = :name LIMIT 1")
+    fun getUserByName(name: String): User?
+
+    @Query("SELECT COUNT(*) FROM user_table")
+    suspend fun countUsers(): Int
+
+    @Query("DELETE FROM user_table")
+    suspend fun deleteAllUsers()
 }

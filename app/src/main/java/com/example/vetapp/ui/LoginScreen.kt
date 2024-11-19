@@ -9,60 +9,34 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.example.vetapp.viewmodels.LoginViewModel
 
 @Composable
 fun LoginScreen(navController: NavController) {
     // State variables to hold the username and password values
     var username by remember { mutableStateOf("") }
-    var password by remember { mutableStateOf("") }
 
-    // Layout for the login screen
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Text(text = "Login", fontSize = 24.sp)
+    var viewModel: LoginViewModel = hiltViewModel()
 
-        Spacer(modifier = Modifier.height(24.dp))
+    // State for handling user existence check
+    var userExists by remember { mutableStateOf<Boolean?>(null) }
 
-        // Username TextField
-        TextField(
-            value = username,
-            onValueChange = { username = it },
-            label = { Text("Username") },
-            modifier = Modifier.fillMaxWidth()
-        )
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        Spacer(modifier = Modifier.height(24.dp))
-
-        // Login Button
-        Button(
-            onClick = {
-                // Logic to validate and log in the user can be added here
-                navController.navigate("dashboard")
-            },
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Text("Login To Profile")
+    LaunchedEffect(Unit) {
+        viewModel.doesUserExist { exists ->
+            userExists = exists
         }
+    }
 
-        Spacer(modifier = Modifier.height(16.dp))
-
-        // Create Account Button
-        Button(
-            onClick = {
-                // Navigate to the create account screen
+    // Automatically redirect if user existence is determined
+    LaunchedEffect(userExists) {
+        userExists?.let { exists ->
+            if (exists) {
+                navController.navigate("dashboard")
+            } else {
                 navController.navigate("create_account")
-            },
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Text("Create Profile")
+            }
         }
     }
 }
