@@ -1,5 +1,6 @@
 package com.example.vetapp.Database.DAO
 
+import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
@@ -36,4 +37,7 @@ interface UserDao {
 
     @Query("DELETE FROM user_table")
     suspend fun deleteAllUsers()
+
+    @Query("SELECT name FROM user_table LIMIT 1")
+    fun getCurrentUserName(): LiveData<String>
 }
