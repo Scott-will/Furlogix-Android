@@ -39,14 +39,6 @@ fun LoginScreen(navController: NavController) {
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // Password TextField
-        TextField(
-            value = password,
-            onValueChange = { password = it },
-            label = { Text("Password") },
-            modifier = Modifier.fillMaxWidth()
-        )
-
         Spacer(modifier = Modifier.height(24.dp))
 
         // Login Button
@@ -57,7 +49,7 @@ fun LoginScreen(navController: NavController) {
             },
             modifier = Modifier.fillMaxWidth()
         ) {
-            Text("Login")
+            Text("Login To Profile")
         }
 
         Spacer(modifier = Modifier.height(16.dp))
@@ -70,7 +62,7 @@ fun LoginScreen(navController: NavController) {
             },
             modifier = Modifier.fillMaxWidth()
         ) {
-            Text("Create an Account")
+            Text("Create Profile")
         }
     }
 }

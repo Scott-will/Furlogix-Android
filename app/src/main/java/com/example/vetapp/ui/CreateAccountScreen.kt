@@ -12,6 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.vetapp.ui.navigation.Screen
 
@@ -21,8 +22,9 @@ fun CreateAccountScreen(navController: NavController) {
     Column(
         modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
+        verticalArrangement = Arrangement.spacedBy(16.dp, Alignment.CenterVertically)
     ) {
+        Text(text = "Create Profile", fontSize = 24.sp)
         TextField(
             value = "", onValueChange = {}, label = { Text("Name") }
         )
@@ -35,12 +37,9 @@ fun CreateAccountScreen(navController: NavController) {
         TextField(
             value = "", onValueChange = {}, label = { Text("Email") }
         )
-        TextField(
-            value = "", onValueChange = {}, label = { Text("Password") }
-        )
         Spacer(modifier = Modifier.height(16.dp))
         Button(onClick = { navController.navigate(Screen.Dashboard.route) }) {
-            Text("Create Account")
+            Text("Create Profile")
         }
     }
 }

@@ -40,10 +40,10 @@ class MainActivity : ComponentActivity()  {
 @Composable
 fun VetApp() {
     val navController = rememberNavController()
-    NavHost(navController = navController, startDestination = Screen.ReportsTemplate.route) {
+    NavHost(navController = navController, startDestination = Screen.Login.route) {
         composable(Screen.Login.route) { LoginScreen(navController) }
         composable(Screen.CreateAccount.route) { CreateAccountScreen(navController) }
-        composable(Screen.Dashboard.route) { DashboardScreen() }
-        composable(Screen.ReportsTemplate.route) { ReportTemplateScreen() }
+        composable(Screen.Dashboard.route) { DashboardScreen(navController) }
+        composable(Screen.ReportsTemplate.route) { ReportTemplateScreen(navController = navController) }
     }
 }

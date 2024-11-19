@@ -1,5 +1,6 @@
 package com.example.vetapp.ui
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -19,11 +20,11 @@ import androidx.compose.ui.unit.dp
 import com.example.vetapp.viewmodels.ReportViewModel
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.asLiveData
+import androidx.navigation.NavController
 import com.example.vetapp.ui.componets.reports.AddReportDialog
 
 @Composable
-fun ReportTemplateScreen(viewModel: ReportViewModel = hiltViewModel()
-) {
+fun ReportTemplateScreen(viewModel: ReportViewModel = hiltViewModel(), navController: NavController) {
 
     val reportState = viewModel.reportTemplateFields.collectAsState()
     val reports = viewModel.reports.collectAsState()
@@ -31,12 +32,14 @@ fun ReportTemplateScreen(viewModel: ReportViewModel = hiltViewModel()
     var label by remember { mutableStateOf("") }
     var selectedType by remember { mutableStateOf("Type 1") }
 
+    AppHeader(navController = navController)
     // Button to show the dialog
     Column(
         modifier = Modifier
             .fillMaxSize()
             .padding(16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
     ) {
         Spacer(modifier = Modifier.height(16.dp))
         Button(onClick = { showDialog = true }, modifier = Modifier.align(Alignment.CenterHorizontally)) {
