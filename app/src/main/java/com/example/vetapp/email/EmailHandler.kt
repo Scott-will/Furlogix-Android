@@ -5,11 +5,16 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.widget.Toast
-class EmailHandler {
+import javax.inject.Inject
+
+class EmailHandler @Inject constructor(
+    private val context: Context
+) : IEmailHandler {
     val TAG: String = "EmailService"
-    fun SendEmail(email: EmailWrapper?) {
+    override fun SendEmail(email: EmailWrapper?) {
     }
-    fun SendEmail(context: Context, emailIntent: Intent) {
+
+    fun SendEmail(emailIntent: Intent) {
         try{
             context.startActivity(emailIntent)
         }
@@ -17,18 +22,19 @@ class EmailHandler {
             Toast.makeText(context, "No email clients installed.", Toast.LENGTH_SHORT).show()
         }
     }
-    fun CreateEmail(context: Context, email: EmailWrapper) : Intent {
+
+    override fun CreateEmail(wrapper: EmailWrapper?) : Intent {
         val emailIntent = Intent(Intent.ACTION_SENDTO).apply {
             data = Uri.parse("mailto:") // Only email apps handle this.
             putExtra(Intent.EXTRA_EMAIL, arrayOf("placeholder@gmail.com"))
             putExtra(Intent.EXTRA_SUBJECT, "test")
             addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         }
-        this.SendEmail(context, emailIntent)
+        this.SendEmail(emailIntent)
         return emailIntent
     }
-    fun CreateAndSendEmail(context: Context, email: EmailWrapper){
-        val emailIntent = this.CreateEmail(context, email)
-        this.SendEmail(context, emailIntent)
+    override  fun CreateAndSendEmail(email: EmailWrapper){
+        val emailIntent = this.CreateEmail(email)
+        this.SendEmail(emailIntent)
     }
 }
