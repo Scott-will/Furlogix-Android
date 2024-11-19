@@ -3,6 +3,7 @@ package com.example.vetapp.di.injectionModules
 import android.content.Context
 import androidx.room.Room
 import com.example.vetapp.Database.AppDatabase
+import com.example.vetapp.Database.DAO.UserDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -26,5 +27,10 @@ object AppDatabaseModule {
             "reports_database" // Database name
         ).fallbackToDestructiveMigration() // Optional: Handle schema changes
             .build()
+    }
+
+    @Provides
+    fun provideUserDao(database: AppDatabase): UserDao {
+        return database.userDao()
     }
 }

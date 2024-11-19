@@ -9,16 +9,28 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.vetapp.ui.navigation.Screen
+import com.example.vetapp.viewmodels.CreateProfileViewModel
 
 
 @Composable
 fun CreateAccountScreen(navController: NavController) {
+    val viewModel: CreateProfileViewModel = hiltViewModel()
+    var name by remember { mutableStateOf("") }
+    var surname by remember { mutableStateOf("") }
+    var petName by remember { mutableStateOf("") }
+    var email by remember { mutableStateOf("") }
+
     Column(
         modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -26,19 +38,22 @@ fun CreateAccountScreen(navController: NavController) {
     ) {
         Text(text = "Create Profile", fontSize = 24.sp)
         TextField(
-            value = "", onValueChange = {}, label = { Text("Name") }
+            value = name, onValueChange = { name = it }, label = { Text("Name") }
         )
         TextField(
-            value = "", onValueChange = {}, label = { Text("Surname") }
+            value = surname, onValueChange = { surname = it }, label = { Text("Surname") }
         )
         TextField(
-            value = "", onValueChange = {}, label = { Text("Pet Name") }
+            value = petName, onValueChange = { petName = it }, label = { Text("Pet Name") }
         )
         TextField(
-            value = "", onValueChange = {}, label = { Text("Email") }
+            value = email, onValueChange = { email = it }, label = { Text("Email") }
         )
         Spacer(modifier = Modifier.height(16.dp))
-        Button(onClick = { navController.navigate(Screen.Dashboard.route) }) {
+        Button(onClick = {
+            viewModel.addUser(name, surname, petName, email)
+            navController.navigate(Screen.Dashboard.route)
+        }) {
             Text("Create Profile")
         }
     }
