@@ -8,8 +8,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material3.Button
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -23,7 +21,6 @@ import androidx.compose.ui.unit.dp
 import com.example.vetapp.viewmodels.ReportViewModel
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import com.example.vetapp.ui.componets.common.AddItemButton
 import com.example.vetapp.ui.componets.reports.AddReportDialog
 import com.example.vetapp.ui.componets.reports.ReportsList
@@ -65,7 +62,7 @@ fun ReportScreen(navController: NavController, viewModel: ReportViewModel = hilt
                 viewModel.insert(reportTemplateField = emptyList(), newItem.Name)
                 //showDialog = false
             },
-            currentLabel = label,
+            currentLabel = "",
             onLabelChange = { label = it },
         )
     }

@@ -24,12 +24,13 @@ import com.example.vetapp.viewmodels.ReportViewModel
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.vetapp.ui.componets.common.AddItemButton
+import com.example.vetapp.ui.componets.common.NoDataAvailable
 import com.example.vetapp.ui.componets.reports.AddReportDialog
 import com.example.vetapp.ui.componets.reports.AddReportTemplateDialog
 import com.example.vetapp.ui.componets.reports.ReportsList
 
 @Composable
-fun ReportTemplateScreen(navController: NavController, viewModel: ReportViewModel = hiltViewModel()
+fun ReportTemplateScreen(navController: NavController, reportId : Int = 0, viewModel: ReportViewModel = hiltViewModel()
 ) {
 
     val reportTemplateState = viewModel.reportTemplateFields.collectAsState()
@@ -44,6 +45,18 @@ fun ReportTemplateScreen(navController: NavController, viewModel: ReportViewMode
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         // Show the Material 3 Dialog for adding new item
+        val reportsTemplates = reportTemplateState.value.filter { it.reportId == reportId }
+        if(reportsTemplates.size == 0 ){
+            NoDataAvailable("Report Fields")
+        }
+        Spacer(modifier = Modifier.height(16.dp))
+        AddItemButton(onClick = { showDialog = true }, localModifier = Modifier
+            .size(56.dp) // Size of the button
+            .background(
+                color = Color.Gray, // Background color of the button
+                shape = CircleShape // Circular shape
+            )
+            .align(Alignment.Start))
         if (showDialog) {
             AddReportTemplateDialog(
                 onDismiss = { showDialog = false },
