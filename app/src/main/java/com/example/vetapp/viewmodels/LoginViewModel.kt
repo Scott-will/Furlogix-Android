@@ -10,13 +10,6 @@ import javax.inject.Inject
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(private val userDao: UserDao) : ViewModel() {
-    fun deleteAllUsers(onComplete: () -> Unit) {
-        viewModelScope.launch(Dispatchers.IO) {
-            userDao.deleteAllUsers()
-            onComplete()
-        }
-    }
-
     fun doesUserExist(onResult: (Boolean) -> Unit) {
         viewModelScope.launch(Dispatchers.IO) {
             val userExists = userDao.countUsers() > 0
