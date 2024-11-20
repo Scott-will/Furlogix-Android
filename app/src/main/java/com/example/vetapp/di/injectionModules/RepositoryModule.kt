@@ -3,6 +3,8 @@ package com.example.vetapp.di.injectionModules
 import com.example.vetapp.Database.AppDatabase
 import com.example.vetapp.Database.DAO.ReportTemplateDao
 import com.example.vetapp.Database.DAO.ReportsDao
+import com.example.vetapp.email.EmailHandler
+import com.example.vetapp.email.IEmailHandler
 import com.example.vetapp.repositories.IReportTemplateRepository
 import com.example.vetapp.repositories.IReportsRepository
 import com.example.vetapp.repositories.ReportTemplateRepository
@@ -17,9 +19,12 @@ import dagger.hilt.components.SingletonComponent
 @InstallIn(SingletonComponent::class)
 abstract class RepositoryModule {
 
-    // Bind ReportsRepository interface to its implementation
+    // repository binding
     @Binds
     abstract fun bindReportsRepository(reportsRepository: ReportsRepository): IReportsRepository
+
+    @Binds
+    abstract fun bindReportTemplateRepository(reportsRepository: ReportTemplateRepository): IReportTemplateRepository
 
     companion object {
         @Provides
@@ -32,7 +37,4 @@ abstract class RepositoryModule {
             return database.reportTemplateDao()
         }
     }
-
-    @Binds
-    abstract fun bindReportTemplateRepository(reportsRepository: ReportTemplateRepository): IReportTemplateRepository
 }
