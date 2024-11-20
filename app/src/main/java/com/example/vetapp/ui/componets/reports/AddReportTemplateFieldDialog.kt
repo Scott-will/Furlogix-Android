@@ -27,17 +27,19 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
-import com.example.vetapp.Database.Entities.Reports
 import com.example.vetapp.reports.FieldType
 import com.example.vetapp.reports.ReportTemplateField
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AddReportDialog(
+fun AddReportTemplateDialog(
     onDismiss:() -> Unit,
-    onSave: (Reports) -> Unit,
+    onSave: (ReportTemplateField) -> Unit,
     currentLabel: String,
-    onLabelChange: (String) -> Unit){
+    onLabelChange: (String) -> Unit,
+    selectedType: String,
+    onTypeChange: (String) -> Unit){
+    val fieldTypes = FieldType.values()
     Dialog(onDismissRequest = onDismiss) {
         Surface(
             shape = MaterialTheme.shapes.medium,
@@ -48,7 +50,7 @@ fun AddReportDialog(
                 modifier = Modifier.padding(16.dp).fillMaxWidth()
             ) {
                 //field name
-                Text("Report Name: ")
+                Text("Field Name: ")
                 OutlinedTextField(
                     value = currentLabel,
                     onValueChange = onLabelChange,
@@ -58,12 +60,49 @@ fun AddReportDialog(
                     ),
                     modifier = Modifier.fillMaxWidth().padding(8.dp)
                 )
+
+                Spacer(modifier = Modifier.height(8.dp))
+
+                //drop down for field type selection
+                Text("Input Type:")
+                var expanded by remember{ mutableStateOf<Boolean>(false) }
+                ExposedDropdownMenuBox(
+                    expanded = expanded,
+                    onExpandedChange = {expanded = !expanded}
+                ) {
+                    OutlinedTextField(
+                        value = selectedType,
+                        onValueChange = {},
+                        readOnly = true,
+                        label = { Text("Select Input Type") },
+                        trailingIcon = {
+                            Icon(Icons.Default.ArrowDropDown, contentDescription = null)
+                        },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                    )
+                    ExposedDropdownMenu(
+                        expanded = expanded,
+                        onDismissRequest = { expanded = false }
+                    ) {
+                        fieldTypes.forEach { type ->
+                            DropdownMenuItem(onClick = {
+                                onTypeChange(type.toString())
+                                expanded = false
+                            }, text = { Text(type.toString()) })
+
+                        }
+                    }
+                }
+                Spacer(modifier = Modifier.height(16.dp))
+
                 // Submit button to save the new field
                 Button(
                     onClick = {
                         // Create the new FormField and save it using onSave
-                        val newField = Reports(
-                            Name = currentLabel,
+                        val newField = ReportTemplateField(
+                            label = currentLabel,
+                            fieldType = FieldType.valueOf(selectedType) // Convert string to FieldType
                         )
                         onSave(newField)
                         onDismiss() // Close the dialog after saving

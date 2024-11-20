@@ -19,6 +19,7 @@ import com.example.vetapp.ui.navigation.Screen
 import com.example.vetapp.ui.LoginScreen
 import com.example.vetapp.ui.CreateAccountScreen
 import com.example.vetapp.ui.DashboardScreen
+import com.example.vetapp.ui.ReportScreen
 import com.example.vetapp.ui.ReportTemplateScreen
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -63,10 +64,11 @@ class MainActivity : ComponentActivity()  {
 @Composable
 fun VetApp() {
     val navController = rememberNavController()
-    NavHost(navController = navController, startDestination = Screen.Login.route) {
+    NavHost(navController = navController, startDestination = Screen.Reports.route) {
         composable(Screen.Login.route) { LoginScreen(navController) }
         composable(Screen.CreateAccount.route) { CreateAccountScreen(navController) }
         composable(Screen.Dashboard.route) { DashboardScreen() }
-        composable(Screen.ReportsTemplate.route) { ReportTemplateScreen() }
+        composable(Screen.ReportsTemplate.route) { ReportTemplateScreen(navController) }
+        composable(Screen.Reports.route) { ReportScreen(navController) }
     }
 }

@@ -23,39 +23,50 @@ import androidx.compose.ui.unit.dp
 import com.example.vetapp.viewmodels.ReportViewModel
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.example.vetapp.ui.componets.common.AddItemButton
 import com.example.vetapp.ui.componets.reports.AddReportDialog
-import com.example.vetapp.ui.componets.reports.AddReportTemplateDialog
 import com.example.vetapp.ui.componets.reports.ReportsList
+import com.example.vetapp.ui.navigation.Screen
 
 @Composable
-fun ReportTemplateScreen(navController: NavController, viewModel: ReportViewModel = hiltViewModel()
+fun ReportScreen(navController: NavController, viewModel: ReportViewModel = hiltViewModel()
 ) {
 
-    val reportTemplateState = viewModel.reportTemplateFields.collectAsState()
+    var reports = viewModel.reports.collectAsState()
     var showDialog by remember { mutableStateOf(false) }
     var label by remember { mutableStateOf("") }
-    var selectedType by remember { mutableStateOf("Type 1") }
 
+    // Button to show the dialog
     Column(
         modifier = Modifier
             .fillMaxSize()
             .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        // Show the Material 3 Dialog for adding new item
-        if (showDialog) {
-            AddReportTemplateDialog(
-                onDismiss = { showDialog = false },
-                onSave = { newItem ->
-                    //reportState = reportState + newItem
-                    //showDialog = false
-                },
-                currentLabel = label,
-                onLabelChange = { label = it },
-                selectedType = selectedType,
-                onTypeChange = { selectedType = it }
+        // Show the list of form items
+        Spacer(modifier = Modifier.height(16.dp))
+        ReportsList(reports.value, onBoxClick = {navController.navigate(Screen.ReportsTemplate.route)})
+        Spacer(modifier = Modifier.height(16.dp))
+        AddItemButton(onClick = {showDialog = true}, localModifier = Modifier
+            .size(56.dp) // Size of the button
+            .background(
+                color = Color.Gray, // Background color of the button
+                shape = CircleShape // Circular shape
             )
-        }
+            .align(Alignment.Start))
+    }
+
+    // Show the Material 3 Dialog for adding new item
+    if (showDialog) {
+        AddReportDialog(
+            onDismiss = { showDialog = false },
+            onSave = { newItem ->
+                viewModel.insert(reportTemplateField = emptyList(), newItem.Name)
+                //showDialog = false
+            },
+            currentLabel = label,
+            onLabelChange = { label = it },
+        )
     }
 }
