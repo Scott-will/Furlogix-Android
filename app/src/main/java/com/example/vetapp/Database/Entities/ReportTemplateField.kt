@@ -14,7 +14,7 @@ import com.example.vetapp.reports.FieldType
     onDelete = ForeignKey.CASCADE
 )])
 data class ReportTemplateField(
-    @PrimaryKey val uid: Int,
+    @PrimaryKey(autoGenerate = true) val uid: Int = 0,
     val reportId: Int,
     val fieldType : FieldType,
     val name : String

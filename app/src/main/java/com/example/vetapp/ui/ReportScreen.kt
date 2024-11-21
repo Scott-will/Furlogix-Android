@@ -43,7 +43,7 @@ fun ReportScreen(navController: NavController, viewModel: ReportViewModel = hilt
     ) {
         // Show the list of form items
         Spacer(modifier = Modifier.height(16.dp))
-        ReportsList(reports.value, onBoxClick = {navController.navigate(Screen.ReportsTemplate.route)})
+        ReportsList(reports.value, navController)
         Spacer(modifier = Modifier.height(16.dp))
         AddItemButton(onClick = {showDialog = true}, localModifier = Modifier
             .size(56.dp) // Size of the button
@@ -59,10 +59,11 @@ fun ReportScreen(navController: NavController, viewModel: ReportViewModel = hilt
         AddReportDialog(
             onDismiss = { showDialog = false },
             onSave = { newItem ->
-                viewModel.insert(reportTemplateField = emptyList(), newItem.Name)
-                //showDialog = false
+                viewModel.insertReport(newItem.Name)
+                label = ""
+                showDialog = false
             },
-            currentLabel = "",
+            currentLabel = label,
             onLabelChange = { label = it },
         )
     }

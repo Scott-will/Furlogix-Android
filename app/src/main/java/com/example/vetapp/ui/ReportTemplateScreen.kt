@@ -23,11 +23,13 @@ import androidx.compose.ui.unit.dp
 import com.example.vetapp.viewmodels.ReportViewModel
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.example.vetapp.reports.FieldType
 import com.example.vetapp.ui.componets.common.AddItemButton
 import com.example.vetapp.ui.componets.common.NoDataAvailable
 import com.example.vetapp.ui.componets.reports.AddReportDialog
 import com.example.vetapp.ui.componets.reports.AddReportTemplateDialog
 import com.example.vetapp.ui.componets.reports.ReportsList
+import com.example.vetapp.ui.componets.reports.ReporttemplatesList
 
 @Composable
 fun ReportTemplateScreen(navController: NavController, reportId : Int = 0, viewModel: ReportViewModel = hiltViewModel()
@@ -36,7 +38,7 @@ fun ReportTemplateScreen(navController: NavController, reportId : Int = 0, viewM
     val reportTemplateState = viewModel.reportTemplateFields.collectAsState()
     var showDialog by remember { mutableStateOf(false) }
     var label by remember { mutableStateOf("") }
-    var selectedType by remember { mutableStateOf("Type 1") }
+    var selectedType by remember { mutableStateOf(FieldType.values().first().toString()) }
 
     Column(
         modifier = Modifier
@@ -48,6 +50,9 @@ fun ReportTemplateScreen(navController: NavController, reportId : Int = 0, viewM
         val reportsTemplates = reportTemplateState.value.filter { it.reportId == reportId }
         if(reportsTemplates.size == 0 ){
             NoDataAvailable("Report Fields")
+        }
+        else{
+            ReporttemplatesList(reportsTemplates)
         }
         Spacer(modifier = Modifier.height(16.dp))
         AddItemButton(onClick = { showDialog = true }, localModifier = Modifier
@@ -61,13 +66,13 @@ fun ReportTemplateScreen(navController: NavController, reportId : Int = 0, viewM
             AddReportTemplateDialog(
                 onDismiss = { showDialog = false },
                 onSave = { newItem ->
-                    //reportState = reportState + newItem
-                    //showDialog = false
+                    viewModel.insertReportTemplateField(newItem)
                 },
                 currentLabel = label,
                 onLabelChange = { label = it },
                 selectedType = selectedType,
-                onTypeChange = { selectedType = it }
+                onTypeChange = { selectedType = it },
+                reportId = reportId
             )
         }
     }

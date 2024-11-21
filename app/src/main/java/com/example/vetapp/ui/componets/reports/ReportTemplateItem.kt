@@ -1,27 +1,27 @@
 package com.example.vetapp.ui.componets.reports
 
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Text
 import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.runtime.Composable
-import androidx.navigation.NavController
-import com.example.vetapp.Database.Entities.Reports
-import com.example.vetapp.ui.navigation.Screen
+import androidx.compose.ui.unit.dp
+import com.example.vetapp.Database.Entities.ReportTemplateField
+
 
 @Composable
-fun ReportItem(data: Reports, onClick: (Reports) -> Unit) {
+fun ReportTemplateItem(data: ReportTemplateField) {
     Surface(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = 5.dp)
-            .clickable { onClick(data) }, // Box is clickable
+            .padding(vertical = 5.dp),
         shape = RoundedCornerShape(12.dp), // Rounded corners
         color = Color.LightGray // Light blue background
     ) {
@@ -33,7 +33,7 @@ fun ReportItem(data: Reports, onClick: (Reports) -> Unit) {
         ) {
             // Left-aligned text
             Text(
-                text = data.Name,
+                text = data.name,
                 modifier = Modifier.weight(1f), // Ensures text is left-aligned
                 fontWeight = FontWeight.Bold // Optional: Makes the text bold
             )
@@ -42,10 +42,10 @@ fun ReportItem(data: Reports, onClick: (Reports) -> Unit) {
 }
 
 @Composable
-fun ReportsList(dataList: List<Reports>, navController: NavController) {
+fun ReporttemplatesList(dataList: List<ReportTemplateField>) {
     Column(modifier = Modifier.padding(16.dp)) {
         dataList.forEach { data ->
-            ReportItem(data = data, onClick = {navController.navigate(Screen.ReportsTemplate.route.replace("{reportId}", "${data.Id}"))})
+            ReportTemplateItem(data = data)
         }
     }
 }

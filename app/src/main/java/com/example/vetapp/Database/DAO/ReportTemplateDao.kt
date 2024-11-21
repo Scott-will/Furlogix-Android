@@ -14,7 +14,7 @@ interface ReportTemplateDao {
     fun getAll(): Flow<List<ReportTemplateField>>
 
     @Insert
-    fun insertAll(vararg users: ReportTemplateField)
+    fun insert(vararg users: ReportTemplateField)
 
     @Query("SELECT * FROM REPORTTEMPLATEFIELD WHERE reportId = :id")
     fun getReportById(id: Int): Flow<List<ReportTemplateField>>

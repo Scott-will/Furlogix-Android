@@ -27,8 +27,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
+import com.example.vetapp.Database.Entities.ReportTemplateField
 import com.example.vetapp.reports.FieldType
-import com.example.vetapp.reports.ReportTemplateField
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -38,7 +38,8 @@ fun AddReportTemplateDialog(
     currentLabel: String,
     onLabelChange: (String) -> Unit,
     selectedType: String,
-    onTypeChange: (String) -> Unit){
+    onTypeChange: (String) -> Unit,
+    reportId : Int){
     val fieldTypes = FieldType.values()
     Dialog(onDismissRequest = onDismiss) {
         Surface(
@@ -101,7 +102,8 @@ fun AddReportTemplateDialog(
                     onClick = {
                         // Create the new FormField and save it using onSave
                         val newField = ReportTemplateField(
-                            label = currentLabel,
+                            reportId = reportId,
+                            name = currentLabel,
                             fieldType = FieldType.valueOf(selectedType) // Convert string to FieldType
                         )
                         onSave(newField)

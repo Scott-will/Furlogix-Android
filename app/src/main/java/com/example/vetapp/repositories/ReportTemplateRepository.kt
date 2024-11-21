@@ -17,8 +17,8 @@ class ReportTemplateRepository @Inject constructor(
             return reportTemplateDao.getAll()
         }
 
-        override suspend fun insertReportTemplateFields(reportTemplateFields : List<ReportTemplateField>){
-            return reportTemplateDao.insertAll()
+        override suspend fun insertReportTemplateField(reportTemplateField : ReportTemplateField){
+            return reportTemplateDao.insert(reportTemplateField)
         }
 
         override suspend fun GetReportById(id: Int): Flow<List<ReportTemplateField>> {

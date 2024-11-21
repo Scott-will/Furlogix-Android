@@ -8,10 +8,12 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.runtime.Composable
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import com.example.vetapp.ui.theme.VetAppTheme
 import androidx.navigation.compose.composable
+import androidx.navigation.navArgument
 import androidx.room.Room
 import com.example.vetapp.Database.AppDatabase
 import com.example.vetapp.broadcastreceivers.EmailBroadcastReceiver
@@ -68,7 +70,14 @@ fun VetApp() {
         composable(Screen.Login.route) { LoginScreen(navController) }
         composable(Screen.CreateAccount.route) { CreateAccountScreen(navController) }
         composable(Screen.Dashboard.route) { DashboardScreen() }
-        composable(Screen.ReportsTemplate.route) { ReportTemplateScreen(navController) }
+        composable(Screen.ReportsTemplate.route, listOf(navArgument("reportId"){type = NavType.IntType})) { backStackEntry -> val reportId = backStackEntry.arguments?.getInt("reportId")
+            if (reportId != null) {
+                ReportTemplateScreen(navController, reportId)
+            }
+            else{
+                ReportTemplateScreen(navController)
+            }
+        }
         composable(Screen.Reports.route) { ReportScreen(navController) }
     }
 }
