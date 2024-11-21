@@ -15,7 +15,7 @@ import com.example.vetapp.reports.FieldType
 )])
 data class ReportTemplateField(
     @PrimaryKey(autoGenerate = true) val uid: Int = 0,
-    val reportId: Int,
-    val fieldType : FieldType,
-    val name : String
+    var reportId: Int,
+    var fieldType : FieldType,
+    var name : String
 )

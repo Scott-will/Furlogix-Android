@@ -10,4 +10,8 @@ interface IReportsRepository {
 
     suspend fun insertReport(report : Reports)
 
+    suspend fun updateReport(report : Reports)
+
+    suspend fun deleteReport(report : Reports)
+
 }

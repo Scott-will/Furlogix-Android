@@ -8,8 +8,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material3.Button
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -26,9 +24,7 @@ import androidx.navigation.NavController
 import com.example.vetapp.reports.FieldType
 import com.example.vetapp.ui.componets.common.AddItemButton
 import com.example.vetapp.ui.componets.common.NoDataAvailable
-import com.example.vetapp.ui.componets.reports.AddReportDialog
 import com.example.vetapp.ui.componets.reports.AddReportTemplateDialog
-import com.example.vetapp.ui.componets.reports.ReportsList
 import com.example.vetapp.ui.componets.reports.ReporttemplatesList
 
 @Composable
@@ -46,13 +42,16 @@ fun ReportTemplateScreen(navController: NavController, reportId : Int = 0, viewM
             .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        Spacer(modifier = Modifier.height(16.dp))
         // Show the Material 3 Dialog for adding new item
         val reportsTemplates = reportTemplateState.value.filter { it.reportId == reportId }
         if(reportsTemplates.size == 0 ){
             NoDataAvailable("Report Fields")
         }
         else{
-            ReporttemplatesList(reportsTemplates)
+            ReporttemplatesList(reportsTemplates,
+                onDeleteClick = {item -> viewModel.deleteReportTemplateField(item)},
+                onUpdateClick = {item -> viewModel.updateReportTemplateField(item)})
         }
         Spacer(modifier = Modifier.height(16.dp))
         AddItemButton(onClick = { showDialog = true }, localModifier = Modifier
@@ -69,9 +68,7 @@ fun ReportTemplateScreen(navController: NavController, reportId : Int = 0, viewM
                     viewModel.insertReportTemplateField(newItem)
                 },
                 currentLabel = label,
-                onLabelChange = { label = it },
                 selectedType = selectedType,
-                onTypeChange = { selectedType = it },
                 reportId = reportId
             )
         }

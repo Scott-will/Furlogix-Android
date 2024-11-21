@@ -10,6 +10,10 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
@@ -22,7 +26,9 @@ fun AddReportDialog(
     onDismiss:() -> Unit,
     onSave: (Reports) -> Unit,
     currentLabel: String,
-    onLabelChange: (String) -> Unit){
+    update : Boolean = false,
+    report : Reports? = null){
+    var textFieldValue by remember { mutableStateOf(currentLabel) }
     Dialog(onDismissRequest = onDismiss) {
         Surface(
             shape = MaterialTheme.shapes.medium,
@@ -30,27 +36,39 @@ fun AddReportDialog(
             modifier = Modifier.fillMaxWidth()
         ) {
             Column(
-                modifier = Modifier.padding(16.dp).fillMaxWidth()
+                modifier = Modifier
+                    .padding(16.dp)
+                    .fillMaxWidth()
             ) {
                 //field name
                 Text("Report Name: ")
                 OutlinedTextField(
-                    value = currentLabel,
-                    onValueChange = onLabelChange,
+                    value = textFieldValue,
+                    onValueChange = { textFieldValue = it },
                     label = { Text("Enter Field Name") },
                     keyboardOptions = KeyboardOptions.Default.copy(
                         keyboardType = KeyboardType.Text
                     ),
-                    modifier = Modifier.fillMaxWidth().padding(8.dp)
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(8.dp)
                 )
                 // Submit button to save the new field
                 Button(
                     onClick = {
                         // Create the new FormField and save it using onSave
-                        val newField = Reports(
-                            Name = currentLabel,
-                        )
-                        onSave(newField)
+                        if(update){
+                            report?.Name = textFieldValue
+                            onSave(report!!)
+                        }
+                        else{
+                            val newField = Reports(
+                                Name = textFieldValue,
+                            )
+                            onSave(newField)
+                        }
+
+
                         onDismiss() // Close the dialog after saving
                     },
                     modifier = Modifier.align(Alignment.CenterHorizontally)

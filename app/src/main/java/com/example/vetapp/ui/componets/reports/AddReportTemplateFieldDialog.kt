@@ -1,5 +1,6 @@
 package com.example.vetapp.ui.componets.reports
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -36,11 +37,13 @@ fun AddReportTemplateDialog(
     onDismiss:() -> Unit,
     onSave: (ReportTemplateField) -> Unit,
     currentLabel: String,
-    onLabelChange: (String) -> Unit,
     selectedType: String,
-    onTypeChange: (String) -> Unit,
-    reportId : Int){
+    reportId : Int,
+    update : Boolean = false,
+    reportField : ReportTemplateField? = null){
     val fieldTypes = FieldType.values()
+    var textFieldValue by remember { mutableStateOf(currentLabel) }
+    var typeFieldValue by remember { mutableStateOf(selectedType) }
     Dialog(onDismissRequest = onDismiss) {
         Surface(
             shape = MaterialTheme.shapes.medium,
@@ -48,50 +51,55 @@ fun AddReportTemplateDialog(
             modifier = Modifier.fillMaxWidth()
         ) {
             Column(
-                modifier = Modifier.padding(16.dp).fillMaxWidth()
+                modifier = Modifier
+                    .padding(16.dp)
+                    .fillMaxWidth()
             ) {
                 //field name
                 Text("Field Name: ")
                 OutlinedTextField(
-                    value = currentLabel,
-                    onValueChange = onLabelChange,
+                    value = textFieldValue,
+                    onValueChange = { textFieldValue = it },
                     label = { Text("Enter Field Name") },
                     keyboardOptions = KeyboardOptions.Default.copy(
                         keyboardType = KeyboardType.Text
                     ),
-                    modifier = Modifier.fillMaxWidth().padding(8.dp)
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(8.dp)
                 )
 
                 Spacer(modifier = Modifier.height(8.dp))
 
                 //drop down for field type selection
                 Text("Input Type:")
-                var expanded by remember{ mutableStateOf<Boolean>(false) }
+                var expanded by remember { mutableStateOf(false) }
                 ExposedDropdownMenuBox(
                     expanded = expanded,
-                    onExpandedChange = {expanded = !expanded}
+                    onExpandedChange = { expanded = !expanded },
                 ) {
                     OutlinedTextField(
-                        value = selectedType,
-                        onValueChange = {},
+                        value = typeFieldValue,
+                        onValueChange = { },
                         readOnly = true,
                         label = { Text("Select Input Type") },
                         trailingIcon = {
                             Icon(Icons.Default.ArrowDropDown, contentDescription = null)
                         },
-                        modifier = Modifier
-                            .fillMaxWidth()
+                        modifier = Modifier.menuAnchor()
                     )
                     ExposedDropdownMenu(
                         expanded = expanded,
                         onDismissRequest = { expanded = false }
                     ) {
                         fieldTypes.forEach { type ->
-                            DropdownMenuItem(onClick = {
-                                onTypeChange(type.toString())
-                                expanded = false
-                            }, text = { Text(type.toString()) })
-
+                            DropdownMenuItem(
+                                onClick = {
+                                    typeFieldValue = type.toString()
+                                    expanded = false // Close the dropdown when an item is selected
+                                },
+                                text = { type.toString() }
+                            )
                         }
                     }
                 }
@@ -101,12 +109,20 @@ fun AddReportTemplateDialog(
                 Button(
                     onClick = {
                         // Create the new FormField and save it using onSave
-                        val newField = ReportTemplateField(
-                            reportId = reportId,
-                            name = currentLabel,
-                            fieldType = FieldType.valueOf(selectedType) // Convert string to FieldType
-                        )
-                        onSave(newField)
+                        if(update){
+                            reportField?.name = textFieldValue
+                            reportField?.fieldType = enumValueOf<FieldType>(typeFieldValue)
+                            onSave(reportField!!)
+                        }
+                        else{
+                            val newField = ReportTemplateField(
+                                reportId = reportId,
+                                name = textFieldValue,
+                                fieldType = FieldType.valueOf(typeFieldValue) // Convert string to FieldType
+                            )
+                            onSave(newField)
+                        }
+
                         onDismiss() // Close the dialog after saving
                     },
                     modifier = Modifier.align(Alignment.CenterHorizontally)

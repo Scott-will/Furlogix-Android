@@ -31,13 +31,46 @@ class ReportViewModel @Inject constructor(
             }
 
         }
-        //TODO:insert fields with link to newly inserted report
+    }
+
+    fun deleteReport( report : Reports ){
+        viewModelScope.launch {
+            withContext(Dispatchers.IO){
+                reportRepository.deleteReport(report)
+            }
+
+        }
+    }
+
+    fun updateReport( report : Reports ){
+        viewModelScope.launch {
+            withContext(Dispatchers.IO){
+                reportRepository.updateReport(report)
+            }
+
+        }
     }
 
     fun insertReportTemplateField(field : ReportTemplateField){
         viewModelScope.launch {
             withContext(Dispatchers.IO){
                 reportTemplateRepository.insertReportTemplateField(field)
+            }
+        }
+    }
+
+    fun deleteReportTemplateField(field : ReportTemplateField){
+        viewModelScope.launch {
+            withContext(Dispatchers.IO){
+                reportTemplateRepository.deleteReportTemplateField(field)
+            }
+        }
+    }
+
+    fun updateReportTemplateField(field : ReportTemplateField){
+        viewModelScope.launch {
+            withContext(Dispatchers.IO){
+                reportTemplateRepository.updateReportTemplateField(field)
             }
         }
     }
