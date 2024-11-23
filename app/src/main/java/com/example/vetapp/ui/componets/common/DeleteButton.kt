@@ -11,6 +11,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.draw.clip
+import com.example.vetapp.R
 
 @Composable
 fun DeleteButton(onClick: () -> Unit) {
@@ -22,7 +23,7 @@ fun DeleteButton(onClick: () -> Unit) {
     ) {
         Icon(
             imageVector = Icons.Default.Delete, // Pencil icon
-            contentDescription = "Edit",
+            contentDescription = R.string.delete_text.toString(),
             modifier = Modifier.size(24.dp), // Icon size inside the circle
             tint = Color.White // Icon color
         )

@@ -11,6 +11,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.draw.clip
+import com.example.vetapp.R
 
 @Composable
 fun EditButton(onClick: () -> Unit) {
@@ -18,11 +19,12 @@ fun EditButton(onClick: () -> Unit) {
         onClick = onClick,
         modifier = Modifier
             .size(56.dp) // Size of the circle
-            .clip(CircleShape) // Apply circular shape
+            .clip(CircleShape), // Apply circular shape
+
     ) {
         Icon(
             imageVector = Icons.Default.Edit, // Pencil icon
-            contentDescription = "Edit",
+            contentDescription = R.string.edit_text.toString(),
             modifier = Modifier.size(24.dp), // Icon size inside the circle
             tint = Color.White // Icon color
         )

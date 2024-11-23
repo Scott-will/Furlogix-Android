@@ -15,6 +15,9 @@ interface ReportsDao {
     @Query("SELECT * FROM Reports")
     fun getAll(): Flow<List<Reports>>
 
+    @Query("SELECT * FROM Reports Where Id = :id Limit 1")
+    fun getByReportId(id : Int): Flow<Reports>
+
     @Insert
     fun insert(vararg reports: Reports)
 

@@ -34,7 +34,7 @@ class MainActivity : ComponentActivity()  {
         //init database
         val db = Room.databaseBuilder(
             applicationContext,
-            AppDatabase::class.java, "VetApp"
+            AppDatabase::class.java, R.string.database_name.toString()
         ).build()
         //init broadcast receivers
         this.InitBroadcastReceivers()

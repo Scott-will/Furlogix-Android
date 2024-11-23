@@ -16,6 +16,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
@@ -34,6 +35,7 @@ fun AddReportDialog(
             shape = MaterialTheme.shapes.medium,
             tonalElevation = 8.dp,
             modifier = Modifier.fillMaxWidth()
+                .testTag("AddReportDialog")
         ) {
             Column(
                 modifier = Modifier
@@ -71,7 +73,7 @@ fun AddReportDialog(
 
                         onDismiss() // Close the dialog after saving
                     },
-                    modifier = Modifier.align(Alignment.CenterHorizontally)
+                    modifier = Modifier.align(Alignment.CenterHorizontally).testTag("AddReportDialogSave")
                 )
                 {
                     Text("Save")
