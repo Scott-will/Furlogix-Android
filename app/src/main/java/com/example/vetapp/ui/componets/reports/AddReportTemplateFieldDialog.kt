@@ -9,6 +9,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
+import androidx.compose.material.icons.filled.KeyboardArrowDown
+import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material3.Button
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -56,6 +58,11 @@ fun AddReportTemplateDialog(
                     .padding(16.dp)
                     .fillMaxWidth()
             ) {
+                var expanded by remember { mutableStateOf(false) }
+                val icon = if (expanded)
+                    Icons.Filled.KeyboardArrowUp
+                else
+                    Icons.Filled.KeyboardArrowDown
                 //field name
                 Text("Field Name: ")
                 OutlinedTextField(
@@ -67,14 +74,13 @@ fun AddReportTemplateDialog(
                     ),
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(8.dp)
+                        .padding(8.dp),
                 )
 
                 Spacer(modifier = Modifier.height(8.dp))
 
                 //drop down for field type selection
                 Text("Input Type:")
-                var expanded by remember { mutableStateOf(false) }
                 ExposedDropdownMenuBox(
                     expanded = expanded,
                     onExpandedChange = { expanded = !expanded },
@@ -99,7 +105,7 @@ fun AddReportTemplateDialog(
                                     typeFieldValue = type.toString()
                                     expanded = false // Close the dropdown when an item is selected
                                 },
-                                text = { type.toString() }
+                                text = {Text( text = type.toString() )}
                             )
                         }
                     }
