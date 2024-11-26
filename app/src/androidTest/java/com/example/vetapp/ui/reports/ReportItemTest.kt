@@ -37,7 +37,7 @@ class ReportItemTest {
     @Test
     fun reportItem_displaysCorrectName() {
         // Given
-        val report = Reports(Name = "Test")
+        val report = Reports(name = "Test")
 
         composeTestRule.setContent {
             ReportItemTestContent(data = report)
@@ -50,7 +50,7 @@ class ReportItemTest {
     @Test
     fun reportItem_triggersOnClick() {
         // Given
-        val report = Reports(Name = "Sample Report")
+        val report = Reports(name = "Sample Report")
         var clickedReport: Reports? = null
         val onClick: (Reports) -> Unit = { clickedReport = it }
 
@@ -63,13 +63,13 @@ class ReportItemTest {
 
         // Then
         assert(clickedReport != null)
-        assert(report.Name == clickedReport?.Name)
+        assert(report.name == clickedReport?.name)
     }
 
     @Test
     fun reportItem_showsDialogOnEditClick() {
         // Given
-        val report = Reports(Name = "Sample Report")
+        val report = Reports(name = "Sample Report")
 
         composeTestRule.setContent {
             ReportItemTestContent(
@@ -90,7 +90,7 @@ class ReportItemTest {
     @Test
     fun reportItem_triggersOnDeleteClick() {
         // Given
-        val report = Reports(Name = "Sample Report")
+        val report = Reports(name = "Sample Report")
         var deletedReport: Reports? = null
         val onDeleteClick: (Reports) -> Unit = { deletedReport = it }
 
@@ -103,13 +103,13 @@ class ReportItemTest {
 
         // Then
         assert(deletedReport != null)
-        assert(report.Name == deletedReport?.Name)
+        assert(report.name == deletedReport?.name)
     }
 
     @Test
     fun reportItem_triggersOnSaveFromDialog() {
         // Given
-        val report = Reports(Name = "Sample Report")
+        val report = Reports(name = "Sample Report")
         var updatedReport: Reports? = null
         val onUpdateClick: (Reports) -> Unit = { updatedReport = it }
 
@@ -129,13 +129,13 @@ class ReportItemTest {
 
         // Then
         assert(updatedReport != null)
-        assert(report.Name == updatedReport?.Name)
+        assert(report.name == updatedReport?.name)
     }
 
     @Test
     fun reportItem_dialogClosesOnDismiss() {
         // Given
-        val report = Reports(Name = "Sample Report")
+        val report = Reports(name = "Sample Report")
 
         composeTestRule.setContent {
             ReportItemTestContent(data = report)
@@ -152,7 +152,7 @@ class ReportItemTest {
     @Test
     fun reportItem_togglesDialogVisibility() {
         // Given
-        val report = Reports(Name = "Sample Report")
+        val report = Reports(name = "Sample Report")
 
         composeTestRule.setContent {
             ReportItemTestContent(

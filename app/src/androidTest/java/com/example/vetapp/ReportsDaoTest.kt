@@ -35,28 +35,28 @@ class ReportsDaoTest {
 
     @Test
     fun insertAndRetrieveReports() = runBlocking {
-        val report = Reports(Name = "Test")
+        val report = Reports(name = "Test")
         reportDao.insert(report)
         val reports = reportDao.getAll().first()
         assertEquals(reports.count(), 1)
-        assertEquals(reports.first().Name, "Test")
+        assertEquals(reports.first().name, "Test")
     }
 
     @Test
     fun updateReports() = runBlocking {
-        val report = Reports(Name = "Reports to Update")
+        val report = Reports(name = "Reports to Update")
         reportDao.insert(report)
         val insertedReports = reportDao.getAll().first().first()
-        val updatedReports = insertedReports.copy(Name = "Updated Name")
+        val updatedReports = insertedReports.copy(name = "Updated Name")
         reportDao.update(updatedReports)
 
         val result = reportDao.getByReportId(insertedReports.Id)
-        assertEquals(result.first().Name, "Updated Name")
+        assertEquals(result.first().name, "Updated Name")
     }
 
     @Test
     fun deleteReports() = runBlocking {
-        val report = Reports(Name = "Reports to Delete")
+        val report = Reports(name = "Reports to Delete")
         reportDao.insert(report)
         val insertedReports = reportDao.getAll().first().first()
         assertNotNull(insertedReports)

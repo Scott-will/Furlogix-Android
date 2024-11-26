@@ -60,7 +60,7 @@ fun ReportScreen(navController: NavController, viewModel: ReportViewModel = hilt
         AddReportDialog(
             onDismiss = { showDialog = false },
             onSave = { newItem ->
-                viewModel.insertReport(newItem.Name)
+                viewModel.insertReport(newItem.name)
                 label = ""
                 showDialog = false
             },
