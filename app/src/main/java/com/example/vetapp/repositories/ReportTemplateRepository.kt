@@ -13,16 +13,23 @@ class ReportTemplateRepository @Inject constructor(
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO,
     private val reportTemplateDao :ReportTemplateDao) : IReportTemplateRepository {
 
-        override fun ReportTemplateObservable() : Flow<List<ReportTemplateField>> {
-            return reportTemplateDao.getAll()
-        }
+    override fun ReportTemplateObservable() : Flow<List<ReportTemplateField>> {
+        return reportTemplateDao.getAll()
+    }
 
-        override suspend fun insertReportTemplateFields(reportTemplateFields : List<ReportTemplateField>){
-            return reportTemplateDao.insertAll()
-        }
+    override suspend fun insertReportTemplateField(reportTemplateField : ReportTemplateField){
+        return reportTemplateDao.insert(reportTemplateField)
+    }
 
-        override suspend fun GetReportById(id: Int): Flow<List<ReportTemplateField>> {
-            return reportTemplateDao.getReportById(id)
-        }
+    override suspend fun GetReportById(id: Int): Flow<List<ReportTemplateField>> {
+        return reportTemplateDao.getReportById(id)
+    }
+
+    override suspend fun updateReportTemplateField(reportTemplateField : ReportTemplateField){
+        return reportTemplateDao.update(reportTemplateField)
+    }
+    override suspend fun deleteReportTemplateField(reportTemplateField : ReportTemplateField){
+        return reportTemplateDao.delete(reportTemplateField)
+    }
 
 }
