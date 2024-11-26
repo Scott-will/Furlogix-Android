@@ -3,6 +3,7 @@ package com.example.vetapp.di.injectionModules
 import com.example.vetapp.Database.AppDatabase
 import com.example.vetapp.Database.DAO.ReportTemplateDao
 import com.example.vetapp.Database.DAO.ReportsDao
+import com.example.vetapp.Database.DAO.UserDao
 import com.example.vetapp.email.EmailHandler
 import com.example.vetapp.email.IEmailHandler
 import com.example.vetapp.repositories.IReportTemplateRepository
@@ -35,6 +36,11 @@ abstract class RepositoryModule {
         @Provides
         fun provideReportTemplateDao(database: AppDatabase): ReportTemplateDao {
             return database.reportTemplateDao()
+        }
+
+        @Provides
+        fun provideUserDao(database: AppDatabase): UserDao {
+            return database.userDao()
         }
     }
 }

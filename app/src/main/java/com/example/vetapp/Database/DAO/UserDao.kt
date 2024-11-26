@@ -8,6 +8,7 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
 import com.example.vetapp.Database.Entities.User
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface UserDao {
@@ -40,4 +41,10 @@ interface UserDao {
 
     @Query("SELECT name FROM user_table LIMIT 1")
     fun getCurrentUserName(): LiveData<String>
+
+    @Query("SELECT email FROM user_table LIMIT 1")
+    fun getCurrentUserEmail(): LiveData<String>
+
+    @Query("UPDATE user_table SET name = :name, email = :email")
+    suspend fun updateUser(name: String, email: String)
 }

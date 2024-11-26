@@ -12,9 +12,8 @@ import javax.inject.Inject
 @HiltViewModel
 class CreateProfileViewModel @Inject constructor(private val userDao: UserDao) : ViewModel() {
 
-    fun addUser(name: String, surname: String, petName: String, email: String) {
+    fun addUser(user: User) {
         viewModelScope.launch(Dispatchers.IO) {
-            val user = User(name = name, surname = surname, petName = petName, email = email)
             userDao.insert(user)
         }
     }

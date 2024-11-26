@@ -19,6 +19,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.example.vetapp.Database.Entities.User
 import com.example.vetapp.ui.navigation.Screen
 import com.example.vetapp.viewmodels.CreateProfileViewModel
 
@@ -51,7 +52,8 @@ fun CreateAccountScreen(navController: NavController) {
         )
         Spacer(modifier = Modifier.height(16.dp))
         Button(onClick = {
-            viewModel.addUser(name, surname, petName, email)
+            val user = User(name = name, surname = surname, petName = petName, email = email)
+            viewModel.addUser(user)
             navController.navigate(Screen.Dashboard.route)
         }) {
             Text("Create Profile")

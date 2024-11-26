@@ -28,9 +28,4 @@ object AppDatabaseModule {
         ).fallbackToDestructiveMigration() // Optional: Handle schema changes
             .build()
     }
-
-    @Provides
-    fun provideUserDao(database: AppDatabase): UserDao {
-        return database.userDao()
-    }
 }

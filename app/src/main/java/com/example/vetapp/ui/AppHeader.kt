@@ -3,6 +3,7 @@ package com.example.vetapp.ui
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -38,6 +39,18 @@ fun AppHeader(navController: NavController, viewModel: UserViewModel = hiltViewM
             }) {
                 Icon(Icons.Filled.Home, contentDescription = "Go to Dashboard")
             }
+            val currentBackStackEntry = navController.currentBackStackEntry
+            val currentRoute = currentBackStackEntry?.destination?.route
+
+            if (currentRoute != Screen.Dashboard.route) {
+                IconButton(onClick = { navController.popBackStack() }) {
+                    Icon(
+                        imageVector = Icons.Default.ArrowBack, // Back arrow icon
+                        contentDescription = "Back",
+                        tint = Color.White
+                    )
+                }
+            }
         },
         actions = {
             Row(
@@ -45,7 +58,7 @@ fun AppHeader(navController: NavController, viewModel: UserViewModel = hiltViewM
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 Text(text = userName, color = Color.White)
-                IconButton(onClick = { /* Handle user icon click, e.g., navigate to profile */ }) {
+                IconButton(onClick = { navController.navigate(Screen.Profile.route) }) {
                     Icon(
                         imageVector = Icons.Filled.Person,
                         contentDescription = "User Profile",

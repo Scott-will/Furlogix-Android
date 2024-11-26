@@ -19,6 +19,7 @@ import com.example.vetapp.ui.navigation.Screen
 import com.example.vetapp.ui.LoginScreen
 import com.example.vetapp.ui.CreateAccountScreen
 import com.example.vetapp.ui.DashboardScreen
+import com.example.vetapp.ui.ProfileScreen
 import com.example.vetapp.ui.ReportTemplateScreen
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -68,5 +69,6 @@ fun VetApp() {
         composable(Screen.CreateAccount.route) { CreateAccountScreen(navController) }
         composable(Screen.Dashboard.route) { DashboardScreen(navController) }
         composable(Screen.ReportsTemplate.route) { ReportTemplateScreen(navController = navController) }
+        composable(Screen.Profile.route) { ProfileScreen(navController = navController) }
     }
 }
