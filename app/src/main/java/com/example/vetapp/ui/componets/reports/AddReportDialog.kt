@@ -60,12 +60,12 @@ fun AddReportDialog(
                     onClick = {
                         // Create the new FormField and save it using onSave
                         if(update){
-                            report?.Name = textFieldValue
+                            report?.name = textFieldValue
                             onSave(report!!)
                         }
                         else{
                             val newField = Reports(
-                                Name = textFieldValue,
+                                name = textFieldValue,
                             )
                             onSave(newField)
                         }

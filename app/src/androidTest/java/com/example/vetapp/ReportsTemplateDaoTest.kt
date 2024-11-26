@@ -34,7 +34,7 @@ class ReportsTemplateDaoTest {
         db = Room.inMemoryDatabaseBuilder(context, AppDatabase::class.java).build()
         reportTemplateDao = db.reportTemplateDao()
         reportDao = db.reportsDao()
-        reportDao.insert(Reports(Name = "Test"))
+        reportDao.insert(Reports(name = "Test"))
     }
 
     @After
