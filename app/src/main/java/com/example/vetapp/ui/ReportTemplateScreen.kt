@@ -32,7 +32,6 @@ fun ReportTemplateScreen(viewModel: ReportViewModel = hiltViewModel(), navContro
     var label by remember { mutableStateOf("") }
     var selectedType by remember { mutableStateOf("Type 1") }
 
-    AppHeader(navController = navController)
     // Button to show the dialog
     Column(
         modifier = Modifier

@@ -36,8 +36,6 @@ fun ProfileScreen(
     name = userName
     email = userEmail
 
-    AppHeader(navController = navController)
-
     Column(
         modifier = Modifier
             .fillMaxSize()

@@ -22,7 +22,6 @@ import com.example.vetapp.email.IEmailHandler
 
 @Composable
 fun DashboardScreen(navController: NavController) {
-    AppHeader(navController = navController)
     Column(
         modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,

@@ -22,6 +22,7 @@ import androidx.navigation.NavController
 import com.example.vetapp.ui.navigation.Screen
 import com.example.vetapp.viewmodels.UserViewModel
 import androidx.compose.runtime.getValue
+import androidx.navigation.compose.currentBackStackEntryAsState
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -29,26 +30,30 @@ import androidx.compose.runtime.getValue
 fun AppHeader(navController: NavController, viewModel: UserViewModel = hiltViewModel()) {
     val userName by viewModel.userName.collectAsState(initial = "Guest")
 
+    val currentBackStackEntry by navController.currentBackStackEntryFlow.collectAsState(null)
+    val currentRoute = currentBackStackEntry?.destination?.route ?: Screen.Dashboard.route
+
+    println("Current route: $currentRoute")
+    println("Dashboard route: ${Screen.Dashboard.route}")
+
     TopAppBar(
         title = { Text("VetApp", color = Color.White) },
         navigationIcon = {
-            IconButton(onClick = {
-                navController.navigate(Screen.Dashboard.route) {
-                    popUpTo(Screen.Dashboard.route) { inclusive = true }
-                }
-            }) {
-                Icon(Icons.Filled.Home, contentDescription = "Go to Dashboard")
-            }
-            val currentBackStackEntry = navController.currentBackStackEntry
-            val currentRoute = currentBackStackEntry?.destination?.route
-
-            if (currentRoute != Screen.Dashboard.route) {
+            if (currentRoute != Screen.Dashboard.route) { // Only show back button if not on Dashboard
                 IconButton(onClick = { navController.popBackStack() }) {
                     Icon(
-                        imageVector = Icons.Default.ArrowBack, // Back arrow icon
+                        imageVector = Icons.Default.ArrowBack,
                         contentDescription = "Back",
                         tint = Color.White
                     )
+                }
+            } else {
+                IconButton(onClick = {
+                    navController.navigate(Screen.Dashboard.route) {
+                        popUpTo(Screen.Dashboard.route) { inclusive = true }
+                    }
+                }) {
+                    Icon(Icons.Filled.Home, contentDescription = "Go to Dashboard", tint = Color.White)
                 }
             }
         },
