@@ -2,12 +2,10 @@ package com.example.vetapp.viewmodels
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.vetapp.Database.Entities.ReportTemplateField
 import com.example.vetapp.Database.Entities.Reports
-import com.example.vetapp.reports.ReportTemplateField
 import com.example.vetapp.repositories.IReportTemplateRepository
 import com.example.vetapp.repositories.IReportsRepository
-import com.example.vetapp.repositories.ReportTemplateRepository
-import com.example.vetapp.repositories.ReportsRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.SharingStarted
@@ -18,22 +16,62 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ReportViewModel @Inject constructor(
-    private val reportTemplateRepository : ReportTemplateRepository,
+    private val reportTemplateRepository : IReportTemplateRepository,
     private val reportRepository : IReportsRepository) : ViewModel()
 {
     val reportTemplateFields = reportTemplateRepository.ReportTemplateObservable().stateIn(viewModelScope, SharingStarted.Lazily, emptyList())
     val reports = reportRepository.reportsObservable().stateIn(viewModelScope, SharingStarted.Lazily, emptyList())
 
-    fun insert(reportTemplateField: List<ReportTemplateField>, name : String ){
+    fun insertReport( name : String ){
         //insert report
-        val report = Reports(Name = name)
+        val report = Reports(name = name)
         viewModelScope.launch {
             withContext(Dispatchers.IO){
                 reportRepository.insertReport(report)
             }
 
         }
-        //TODO:insert fields with link to newly inserted report
     }
 
+    fun deleteReport( report : Reports ){
+        viewModelScope.launch {
+            withContext(Dispatchers.IO){
+                reportRepository.deleteReport(report)
+            }
+
+        }
+    }
+
+    fun updateReport( report : Reports ){
+        viewModelScope.launch {
+            withContext(Dispatchers.IO){
+                reportRepository.updateReport(report)
+            }
+
+        }
+    }
+
+    fun insertReportTemplateField(field : ReportTemplateField){
+        viewModelScope.launch {
+            withContext(Dispatchers.IO){
+                reportTemplateRepository.insertReportTemplateField(field)
+            }
+        }
+    }
+
+    fun deleteReportTemplateField(field : ReportTemplateField){
+        viewModelScope.launch {
+            withContext(Dispatchers.IO){
+                reportTemplateRepository.deleteReportTemplateField(field)
+            }
+        }
+    }
+
+    fun updateReportTemplateField(field : ReportTemplateField){
+        viewModelScope.launch {
+            withContext(Dispatchers.IO){
+                reportTemplateRepository.updateReportTemplateField(field)
+            }
+        }
+    }
 }

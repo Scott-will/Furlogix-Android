@@ -1,0 +1,75 @@
+package com.example.vetapp
+
+import android.content.Context
+import androidx.room.Room
+import androidx.test.core.app.ApplicationProvider
+import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.example.vetapp.Database.AppDatabase
+import com.example.vetapp.Database.DAO.ReportTemplateDao
+import com.example.vetapp.Database.DAO.ReportsDao
+import com.example.vetapp.Database.Entities.ReportTemplateField
+import com.example.vetapp.Database.Entities.Reports
+import com.example.vetapp.reports.FieldType
+import junit.framework.TestCase.assertEquals
+import junit.framework.TestCase.assertNull
+import kotlinx.coroutines.flow.count
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.coroutines.runBlocking
+import org.junit.After
+import org.junit.Before
+import org.junit.Test
+import org.junit.runner.RunWith
+
+@RunWith(AndroidJUnit4::class)
+class ReportsTemplateDaoTest {
+    private lateinit var db: AppDatabase
+    private lateinit var reportTemplateDao: ReportTemplateDao
+    private lateinit var reportDao: ReportsDao
+
+    @Before
+    fun createDb() {
+        val context = ApplicationProvider.getApplicationContext<Context>()
+        context.deleteDatabase(R.string.database_name.toString())
+        db = Room.inMemoryDatabaseBuilder(context, AppDatabase::class.java).build()
+        reportTemplateDao = db.reportTemplateDao()
+        reportDao = db.reportsDao()
+        reportDao.insert(Reports(name = "Test"))
+    }
+
+    @After
+    fun closeDb() {
+        db.close()
+    }
+
+    @Test
+    fun insertAndRetrieveTemplate() = runBlocking {
+        val reportTemplateField = ReportTemplateField(name = "Test", fieldType = FieldType.NUMBER, reportId = 1)
+        reportTemplateDao.insert(reportTemplateField)
+        val templates = reportTemplateDao.getAll().first()
+        assertEquals(templates.count(), 1)
+        assertEquals(templates.firstOrNull()?.name, "Test")
+    }
+    @Test
+    fun updateTemplate() = runBlocking {
+        val reportTemplateField = ReportTemplateField(name = "Original Name", fieldType = FieldType.TEXT, reportId = 1)
+        reportTemplateDao.insert(reportTemplateField)
+        val insertedTemplate = reportTemplateDao.getAll().firstOrNull()?.first()
+        val updatedTemplate = insertedTemplate?.copy(name = "Updated Name")
+        reportTemplateDao.update(updatedTemplate!!)
+
+        val result = reportTemplateDao.getAll().firstOrNull { x -> x.first().uid == insertedTemplate.uid }
+        assertEquals(result?.first()?.name, "Updated Name")
+    }
+
+    @Test
+    fun deleteTemplate() = runBlocking {
+        val template = ReportTemplateField(name = "Test", fieldType = FieldType.BOOLEAN, reportId = 1)
+        reportTemplateDao.insert(template)
+        val insertedUser = reportTemplateDao.getAll().first().first()
+        reportTemplateDao.delete(insertedUser)
+
+        val result = reportTemplateDao.getReportById(1).first()
+        assert(result.isEmpty())
+    }
+}

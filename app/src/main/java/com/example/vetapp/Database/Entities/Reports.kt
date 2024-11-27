@@ -5,7 +5,7 @@ import androidx.room.PrimaryKey
 
 @Entity
 data class Reports (
-    @PrimaryKey val Id : Int = -1,
-     val Name : String,
+    @PrimaryKey (autoGenerate = true) val Id : Int = 0,
+     var name : String,
 )
 

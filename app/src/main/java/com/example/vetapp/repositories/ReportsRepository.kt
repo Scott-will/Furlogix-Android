@@ -13,11 +13,19 @@ class ReportsRepository @Inject constructor(
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO,
     private val reportDao : ReportsDao) : IReportsRepository  {
 
-        override fun reportsObservable(): Flow<List<Reports>> {
-            return reportDao.getAll()
-        }
+    override fun reportsObservable(): Flow<List<Reports>> {
+        return reportDao.getAll()
+    }
 
-        override suspend  fun insertReport(report: Reports) {
-            return reportDao.insert(report)
+    override suspend  fun insertReport(report: Reports) {
+        return reportDao.insert(report)
+    }
+
+    override suspend  fun updateReport(report: Reports) {
+        return reportDao.update(report)
+    }
+
+    override suspend  fun deleteReport(report: Reports) {
+            return reportDao.delete(report)
         }
 }
