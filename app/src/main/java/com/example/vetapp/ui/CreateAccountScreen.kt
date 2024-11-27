@@ -25,36 +25,67 @@ import com.example.vetapp.viewmodels.UserViewModel
 
 
 @Composable
-fun CreateAccountScreen(navController: NavController) {
-    val viewModel: UserViewModel = hiltViewModel()
-    var name by remember { mutableStateOf("") }
-    var surname by remember { mutableStateOf("") }
-    var petName by remember { mutableStateOf("") }
-    var email by remember { mutableStateOf("") }
-
+fun CreateAccountScreen(navController: NavController, viewModel: UserViewModel = hiltViewModel()) {
     Column(
         modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(16.dp, Alignment.CenterVertically)
     ) {
         Text(text = "Create Profile", fontSize = 24.sp)
+
         TextField(
-            value = name, onValueChange = { name = it }, label = { Text("Name") }
+            value = viewModel.name,
+            onValueChange = viewModel::onNameChange,
+            label = { Text("Name") },
+            isError = viewModel.nameError != null
         )
+        if (viewModel.nameError != null) {
+            Text(viewModel.nameError!!, color = androidx.compose.ui.graphics.Color.Red)
+        }
+
         TextField(
-            value = surname, onValueChange = { surname = it }, label = { Text("Surname") }
+            value = viewModel.surname,
+            onValueChange = viewModel::onSurnameChange,
+            label = { Text("Surname") },
+            isError = viewModel.surnameError != null
         )
+        if (viewModel.surnameError != null) {
+            Text(viewModel.surnameError!!, color = androidx.compose.ui.graphics.Color.Red)
+        }
+
         TextField(
-            value = petName, onValueChange = { petName = it }, label = { Text("Pet Name") }
+            value = viewModel.petName,
+            onValueChange = viewModel::onPetNameChange,
+            label = { Text("Pet Name") },
+            isError = viewModel.petNameError != null
         )
+        if (viewModel.petNameError != null) {
+            Text(viewModel.petNameError!!, color = androidx.compose.ui.graphics.Color.Red)
+        }
+
         TextField(
-            value = email, onValueChange = { email = it }, label = { Text("Email") }
+            value = viewModel.email,
+            onValueChange = viewModel::onEmailChange,
+            label = { Text("Email") },
+            isError = viewModel.emailError != null
         )
+        if (viewModel.emailError != null) {
+            Text(viewModel.emailError!!, color = androidx.compose.ui.graphics.Color.Red)
+        }
+
         Spacer(modifier = Modifier.height(16.dp))
+
         Button(onClick = {
-            val user = User(name = name, surname = surname, petName = petName, email = email)
-            viewModel.addUser(user)
-            navController.navigate(Screen.Dashboard.route)
+            if (viewModel.isFormValid()) {
+                val user = User(
+                    name = viewModel.name,
+                    surname = viewModel.surname,
+                    petName = viewModel.petName,
+                    email = viewModel.email
+                )
+                viewModel.addUser(user)
+                navController.navigate(Screen.Dashboard.route)
+            }
         }) {
             Text("Create Profile")
         }
