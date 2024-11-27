@@ -44,7 +44,7 @@ fun ReportItem(data: Reports,
         ) {
             // Left-aligned text
             Text(
-                text = data.Name,
+                text = data.name,
                 modifier = Modifier.weight(1f), // Ensures text is left-aligned
                 fontWeight = FontWeight.Bold // Optional: Makes the text bold
             )
@@ -59,7 +59,7 @@ fun ReportItem(data: Reports,
                         onUpdateClick(newItem)
                         showDialog = false
                     },
-                    currentLabel = data.Name,
+                    currentLabel = data.name,
                     report = data,
                     update = true
                 )

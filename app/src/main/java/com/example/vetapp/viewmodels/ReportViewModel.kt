@@ -29,7 +29,7 @@ class ReportViewModel @Inject constructor(
 
     fun insertReport( name : String ){
         //insert report
-        val report = Reports(Name = name)
+        val report = Reports(name = name)
         viewModelScope.launch {
             withContext(Dispatchers.IO){
                 reportRepository.insertReport(report)
