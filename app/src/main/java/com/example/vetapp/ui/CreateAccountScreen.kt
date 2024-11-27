@@ -21,12 +21,12 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.vetapp.Database.Entities.User
 import com.example.vetapp.ui.navigation.Screen
-import com.example.vetapp.viewmodels.CreateProfileViewModel
+import com.example.vetapp.viewmodels.UserViewModel
 
 
 @Composable
 fun CreateAccountScreen(navController: NavController) {
-    val viewModel: CreateProfileViewModel = hiltViewModel()
+    val viewModel: UserViewModel = hiltViewModel()
     var name by remember { mutableStateOf("") }
     var surname by remember { mutableStateOf("") }
     var petName by remember { mutableStateOf("") }

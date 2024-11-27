@@ -4,7 +4,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asFlow
 import androidx.lifecycle.viewModelScope
 import com.example.vetapp.Database.DAO.UserDao
+import com.example.vetapp.Database.Entities.User
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -16,6 +18,19 @@ class UserViewModel @Inject constructor(private val userDao: UserDao) : ViewMode
     fun updateUserProfile(name: String, email: String) {
         viewModelScope.launch {
             userDao.updateUser(name, email) // Assuming updateUser is defined in your UserDao
+        }
+    }
+
+    fun doesUserExist(onResult: (Boolean) -> Unit) {
+        viewModelScope.launch(Dispatchers.IO) {
+            val userExists = userDao.countUsers() > 0
+            onResult(userExists)
+        }
+    }
+
+    fun addUser(user: User) {
+        viewModelScope.launch(Dispatchers.IO) {
+            userDao.insert(user)
         }
     }
 }

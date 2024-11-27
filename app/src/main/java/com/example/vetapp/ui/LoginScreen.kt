@@ -11,14 +11,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.example.vetapp.viewmodels.LoginViewModel
+import com.example.vetapp.viewmodels.UserViewModel
 
 @Composable
 fun LoginScreen(navController: NavController) {
     // State variables to hold the username and password values
     var username by remember { mutableStateOf("") }
 
-    var viewModel: LoginViewModel = hiltViewModel()
+    var viewModel: UserViewModel = hiltViewModel()
 
     // State for handling user existence check
     var userExists by remember { mutableStateOf<Boolean?>(null) }
