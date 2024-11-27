@@ -1,4 +1,4 @@
-package com.example.vetapp.ui
+package com.example.vetapp.ui.screens
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Button

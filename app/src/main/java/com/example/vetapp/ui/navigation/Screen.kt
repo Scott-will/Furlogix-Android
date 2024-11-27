@@ -5,5 +5,6 @@ sealed class Screen(val route: String) {
     object CreateAccount : Screen("create_account")
     object Dashboard : Screen("dashboard")
     object ReportsTemplate : Screen("reports_template/{reportId}")
+    object ReportEntry : Screen("report_entry/{reportId}")
     object Reports : Screen("reports")
 }

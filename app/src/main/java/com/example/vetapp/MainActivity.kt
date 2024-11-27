@@ -18,11 +18,12 @@ import androidx.room.Room
 import com.example.vetapp.Database.AppDatabase
 import com.example.vetapp.broadcastreceivers.EmailBroadcastReceiver
 import com.example.vetapp.ui.navigation.Screen
-import com.example.vetapp.ui.LoginScreen
-import com.example.vetapp.ui.CreateAccountScreen
-import com.example.vetapp.ui.DashboardScreen
-import com.example.vetapp.ui.ReportScreen
-import com.example.vetapp.ui.ReportTemplateScreen
+import com.example.vetapp.ui.screens.LoginScreen
+import com.example.vetapp.ui.screens.CreateAccountScreen
+import com.example.vetapp.ui.screens.DashboardScreen
+import com.example.vetapp.ui.screens.ReportEntryScreen
+import com.example.vetapp.ui.screens.ReportScreen
+import com.example.vetapp.ui.screens.ReportTemplateScreen
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -76,6 +77,14 @@ fun VetApp() {
             }
             else{
                 ReportTemplateScreen(navController)
+            }
+        }
+        composable(Screen.ReportEntry.route, listOf(navArgument("reportId"){type = NavType.IntType})) { backStackEntry -> val reportId = backStackEntry.arguments?.getInt("reportId")
+            if (reportId != null) {
+                ReportEntryScreen(navController, reportId)
+            }
+            else{
+                ReportEntryScreen(navController)
             }
         }
         composable(Screen.Reports.route) { ReportScreen(navController) }
