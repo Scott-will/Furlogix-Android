@@ -18,6 +18,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.example.vetapp.Database.Entities.ReportTemplateField
+import com.example.vetapp.ui.componets.common.NoDataAvailable
 import com.example.vetapp.ui.navigation.Screen
 
 @Composable
@@ -38,14 +39,20 @@ fun ReportEntryForm(
         ) {
             Text(reportName)
             Spacer(modifier = Modifier.height(16.dp))
-            LazyColumn(modifier = Modifier.padding(16.dp)) {
-                items(fields.size) { item ->
-                    ReportEntry(
-                        fields[item],
-                        templateValueMap[fields[item].uid]!! // Bind each item to its corresponding state
-                    )
+            if(fields.size == 0){
+                NoDataAvailable("Templates")
+            }
+            else{
+                LazyColumn(modifier = Modifier.padding(16.dp)) {
+                    items(fields.size) { item ->
+                        ReportEntry(
+                            fields[item],
+                            templateValueMap[fields[item].uid]!! // Bind each item to its corresponding state
+                        )
+                    }
                 }
             }
+
         }
     }
 }

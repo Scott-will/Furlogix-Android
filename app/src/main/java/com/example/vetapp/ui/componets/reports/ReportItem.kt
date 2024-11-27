@@ -77,7 +77,7 @@ fun ReportsList(dataList: List<Reports>,
     Column(modifier = Modifier.padding(16.dp)) {
         dataList.forEach { data ->
             ReportItem(data = data,
-                onClick = {navController.navigate(Screen.ReportsTemplate.route.replace("{reportId}", "${data.Id}"))},
+                onClick = {navController.navigate(Screen.ReportEntry.route.replace("{reportId}", "${data.Id}"))},
                 onUpdateClick = onUpdateClick,
                 onDeleteClick = onDeleteClick)
         }

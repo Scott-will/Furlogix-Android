@@ -19,13 +19,13 @@ import com.example.vetapp.viewmodels.ReportViewModel
 @Composable
 fun ReportEntryScreen(navController: NavController, reportId : Int = 0, viewModel: ReportViewModel = hiltViewModel()
 ) {
-    val reportName = viewModel.reports.collectAsState().value.filter { it.Id == reportId }.first().Name
+    val reportName = viewModel.reports.collectAsState()//reportName.value.filter { it.Id == reportId }.first().name
     var templateValueMap = remember { mutableMapOf<Int, MutableState<String>>() }
     val templates = viewModel.reportTemplateFields.collectAsState().value.filter { it.reportId == reportId }
     templates.forEach { template ->
         templateValueMap[template.uid] = mutableStateOf("")
     }
-    ReportEntryForm(reportName = reportName, fields = templates, templateValueMap = templateValueMap)
+    ReportEntryForm(reportName = "Report Name Dummy", fields = templates, templateValueMap = templateValueMap)
     Spacer(modifier = Modifier.height(16.dp))
     Button(onClick = {viewModel.insertReportEntry(templateValueMap, reportId)}) {
         Text("Save")

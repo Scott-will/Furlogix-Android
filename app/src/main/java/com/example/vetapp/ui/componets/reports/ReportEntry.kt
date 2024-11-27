@@ -19,6 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.ui.platform.testTag
 import com.example.vetapp.Database.Entities.ReportTemplateField
 import com.example.vetapp.reports.FieldType
 
@@ -50,7 +51,7 @@ fun ReportEntry(reportTemplateField: ReportTemplateField, text : MutableState<St
                         },
                         label = { Text("Enter Number") },
                         keyboardOptions = KeyboardOptions.Default.copy(
-                            keyboardType = KeyboardType.Text
+                            keyboardType = KeyboardType.Number
                         ),
                         modifier = Modifier
                             .fillMaxWidth()
@@ -69,6 +70,7 @@ fun ReportEntry(reportTemplateField: ReportTemplateField, text : MutableState<St
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(8.dp)
+                            .testTag("CheckBox")
                     )
                     Text("Check if true")
                 }
@@ -80,7 +82,10 @@ fun ReportEntry(reportTemplateField: ReportTemplateField, text : MutableState<St
                         label = { Text("Enter Text") },
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(8.dp)
+                            .padding(8.dp),
+                        keyboardOptions = KeyboardOptions.Default.copy(
+                            keyboardType = KeyboardType.Number
+                        ),
                     )
                 }
                 else -> Text("Error in Template!!")
