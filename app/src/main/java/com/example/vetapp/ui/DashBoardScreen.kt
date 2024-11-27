@@ -31,8 +31,9 @@ fun DashboardScreen(navController: NavController) {
         Text("Welcome to the Dashboard!")
         Button(
             onClick = {
-                // Logic to validate and log in the user can be added here
-                navController.navigate("reports_template")
+                // I'm not quite sure what reportId is for
+                val reportId = 1
+                navController.navigate("reports_template/$reportId")
             },
             modifier = Modifier.fillMaxWidth()
         ) {
