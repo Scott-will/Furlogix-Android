@@ -26,7 +26,8 @@ import com.example.vetapp.ui.navigation.Screen
 fun ReportItem(data: Reports,
                onClick: (Reports) -> Unit,
                onDeleteClick : (Reports) -> Unit,
-               onUpdateClick : (Reports) -> Unit) {
+               onUpdateClick : (Reports) -> Unit,
+               editable: Boolean = true) {
     var showDialog by remember { mutableStateOf(false) }
     Surface(
         modifier = Modifier
@@ -49,37 +50,42 @@ fun ReportItem(data: Reports,
                 fontWeight = FontWeight.Bold // Optional: Makes the text bold
             )
             Spacer(modifier = Modifier.width(8.dp))
-            EditButton { showDialog = true }
-            Spacer(modifier = Modifier.width(8.dp))
-            DeleteButton {onDeleteClick(data)  }
-            if (showDialog) {
-                AddReportDialog(
-                    onDismiss = { showDialog = false },
-                    onSave = { newItem ->
-                        onUpdateClick(newItem)
-                        showDialog = false
-                    },
-                    currentLabel = data.name,
-                    report = data,
-                    update = true
-                )
+            if(editable){
+                EditButton { showDialog = true }
+                Spacer(modifier = Modifier.width(8.dp))
+                DeleteButton {onDeleteClick(data)  }
+                if (showDialog) {
+                    AddReportDialog(
+                        onDismiss = { showDialog = false },
+                        onSave = { newItem ->
+                            onUpdateClick(newItem)
+                            showDialog = false
+                        },
+                        currentLabel = data.name,
+                        report = data,
+                        update = true
+                    )
+                }
             }
+
         }
     }
 }
 
 @Composable
 fun ReportsList(dataList: List<Reports>,
-                navController: NavController,
                 onDeleteClick :  (Reports) ->Unit,
-                onUpdateClick :  (Reports) ->Unit) {
+                onUpdateClick :  (Reports) ->Unit,
+                onClick : (Reports) -> Unit,
+                editable : Boolean = true) {
 
     Column(modifier = Modifier.padding(16.dp)) {
         dataList.forEach { data ->
             ReportItem(data = data,
-                onClick = {navController.navigate(Screen.ReportEntry.route.replace("{reportId}", "${data.Id}"))},
+                onClick = onClick,
                 onUpdateClick = onUpdateClick,
-                onDeleteClick = onDeleteClick)
+                onDeleteClick = onDeleteClick,
+                editable = editable)
         }
 
     }

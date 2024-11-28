@@ -16,6 +16,7 @@ import com.example.vetapp.VetApplication
 import com.example.vetapp.email.EmailHandler
 import com.example.vetapp.email.EmailWrapper
 import com.example.vetapp.email.IEmailHandler
+import com.example.vetapp.ui.navigation.Screen
 
 @Composable
 fun DashboardScreen(navController: NavController) {
@@ -28,13 +29,19 @@ fun DashboardScreen(navController: NavController) {
         Text("Welcome to the Dashboard!")
         Button(
             onClick = {
-                // I'm not quite sure what reportId is for
-                val reportId = 1
-                navController.navigate("reports_template/$reportId")
+                navController.navigate(Screen.ManageReports.route)
             },
             modifier = Modifier.fillMaxWidth()
         ) {
-            Text("Reports")
+            Text("Manage Reports")
+        }
+        Button(
+            onClick = {
+                navController.navigate(Screen.Reports.route)
+            },
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text("Submit Reports")
         }
     }
     Box(

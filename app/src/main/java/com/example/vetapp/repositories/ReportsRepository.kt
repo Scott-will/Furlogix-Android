@@ -17,6 +17,10 @@ class ReportsRepository @Inject constructor(
         return reportDao.getAll()
     }
 
+    override fun getReportById(id : Int): Flow<Reports>{
+        return reportDao.getByReportId(id)
+    }
+
     override suspend  fun insertReport(report: Reports) {
         return reportDao.insert(report)
     }

@@ -27,10 +27,11 @@ import com.example.vetapp.ui.navigation.Screen
 import com.example.vetapp.ui.screens.LoginScreen
 import com.example.vetapp.ui.screens.CreateAccountScreen
 import com.example.vetapp.ui.screens.DashboardScreen
+import com.example.vetapp.ui.screens.ManageReportScreen
 import com.example.vetapp.ui.screens.ReportEntryScreen
-import com.example.vetapp.ui.screens.ReportScreen
 import com.example.vetapp.ui.screens.ReportTemplateScreen
 import com.example.vetapp.ui.screens.ProfileScreen
+import com.example.vetapp.ui.screens.ReportsScreen
 
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -114,7 +115,8 @@ fun VetApp() {
                 }
             }
             composable(Screen.Profile.route) { ProfileScreen(navController = navController) }
-            composable(Screen.Reports.route) { ReportScreen(navController) }
+            composable(Screen.ManageReports.route) { ManageReportScreen(navController) }
+            composable(Screen.Reports.route) { ReportsScreen(navController) }
         }
     }
 }

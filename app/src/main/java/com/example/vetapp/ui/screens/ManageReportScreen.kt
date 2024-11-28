@@ -24,10 +24,10 @@ import androidx.navigation.NavController
 import com.example.vetapp.ui.componets.common.AddItemButton
 import com.example.vetapp.ui.componets.reports.AddReportDialog
 import com.example.vetapp.ui.componets.reports.ReportsList
+import com.example.vetapp.ui.navigation.Screen
 
 @Composable
-fun ReportScreen(navController: NavController, viewModel: ReportViewModel = hiltViewModel()
-) {
+fun ManageReportScreen(navController: NavController, viewModel: ReportViewModel = hiltViewModel()) {
 
     var reports = viewModel.reports.collectAsState()
     var showDialog by remember { mutableStateOf(false) }
@@ -42,9 +42,10 @@ fun ReportScreen(navController: NavController, viewModel: ReportViewModel = hilt
     ) {
         // Show the list of form items
         Spacer(modifier = Modifier.height(16.dp))
-        ReportsList(reports.value, navController,
+        ReportsList(reports.value,
             onDeleteClick = {item -> viewModel.deleteReport(item)},
-            onUpdateClick = {item -> viewModel.updateReport(item)})
+            onUpdateClick = {item -> viewModel.updateReport(item)},
+            onClick = {data -> navController.navigate(Screen.ReportsTemplate.route.replace("{reportId}", "${data.Id}"))})
         Spacer(modifier = Modifier.height(16.dp))
         AddItemButton(onClick = {showDialog = true}, localModifier = Modifier
             .size(56.dp) // Size of the button

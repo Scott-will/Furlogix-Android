@@ -8,6 +8,8 @@ interface IReportsRepository {
 
     fun reportsObservable() : Flow<List<Reports>>
 
+    fun getReportById(id : Int): Flow<Reports>
+
     suspend fun insertReport(report : Reports)
 
     suspend fun updateReport(report : Reports)
