@@ -26,6 +26,8 @@ import com.example.vetapp.ui.componets.common.AddItemButton
 import com.example.vetapp.ui.componets.common.NoDataAvailable
 import com.example.vetapp.ui.componets.reports.AddReportTemplateDialog
 import com.example.vetapp.ui.componets.reports.ReporttemplatesList
+import androidx.lifecycle.asLiveData
+import com.example.vetapp.ui.componets.reports.AddReportDialog
 
 @Composable
 fun ReportTemplateScreen(navController: NavController, reportId : Int = 0, viewModel: ReportViewModel = hiltViewModel()
