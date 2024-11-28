@@ -23,12 +23,13 @@ class EmailHandler @Inject constructor(
         }
     }
 
-    override fun CreateEmail(wrapper: EmailWrapper?) : Intent {
+    override fun CreateEmail(wrapper: EmailWrapper) : Intent {
         val emailIntent = Intent(Intent.ACTION_SENDTO).apply {
             data = Uri.parse("mailto:") // Only email apps handle this.
-            putExtra(Intent.EXTRA_EMAIL, arrayOf("placeholder@gmail.com"))
-            putExtra(Intent.EXTRA_SUBJECT, "test")
+            putExtra(Intent.EXTRA_EMAIL, arrayOf(wrapper.ToEmailAddress))
+            putExtra(Intent.EXTRA_SUBJECT, wrapper.Subject)
             addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            putExtra(Intent.EXTRA_STREAM, wrapper.fileUri)
         }
         this.SendEmail(emailIntent)
         return emailIntent
