@@ -8,4 +8,6 @@ interface IReportEntryRepository {
     fun insertEntries(entries : List<ReportEntry> )
 
     fun getAllEntriesForReport(reportId : Int) : Flow<ReportEntry>
+
+    suspend fun getAllReportEntries(reportId : Int) : List<ReportEntry>
 }

@@ -38,7 +38,7 @@ class ReportViewModel @Inject constructor(
     val reports = reportRepository.reportsObservable().stateIn(viewModelScope, SharingStarted.Lazily, emptyList())
 
     fun getReportNameById(id : Int) = flow {
-        var report = reportRepository.getReportById(id).collect{
+        var report = reportRepository.getReportByIdFlow(id).collect{
             result -> emit(result.name)
         }
     }
@@ -126,17 +126,17 @@ class ReportViewModel @Inject constructor(
         * send to csvBuilder and generate csv file
         *
         * send to email handler as file attachment */
-        var reportName : String = ""
-        var templates = mutableListOf<ReportTemplateField>()
-        var entries = mutableListOf<ReportEntry>()
         viewModelScope.launch {
-            reportRepository.getReportById(reportId).collect{result -> reportName = result.name}
-            reportTemplateRepository.ReportTemplateObservable().collect{template -> templates.addAll(template)}
-            reportEntryRepository.getAllEntriesForReport(reportId).collect{entry -> entries.add(entry)}
-            var fileUri = CsvBuilder().buildCsv(VetApplication.applicationContext(), reportName, entries, templates)
-            val userEmail = userDao.getCurrentUserEmail()
-            val emailWrapper = EmailWrapper(userEmail.value.toString(), userEmail.value.toString(), "${reportName}_${Date()}", "", fileUri.toString())
-            SendEmail(emailWrapper)
+            withContext(Dispatchers.IO){
+                val reportName = reportRepository.getReportById(reportId).name
+                val templates = reportTemplateRepository.GetReportById(reportId)
+                val entries = reportEntryRepository.getAllReportEntries(reportId)
+                var fileUri = CsvBuilder().buildCsv(VetApplication.applicationContext(), reportName, entries, templates)
+                val userEmail = userDao.getCurrentUserEmail()
+                val emailWrapper = EmailWrapper(userEmail.value.toString(), userEmail.value.toString(), "${reportName}_${Date()}", "", fileUri)
+                SendEmail(emailWrapper)
+            }
+
         }
 
 

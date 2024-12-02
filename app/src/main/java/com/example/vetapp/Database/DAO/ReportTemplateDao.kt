@@ -14,13 +14,19 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface ReportTemplateDao {
     @Query("SELECT * FROM ReportTemplateField")
-    fun getAll(): Flow<List<ReportTemplateField>>
+    fun getAllFlow(): Flow<List<ReportTemplateField>>
+
+    @Query("SELECT * FROM ReportTemplateField")
+    fun getAll(): List<ReportTemplateField>
 
     @Insert
     fun insert(vararg users: ReportTemplateField)
 
     @Query("SELECT * FROM REPORTTEMPLATEFIELD WHERE reportId = :id")
-    fun getReportById(id: Int): Flow<List<ReportTemplateField>>
+    fun getReportByIdFlow(id: Int): Flow<List<ReportTemplateField>>
+
+    @Query("SELECT * FROM REPORTTEMPLATEFIELD WHERE reportId = :id")
+    fun getReportById(id: Int): List<ReportTemplateField>
 
     @Update
     fun update(vararg report : ReportTemplateField)

@@ -24,13 +24,18 @@ class EmailHandler @Inject constructor(
     }
 
     override fun CreateEmail(wrapper: EmailWrapper) : Intent {
-        val emailIntent = Intent(Intent.ACTION_SENDTO).apply {
-            data = Uri.parse("mailto:") // Only email apps handle this.
+        val emailIntent = Intent(Intent.ACTION_SEND).apply {
+            type = "message/rfc822"
             putExtra(Intent.EXTRA_EMAIL, arrayOf(wrapper.ToEmailAddress))
             putExtra(Intent.EXTRA_SUBJECT, wrapper.Subject)
             addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             putExtra(Intent.EXTRA_STREAM, wrapper.fileUri)
+            addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         }
+        context.grantUriPermission(
+            "com.google.android.gm", wrapper.fileUri, Intent.FLAG_GRANT_READ_URI_PERMISSION
+        )
         this.SendEmail(emailIntent)
         return emailIntent
     }

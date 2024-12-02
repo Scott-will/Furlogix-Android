@@ -14,10 +14,18 @@ class ReportsRepository @Inject constructor(
     private val reportDao : ReportsDao) : IReportsRepository  {
 
     override fun reportsObservable(): Flow<List<Reports>> {
-        return reportDao.getAll()
+        return reportDao.getAllFlow()
     }
 
-    override fun getReportById(id : Int): Flow<Reports>{
+    override suspend fun getAllReports(): List<Reports> {
+        return reportDao.getAllReports()
+    }
+
+    override fun getReportByIdFlow(id : Int): Flow<Reports>{
+        return reportDao.getByReportIdFlow(id)
+    }
+
+    override suspend fun getReportById(id: Int) : Reports{
         return reportDao.getByReportId(id)
     }
 
