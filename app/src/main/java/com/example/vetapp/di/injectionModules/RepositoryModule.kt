@@ -1,13 +1,16 @@
 package com.example.vetapp.di.injectionModules
 
 import com.example.vetapp.Database.AppDatabase
+import com.example.vetapp.Database.DAO.ReportEntryDao
 import com.example.vetapp.Database.DAO.ReportTemplateDao
 import com.example.vetapp.Database.DAO.ReportsDao
 import com.example.vetapp.Database.DAO.UserDao
 import com.example.vetapp.email.EmailHandler
 import com.example.vetapp.email.IEmailHandler
+import com.example.vetapp.repositories.IReportEntryRepository
 import com.example.vetapp.repositories.IReportTemplateRepository
 import com.example.vetapp.repositories.IReportsRepository
+import com.example.vetapp.repositories.ReportEntryRepository
 import com.example.vetapp.repositories.ReportTemplateRepository
 import com.example.vetapp.repositories.ReportsRepository
 import dagger.Binds
@@ -27,6 +30,9 @@ abstract class RepositoryModule {
     @Binds
     abstract fun bindReportTemplateRepository(reportsRepository: ReportTemplateRepository): IReportTemplateRepository
 
+    @Binds
+    abstract fun bindReportEntryRepository(reportsRepository: ReportEntryRepository): IReportEntryRepository
+
     companion object {
         @Provides
         fun provideReportsDao(database: AppDatabase): ReportsDao {
@@ -36,6 +42,11 @@ abstract class RepositoryModule {
         @Provides
         fun provideReportTemplateDao(database: AppDatabase): ReportTemplateDao {
             return database.reportTemplateDao()
+        }
+
+        @Provides
+        fun provideReportEntryDao(database: AppDatabase): ReportEntryDao {
+            return database.reportEntryDao()
         }
 
         @Provides

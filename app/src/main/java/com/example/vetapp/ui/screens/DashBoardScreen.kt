@@ -1,13 +1,10 @@
-package com.example.vetapp.ui
+package com.example.vetapp.ui.screens
 
-import android.content.Context
-import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.material3.Button
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -19,6 +16,7 @@ import com.example.vetapp.VetApplication
 import com.example.vetapp.email.EmailHandler
 import com.example.vetapp.email.EmailWrapper
 import com.example.vetapp.email.IEmailHandler
+import com.example.vetapp.ui.navigation.Screen
 
 @Composable
 fun DashboardScreen(navController: NavController) {
@@ -31,13 +29,19 @@ fun DashboardScreen(navController: NavController) {
         Text("Welcome to the Dashboard!")
         Button(
             onClick = {
-                // I'm not quite sure what reportId is for
-                val reportId = 1
-                navController.navigate("reports_template/$reportId")
+                navController.navigate(Screen.ManageReports.route)
             },
             modifier = Modifier.fillMaxWidth()
         ) {
-            Text("Reports")
+            Text("Manage Reports")
+        }
+        Button(
+            onClick = {
+                navController.navigate(Screen.Reports.route)
+            },
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text("Submit Reports")
         }
     }
     Box(
@@ -45,7 +49,7 @@ fun DashboardScreen(navController: NavController) {
         contentAlignment = Alignment.BottomCenter
     )
     {
-        Button(onClick = {SendEmail()}){
+        Button(onClick = { SendEmail() }){
             Text("Send Reports")
         }
     }

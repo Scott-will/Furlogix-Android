@@ -1,4 +1,4 @@
-package com.example.vetapp
+package com.example.vetapp.dao
 
 import android.content.Context
 import androidx.room.Room
@@ -9,10 +9,9 @@ import com.example.vetapp.Database.DAO.ReportTemplateDao
 import com.example.vetapp.Database.DAO.ReportsDao
 import com.example.vetapp.Database.Entities.ReportTemplateField
 import com.example.vetapp.Database.Entities.Reports
+import com.example.vetapp.R
 import com.example.vetapp.reports.FieldType
 import junit.framework.TestCase.assertEquals
-import junit.framework.TestCase.assertNull
-import kotlinx.coroutines.flow.count
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.runBlocking
