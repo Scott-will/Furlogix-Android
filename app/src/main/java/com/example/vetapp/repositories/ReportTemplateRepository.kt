@@ -14,6 +14,10 @@ class ReportTemplateRepository @Inject constructor(
     private val reportTemplateDao :ReportTemplateDao) : IReportTemplateRepository {
 
     override fun ReportTemplateObservable() : Flow<List<ReportTemplateField>> {
+        return reportTemplateDao.getAllFlow()
+    }
+
+    override suspend fun GetAllReportTemplates(): List<ReportTemplateField> {
         return reportTemplateDao.getAll()
     }
 
@@ -21,7 +25,11 @@ class ReportTemplateRepository @Inject constructor(
         return reportTemplateDao.insert(reportTemplateField)
     }
 
-    override suspend fun GetReportById(id: Int): Flow<List<ReportTemplateField>> {
+    override suspend fun GetReportByIdFlow(id: Int): Flow<List<ReportTemplateField>> {
+        return reportTemplateDao.getReportByIdFlow(id)
+    }
+
+    override suspend fun GetReportById(id: Int): List<ReportTemplateField> {
         return reportTemplateDao.getReportById(id)
     }
 

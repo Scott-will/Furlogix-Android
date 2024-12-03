@@ -4,9 +4,15 @@ import androidx.compose.runtime.MutableState
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.vetapp.Database.DAO.UserDao
 import com.example.vetapp.Database.Entities.ReportEntry
 import com.example.vetapp.Database.Entities.ReportTemplateField
 import com.example.vetapp.Database.Entities.Reports
+import com.example.vetapp.VetApplication
+import com.example.vetapp.email.CsvBuilder
+import com.example.vetapp.email.EmailHandler
+import com.example.vetapp.email.EmailWrapper
+import com.example.vetapp.email.IEmailHandler
 import com.example.vetapp.repositories.IReportEntryRepository
 import com.example.vetapp.repositories.IReportTemplateRepository
 import com.example.vetapp.repositories.IReportsRepository
@@ -16,6 +22,7 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import java.util.Date
 import javax.inject.Inject
@@ -24,13 +31,14 @@ import javax.inject.Inject
 class ReportViewModel @Inject constructor(
     private val reportTemplateRepository : IReportTemplateRepository,
     private val reportRepository : IReportsRepository,
+    private val userDao: UserDao,
     private val reportEntryRepository : IReportEntryRepository) : ViewModel()
 {
     val reportTemplateFields = reportTemplateRepository.ReportTemplateObservable().stateIn(viewModelScope, SharingStarted.Lazily, emptyList())
     val reports = reportRepository.reportsObservable().stateIn(viewModelScope, SharingStarted.Lazily, emptyList())
 
     fun getReportNameById(id : Int) = flow {
-        var report = reportRepository.getReportById(id).collect{
+        var report = reportRepository.getReportByIdFlow(id).collect{
             result -> emit(result.name)
         }
     }
@@ -105,5 +113,37 @@ class ReportViewModel @Inject constructor(
                reportEntryRepository.insertEntries(entries)
            }
        }
+    }
+
+    fun gatherReportData(reportId : Int){
+        /*get all information from database
+        *information is:
+        * report name
+        * templates
+        * data entry
+        *
+        * once all data is retrieved
+        * send to csvBuilder and generate csv file
+        *
+        * send to email handler as file attachment */
+        viewModelScope.launch {
+            withContext(Dispatchers.IO){
+                val reportName = reportRepository.getReportById(reportId).name
+                val templates = reportTemplateRepository.GetReportById(reportId)
+                val entries = reportEntryRepository.getAllReportEntries(reportId)
+                var fileUri = CsvBuilder().buildCsv(VetApplication.applicationContext(), reportName, entries, templates)
+                val userEmail = userDao.getCurrentUserEmail()
+                val emailWrapper = EmailWrapper(userEmail.value.toString(), userEmail.value.toString(), "${reportName}_${Date()}", "", fileUri)
+                SendEmail(emailWrapper)
+            }
+
+        }
+
+
+    }
+
+    fun SendEmail(wrapper : EmailWrapper){
+        val emailHandler: IEmailHandler = EmailHandler(VetApplication.applicationContext())
+        emailHandler.CreateAndSendEmail(wrapper)
     }
 }

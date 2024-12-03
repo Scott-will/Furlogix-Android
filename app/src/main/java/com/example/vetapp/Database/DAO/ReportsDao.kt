@@ -13,10 +13,16 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface ReportsDao {
     @Query("SELECT * FROM Reports")
-    fun getAll(): Flow<List<Reports>>
+    fun getAllFlow(): Flow<List<Reports>>
+
+    @Query("SELECT * FROM Reports")
+    fun getAllReports() : List<Reports>
 
     @Query("SELECT * FROM Reports Where Id = :id Limit 1")
-    fun getByReportId(id : Int): Flow<Reports>
+    fun getByReportIdFlow(id : Int): Flow<Reports>
+
+    @Query("SELECT * FROM Reports Where Id = :id Limit 1")
+    fun getByReportId(id : Int): Reports
 
     @Insert
     fun insert(vararg reports: Reports)

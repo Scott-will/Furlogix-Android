@@ -1,5 +1,6 @@
 package com.example.vetapp.ui.screens
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -17,6 +18,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.example.vetapp.VetApplication
+import com.example.vetapp.email.EmailHandler
+import com.example.vetapp.email.EmailWrapper
+import com.example.vetapp.email.IEmailHandler
 import com.example.vetapp.ui.componets.reports.ReportEntryForm
 import com.example.vetapp.viewmodels.ReportViewModel
 
@@ -44,12 +49,26 @@ fun ReportEntryScreen(navController: NavController, reportId : Int = 0, viewMode
         Spacer(modifier = Modifier.height(16.dp))
         Button(onClick = {
             viewModel.insertReportEntry(templateValueMap, reportId)
-        saveSuccess.value = true}) {
+            saveSuccess.value = true
+        }) {
             Text("Save")
         }
         //TODO: Better feedback here
-        if(saveSuccess.value) {
+        if (saveSuccess.value) {
             Text("Saved Successfully")
         }
+
+        Box(
+            modifier = Modifier.fillMaxSize(),
+            contentAlignment = Alignment.BottomCenter
+        )
+        {
+            Button(onClick = { viewModel.gatherReportData(reportId) }) {
+                Text("Send Reports")
+            }
+        }
     }
+
 }
+
+
