@@ -11,6 +11,7 @@ import com.example.vetapp.Database.Entities.User
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
@@ -22,8 +23,6 @@ class UserViewModel @Inject constructor(private val userDao: UserDao) : ViewMode
         private set
     var surname by mutableStateOf("")
         private set
-    var petName by mutableStateOf("")
-        private set
     var email by mutableStateOf("")
         private set
 
@@ -31,8 +30,6 @@ class UserViewModel @Inject constructor(private val userDao: UserDao) : ViewMode
     var nameError by mutableStateOf<String?>(null)
         private set
     var surnameError by mutableStateOf<String?>(null)
-        private set
-    var petNameError by mutableStateOf<String?>(null)
         private set
     var emailError by mutableStateOf<String?>(null)
         private set
@@ -50,9 +47,12 @@ class UserViewModel @Inject constructor(private val userDao: UserDao) : ViewMode
         }
     }
 
-    fun addUser(user: User) {
+    fun addUser(user: User, onUserAdded: (Long) -> Unit) {
         viewModelScope.launch(Dispatchers.IO) {
-            userDao.insert(user)
+            val userId = userDao.insert(user)
+            withContext(Dispatchers.Main) {
+                onUserAdded(userId)
+            }
         }
     }
 
@@ -64,11 +64,6 @@ class UserViewModel @Inject constructor(private val userDao: UserDao) : ViewMode
     fun onSurnameChange(newSurname: String) {
         surname = newSurname
         surnameError = null
-    }
-
-    fun onPetNameChange(newPetName: String) {
-        petName = newPetName
-        petNameError = null
     }
 
     fun onEmailChange(newEmail: String) {
@@ -85,10 +80,6 @@ class UserViewModel @Inject constructor(private val userDao: UserDao) : ViewMode
         }
         if (surname.isBlank()) {
             surnameError = "Surname cannot be empty"
-            isValid = false
-        }
-        if (petName.isBlank()) {
-            petNameError = "Pet Name cannot be empty"
             isValid = false
         }
         if (email.isBlank() || !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {

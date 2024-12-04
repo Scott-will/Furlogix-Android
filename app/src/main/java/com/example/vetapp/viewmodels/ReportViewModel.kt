@@ -133,7 +133,7 @@ class ReportViewModel @Inject constructor(
                 val entries = reportEntryRepository.getAllReportEntries(reportId)
                 var fileUri = CsvBuilder().buildCsv(VetApplication.applicationContext(), reportName, entries, templates)
                 val userEmail = userDao.getCurrentUserEmail()
-                val emailWrapper = EmailWrapper(userEmail.value.toString(), userEmail.value.toString(), "${reportName}_${Date()}", "", fileUri)
+                val emailWrapper = EmailWrapper(userEmail.value.toString(), "${reportName}_${Date()}", "", fileUri)
                 SendEmail(emailWrapper)
             }
 
