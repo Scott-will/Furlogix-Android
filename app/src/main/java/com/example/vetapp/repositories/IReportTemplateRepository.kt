@@ -12,6 +12,8 @@ interface IReportTemplateRepository {
     
     suspend fun GetReportByIdFlow(id : Int) : Flow<List<ReportTemplateField>>
 
+    suspend fun GetTemplateById(id : Int) : ReportTemplateField
+
     suspend fun GetReportById(id : Int) : List<ReportTemplateField>
 
     suspend fun deleteReportTemplateField(reportTemplateField : ReportTemplateField)

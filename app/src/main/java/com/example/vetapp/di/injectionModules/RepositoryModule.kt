@@ -7,6 +7,9 @@ import com.example.vetapp.Database.DAO.ReportsDao
 import com.example.vetapp.Database.DAO.UserDao
 import com.example.vetapp.email.EmailHandler
 import com.example.vetapp.email.IEmailHandler
+import com.example.vetapp.reports.ReportEntryValidator
+import com.example.vetapp.reports.ReportTemplateValidator
+import com.example.vetapp.reports.ReportValidator
 import com.example.vetapp.repositories.IReportEntryRepository
 import com.example.vetapp.repositories.IReportTemplateRepository
 import com.example.vetapp.repositories.IReportsRepository
@@ -33,6 +36,7 @@ abstract class RepositoryModule {
     @Binds
     abstract fun bindReportEntryRepository(reportsRepository: ReportEntryRepository): IReportEntryRepository
 
+
     companion object {
         @Provides
         fun provideReportsDao(database: AppDatabase): ReportsDao {
@@ -52,6 +56,16 @@ abstract class RepositoryModule {
         @Provides
         fun provideUserDao(database: AppDatabase): UserDao {
             return database.userDao()
+        }
+
+        @Provides
+        fun provideReportValidator() : ReportValidator{
+            return ReportValidator()
+        }
+
+        @Provides
+        fun provideReportTemplateValidator() : ReportTemplateValidator{
+            return ReportTemplateValidator()
         }
     }
 }

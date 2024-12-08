@@ -54,6 +54,7 @@ dependencies {
     implementation(libs.androidx.ui.test.android)
     implementation(libs.androidx.runtime.livedata)
     testImplementation(libs.junit)
+    testImplementation("io.mockk:mockk:1.13.4") // For mocking the IReportsRepository
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.ui.test.junit4)

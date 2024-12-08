@@ -2,6 +2,7 @@ package com.example.vetapp.repositories
 
 import com.example.vetapp.Database.DAO.ReportTemplateDao
 import com.example.vetapp.Database.Entities.ReportTemplateField
+import com.example.vetapp.reports.ReportTemplateValidator
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -10,7 +11,7 @@ import javax.inject.Singleton
 
 @Singleton
 class ReportTemplateRepository @Inject constructor(
-    private val dispatcher: CoroutineDispatcher = Dispatchers.IO,
+    private val reportTemplateValidator: ReportTemplateValidator,
     private val reportTemplateDao :ReportTemplateDao) : IReportTemplateRepository {
 
     override fun ReportTemplateObservable() : Flow<List<ReportTemplateField>> {
@@ -22,6 +23,9 @@ class ReportTemplateRepository @Inject constructor(
     }
 
     override suspend fun insertReportTemplateField(reportTemplateField : ReportTemplateField){
+        if(!reportTemplateValidator.ValidateTemplate(reportTemplateField)){
+            return
+        }
         return reportTemplateDao.insert(reportTemplateField)
     }
 
@@ -34,10 +38,17 @@ class ReportTemplateRepository @Inject constructor(
     }
 
     override suspend fun updateReportTemplateField(reportTemplateField : ReportTemplateField){
+        if(!reportTemplateValidator.ValidateTemplate(reportTemplateField)){
+            return
+        }
         return reportTemplateDao.update(reportTemplateField)
     }
     override suspend fun deleteReportTemplateField(reportTemplateField : ReportTemplateField){
         return reportTemplateDao.delete(reportTemplateField)
+    }
+
+    override suspend fun GetTemplateById(id : Int) : ReportTemplateField{
+        return reportTemplateDao.getTemplateById(id)
     }
 
 }

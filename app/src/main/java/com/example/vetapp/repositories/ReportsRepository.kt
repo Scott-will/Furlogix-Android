@@ -2,6 +2,7 @@ package com.example.vetapp.repositories
 
 import com.example.vetapp.Database.DAO.ReportsDao
 import com.example.vetapp.Database.Entities.Reports
+import com.example.vetapp.reports.ReportValidator
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -10,7 +11,7 @@ import javax.inject.Singleton
 
 @Singleton
 class ReportsRepository @Inject constructor(
-    private val dispatcher: CoroutineDispatcher = Dispatchers.IO,
+    private val reportValidator: ReportValidator,
     private val reportDao : ReportsDao) : IReportsRepository  {
 
     override fun reportsObservable(): Flow<List<Reports>> {
@@ -30,10 +31,16 @@ class ReportsRepository @Inject constructor(
     }
 
     override suspend  fun insertReport(report: Reports) {
+        if(!reportValidator.ValidateReport(report)){
+            return
+        }
         return reportDao.insert(report)
     }
 
     override suspend  fun updateReport(report: Reports) {
+        if(!reportValidator.ValidateReport(report)){
+            return
+        }
         return reportDao.update(report)
     }
 

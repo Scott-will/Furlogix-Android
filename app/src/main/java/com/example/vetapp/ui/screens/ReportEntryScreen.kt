@@ -34,7 +34,6 @@ fun ReportEntryScreen(navController: NavController, reportId : Int = 0, viewMode
     templates.forEach { template ->
         templateValueMap[template.uid] = mutableStateOf("")
     }
-    var saveSuccess = remember { mutableStateOf(false) }
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -49,13 +48,8 @@ fun ReportEntryScreen(navController: NavController, reportId : Int = 0, viewMode
         Spacer(modifier = Modifier.height(16.dp))
         Button(onClick = {
             viewModel.insertReportEntry(templateValueMap, reportId)
-            saveSuccess.value = true
         }) {
             Text("Save")
-        }
-        //TODO: Better feedback here
-        if (saveSuccess.value) {
-            Text("Saved Successfully")
         }
 
         Box(

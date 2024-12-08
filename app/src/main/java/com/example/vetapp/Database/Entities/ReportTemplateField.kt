@@ -2,6 +2,7 @@ package com.example.vetapp.Database.Entities
 
 import androidx.room.Entity
 import androidx.room.ForeignKey
+import androidx.room.Index
 import androidx.room.PrimaryKey
 import com.example.vetapp.reports.FieldType
 
@@ -12,7 +13,11 @@ import com.example.vetapp.reports.FieldType
     childColumns = arrayOf("reportId"),
     onUpdate = ForeignKey.CASCADE,
     onDelete = ForeignKey.CASCADE
-)])
+)],
+    indices = [
+        Index("reportId")
+    ]
+)
 data class ReportTemplateField(
     @PrimaryKey(autoGenerate = true) val uid: Int = 0,
     var reportId: Int,

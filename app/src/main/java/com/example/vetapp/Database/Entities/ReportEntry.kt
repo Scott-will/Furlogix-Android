@@ -2,6 +2,7 @@ package com.example.vetapp.Database.Entities
 
 import androidx.room.Entity
 import androidx.room.ForeignKey
+import androidx.room.Index
 import androidx.room.PrimaryKey
 import java.util.Date
 
@@ -18,7 +19,11 @@ ForeignKey(
     childColumns = arrayOf("templateId"),
     onUpdate = ForeignKey.CASCADE,
     onDelete = ForeignKey.CASCADE
-)])
+)],
+    indices = [
+        Index("reportId"),
+        Index("templateId")
+    ])
 data class ReportEntry (
     @PrimaryKey(autoGenerate = true) val Id : Int = 0,
     var value : String,

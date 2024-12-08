@@ -5,7 +5,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface IReportEntryRepository {
 
-    fun insertEntries(entries : List<ReportEntry> )
+    suspend fun insertEntries(entries : List<ReportEntry> ) : Boolean
 
     fun getAllEntriesForReport(reportId : Int) : Flow<ReportEntry>
 
