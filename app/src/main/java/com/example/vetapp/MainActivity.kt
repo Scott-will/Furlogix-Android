@@ -114,7 +114,13 @@ fun VetApp() {
                     ReportEntryScreen(navController)
                 }
             }
-            composable(Screen.Profile.route) { ProfileScreen(navController = navController) }
+            composable(
+                Screen.Profile.route,
+                arguments = listOf(navArgument("userId") { type = NavType.LongType })
+            ) { backStackEntry ->
+                val userId = backStackEntry.arguments?.getLong("userId") ?: 0L
+                ProfileScreen(userId = userId, navController = navController)
+            }
             composable(Screen.ManageReports.route) { ManageReportScreen(navController) }
             composable(Screen.Reports.route) { ReportsScreen(navController) }
         }

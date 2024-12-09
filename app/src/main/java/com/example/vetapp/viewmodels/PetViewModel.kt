@@ -32,8 +32,8 @@ class PetViewModel @Inject constructor(private val petDao: PetDao) : ViewModel()
 
     fun loadPetsForUser(userId: Long) {
         viewModelScope.launch {
-            val petList = petDao.getPetsForUser(userId)
-            _pets.value = petList
+            val userPets = petDao.getPetsForUser(userId)
+            _pets.value = userPets
         }
     }
 

@@ -27,6 +27,9 @@ interface UserDao {
     @Update
     fun update(user: User)
 
+    @Query("SELECT uid FROM user_table LIMIT 1")
+    fun getCurrentUserId(): Flow<Long>
+
     @Query("SELECT * FROM user_table WHERE uid = :userId")
     fun getUserById(userId: Int): User?
 

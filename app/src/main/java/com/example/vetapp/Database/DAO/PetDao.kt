@@ -29,6 +29,6 @@ interface PetDao {
     fun deleteAll()
 
     @Query("SELECT * FROM pet_table WHERE userId = :userId")
-    fun getPetsForUser(userId: Long): List<Pet>
+    suspend fun getPetsForUser(userId: Long): List<Pet>
 
 }

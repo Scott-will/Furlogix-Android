@@ -10,6 +10,7 @@ import com.example.vetapp.Database.DAO.UserDao
 import com.example.vetapp.Database.Entities.User
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
@@ -18,6 +19,7 @@ import javax.inject.Inject
 class UserViewModel @Inject constructor(private val userDao: UserDao) : ViewModel() {
     val userName = userDao.getCurrentUserName().asFlow()
     val userEmail = userDao.getCurrentUserEmail().asFlow()
+    val userId: Flow<Long> = userDao.getCurrentUserId()
 
     var name by mutableStateOf("")
         private set

@@ -9,6 +9,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -20,11 +21,15 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.example.vetapp.Database.Entities.Pet
+import com.example.vetapp.viewmodels.PetViewModel
 import com.example.vetapp.viewmodels.UserViewModel
 
 @Composable
 fun ProfileScreen(
+    userId: Long,
     viewModel: UserViewModel = hiltViewModel(),
+    petViewModel: PetViewModel = hiltViewModel(),
     navController: NavController
 ) {
     val userName by viewModel.userName.collectAsState(initial = "")
@@ -32,6 +37,14 @@ fun ProfileScreen(
 
     var name by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
+    //val pets by petViewModel.pets.collectAsState(initial = emptyList())
+    var selectedPet by remember { mutableStateOf<Pet?>(null) }
+
+    val pets by petViewModel.pets.collectAsState()
+
+    LaunchedEffect(userId) {
+        petViewModel.loadPetsForUser(userId)
+    }
 
     name = userName
     email = userEmail
@@ -40,7 +53,8 @@ fun ProfileScreen(
         modifier = Modifier
             .fillMaxSize()
             .padding(16.dp),
-        verticalArrangement = Arrangement.Center
+            verticalArrangement = Arrangement.spacedBy(16.dp)
+        //verticalArrangement = Arrangement.Center
     ) {
         Text(text = "Profile", fontSize = 24.sp)
 
@@ -70,5 +84,30 @@ fun ProfileScreen(
         ) {
             Text("Save")
         }
+
+        Text(text = "Pets", fontSize = 20.sp, modifier = Modifier.padding(top = 16.dp))
+
+        // Display pet names
+        pets.forEach { pet ->
+            Button(
+                onClick = { selectedPet = pet },
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text(text = pet.name)
+            }
+        }
+    }
+
+    if (selectedPet != null) {
+        androidx.compose.material3.AlertDialog(
+            onDismissRequest = { selectedPet = null },
+            title = { Text(text = "Pet Details") },
+            text = { Text(text = "Type: ${selectedPet?.type}") },
+            confirmButton = {
+                Button(onClick = { selectedPet = null }) {
+                    Text("Close")
+                }
+            }
+        )
     }
 }
