@@ -42,6 +42,9 @@ interface UserDao {
     @Query("DELETE FROM user_table")
     suspend fun deleteAllUsers()
 
+    @Query("DELETE FROM user_table WHERE uid = :userId")
+    suspend fun deleteUserById(userId: Long)
+
     @Query("SELECT name FROM user_table LIMIT 1")
     fun getCurrentUserName(): LiveData<String>
 

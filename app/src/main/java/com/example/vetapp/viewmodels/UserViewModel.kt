@@ -91,4 +91,10 @@ class UserViewModel @Inject constructor(private val userDao: UserDao) : ViewMode
 
         return isValid
     }
+
+    fun deleteUser(userId: Long) {
+        viewModelScope.launch(Dispatchers.IO) {
+            userDao.deleteUserById(userId)
+        }
+    }
 }

@@ -23,12 +23,14 @@ import com.example.vetapp.ui.navigation.Screen
 import com.example.vetapp.viewmodels.UserViewModel
 import androidx.compose.runtime.getValue
 import androidx.navigation.compose.currentBackStackEntryAsState
+import kotlinx.coroutines.flow.map
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AppHeader(navController: NavController, userViewModel: UserViewModel = hiltViewModel()) {
-    val userName by userViewModel.userName.collectAsState(initial = "Guest")
+    val userNameFlow = userViewModel.userName.map { it ?: "Guest" }
+    val userName by userNameFlow.collectAsState(initial = "Guest")
     val userId by userViewModel.userId.collectAsState(initial = 0L)
 
     val currentBackStackEntry by navController.currentBackStackEntryFlow.collectAsState(null)

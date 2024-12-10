@@ -56,27 +56,37 @@ fun CreateAccountScreen(
             Text(userViewModel.surnameError!!, color = androidx.compose.ui.graphics.Color.Red)
         }
 
+        val petName = petViewModel.name.collectAsState().value
+        val petType = petViewModel.type.collectAsState().value
+        //val petNameError = petViewModel.nameError.collectAsState().value
+
         TextField(
-            value = petViewModel.name.collectAsState().value,
+            value = petName,
             onValueChange = { petViewModel.name.value = it },
             label = { Text("Pet Name") },
-            isError = petViewModel.nameError.collectAsState().value != null
+            //isError = petNameError != null
         )
-        if (petViewModel.nameError.collectAsState().value != null) {
+        /*
+        if (petNameError != null) {
             Text(
-                text = petViewModel.nameError.collectAsState().value ?: "",
+                text = petNameError,
                 color = androidx.compose.ui.graphics.Color.Red
             )
         }
+        */
+
 
         TextField(
-            value = petViewModel.type.collectAsState().value,
+            value = petType,
             onValueChange = { petViewModel.type.value = it },
             label = { Text("Pet Type") }
         )
+        /*
         if (petViewModel.petNameError != null) {
             Text(petViewModel.petNameError!!, color = androidx.compose.ui.graphics.Color.Red)
         }
+        */
+
 
         TextField(
             value = userViewModel.email,
@@ -91,7 +101,7 @@ fun CreateAccountScreen(
         Spacer(modifier = Modifier.height(16.dp))
 
         Button(onClick = {
-            if (userViewModel.isFormValid()) {
+            if (userViewModel.isFormValid() && petViewModel.validateForm()) {
                 val user = User(
                     name = userViewModel.name,
                     surname = userViewModel.surname,

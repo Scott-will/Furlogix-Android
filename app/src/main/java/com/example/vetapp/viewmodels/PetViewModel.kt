@@ -49,7 +49,7 @@ class PetViewModel @Inject constructor(private val petDao: PetDao) : ViewModel()
         }
     }
 
-    private fun validateForm(): Boolean {
+    fun validateForm(): Boolean {
         var isValid = true
 
         if (name.value.isBlank()) {

@@ -7,13 +7,29 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavType
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import com.example.vetapp.ui.theme.VetAppTheme
@@ -83,10 +99,17 @@ fun VetApp() {
     println("Current route: $currentRoute")
     println("Dashboard route: ${Screen.Dashboard.route}")
 
+    var showDialog by remember { mutableStateOf(false) }
+
     Scaffold(
         topBar = {
             if (currentRoute != null && currentRoute != Screen.Login.route && currentRoute != Screen.CreateAccount.route) {
                 AppHeader(navController = navController)
+            }
+        },
+        floatingActionButton = {
+            FloatingActionButton(onClick = { showDialog = true }) {
+                Icon(Icons.Default.Add, contentDescription = "Add")
             }
         }
     ) { innerPadding ->
@@ -124,5 +147,55 @@ fun VetApp() {
             composable(Screen.ManageReports.route) { ManageReportScreen(navController) }
             composable(Screen.Reports.route) { ReportsScreen(navController) }
         }
+
+        if (showDialog) {
+            ActionDialog(
+                onDismiss = { showDialog = false },
+                onAddPet = { /* Add pet logic */ },
+                onViewPets = { /* View pets logic */ },
+                onManageReports = { /* Manage reports logic */ }
+            )
+        }
     }
+}
+
+@Composable
+private fun ActionDialog(
+    onDismiss: () -> Unit,
+    onAddPet: () -> Unit,
+    onViewPets: () -> Unit,
+    onManageReports: () -> Unit
+) {
+    androidx.compose.material3.AlertDialog(
+        onDismissRequest = { onDismiss() },
+        text = {
+            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                Button(onClick = onAddPet,
+                    colors = ButtonDefaults.buttonColors(
+                    containerColor = Color(0xFF4A148C),
+                    contentColor = Color.White
+                    ),
+                    modifier = Modifier.fillMaxWidth()) {
+                    Text("Add Pet")
+                }
+                Button(onClick = onViewPets,
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = Color(0xFF4A148C),
+                        contentColor = Color.White
+                    ),
+                    modifier = Modifier.fillMaxWidth()) {
+                    Text("View Pets")
+                }
+            }
+        },
+        confirmButton = {
+            Button(onClick = onDismiss,
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color(0xFF4A148C),
+                    contentColor = Color.White
+                )) {
+                Text("Close")
+            }
+        }
+    )
 }
