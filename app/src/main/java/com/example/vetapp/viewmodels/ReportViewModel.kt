@@ -1,6 +1,10 @@
 package com.example.vetapp.viewmodels
 
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -18,13 +22,16 @@ import com.example.vetapp.repositories.IReportTemplateRepository
 import com.example.vetapp.repositories.IReportsRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import java.util.Date
+import java.util.Observable
 import javax.inject.Inject
 
 @HiltViewModel
@@ -36,6 +43,11 @@ class ReportViewModel @Inject constructor(
 {
     val reportTemplateFields = reportTemplateRepository.ReportTemplateObservable().stateIn(viewModelScope, SharingStarted.Lazily, emptyList())
     val reports = reportRepository.reportsObservable().stateIn(viewModelScope, SharingStarted.Lazily, emptyList())
+    private var _isError = MutableStateFlow<Boolean>(false)
+    private var _errorMsg = MutableStateFlow<String>("")
+
+    var isError : StateFlow<Boolean> = _isError
+    var errorMsg : StateFlow<String> = _errorMsg
 
     fun getReportNameById(id : Int) = flow {
         var report = reportRepository.getReportByIdFlow(id).collect{
@@ -48,7 +60,8 @@ class ReportViewModel @Inject constructor(
         val report = Reports(name = name)
         viewModelScope.launch {
             withContext(Dispatchers.IO){
-                reportRepository.insertReport(report)
+                val result = reportRepository.insertReport(report)
+                UpdateErrorState(!result.result, result.msg)
             }
 
         }
@@ -66,7 +79,8 @@ class ReportViewModel @Inject constructor(
     fun updateReport( report : Reports ){
         viewModelScope.launch {
             withContext(Dispatchers.IO){
-                reportRepository.updateReport(report)
+                val result = reportRepository.updateReport(report)
+                UpdateErrorState(!result.result, result.msg)
             }
 
         }
@@ -75,7 +89,8 @@ class ReportViewModel @Inject constructor(
     fun insertReportTemplateField(field : ReportTemplateField){
         viewModelScope.launch {
             withContext(Dispatchers.IO){
-                reportTemplateRepository.insertReportTemplateField(field)
+                val result = reportTemplateRepository.insertReportTemplateField(field)
+                UpdateErrorState(!result.result, result.msg)
             }
         }
     }
@@ -91,7 +106,8 @@ class ReportViewModel @Inject constructor(
     fun updateReportTemplateField(field : ReportTemplateField){
         viewModelScope.launch {
             withContext(Dispatchers.IO){
-                reportTemplateRepository.updateReportTemplateField(field)
+                val result = reportTemplateRepository.updateReportTemplateField(field)
+                UpdateErrorState(!result.result, result.msg)
             }
         }
     }
@@ -110,7 +126,8 @@ class ReportViewModel @Inject constructor(
         }
        viewModelScope.launch {
            withContext(Dispatchers.IO) {
-               reportEntryRepository.insertEntries(entries)
+               var result = reportEntryRepository.insertEntries(entries)
+               UpdateErrorState(!result.result, result.msg)
            }
        }
     }
@@ -136,5 +153,11 @@ class ReportViewModel @Inject constructor(
     fun SendEmail(wrapper : EmailWrapper){
         val emailHandler: IEmailHandler = EmailHandler(VetApplication.applicationContext())
         emailHandler.CreateAndSendEmail(wrapper)
+    }
+
+    fun UpdateErrorState(isError : Boolean, errorMsg : String){
+        this._isError.value = isError
+        this._errorMsg.value = errorMsg
+
     }
 }
