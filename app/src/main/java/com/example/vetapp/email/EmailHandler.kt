@@ -28,6 +28,7 @@ class EmailHandler @Inject constructor(
             type = "message/rfc822"
             putExtra(Intent.EXTRA_EMAIL, arrayOf(wrapper.ToEmailAddress))
             putExtra(Intent.EXTRA_SUBJECT, wrapper.Subject)
+            putExtra(Intent.EXTRA_TEXT, wrapper.BodyText)
             addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             putExtra(Intent.EXTRA_STREAM, wrapper.fileUri)
             addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
