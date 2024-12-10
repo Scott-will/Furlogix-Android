@@ -4,7 +4,6 @@ import com.example.vetapp.Database.Entities.ReportEntry
 import com.example.vetapp.Database.Entities.ReportTemplateField
 import com.example.vetapp.Database.Entities.Reports
 import com.example.vetapp.reports.FieldType
-import com.example.vetapp.reports.FieldTypeValidator
 import com.example.vetapp.reports.ReportEntryValidator
 import com.example.vetapp.repositories.IReportTemplateRepository
 import com.example.vetapp.repositories.IReportsRepository
@@ -41,7 +40,7 @@ class ReportEntryValidatorTests {
         val result = reportEntryValidator.ValidateEntry(entry)
 
         // Then
-        assertTrue(result)
+        assertTrue(result.result)
         coVerify { reportRepository.getReportById(entry.reportId) }
         coVerify { reportTemplateRepository.GetTemplateById(entry.templateId) }
     }
@@ -56,7 +55,7 @@ class ReportEntryValidatorTests {
         val result = reportEntryValidator.ValidateEntry(entry)
 
         // Then
-        assertFalse(result)
+        assertFalse(result.result)
         coVerify { reportRepository.getReportById(entry.reportId) }
     }
 
@@ -66,12 +65,11 @@ class ReportEntryValidatorTests {
         val entry = ReportEntry(reportId = 1, templateId = -1, value = "Valid Value", timestamp = "")
         coEvery { reportRepository.getReportById(entry.reportId) } returns mockk()
         coEvery { reportTemplateRepository.GetTemplateById(entry.templateId) } throws Exception("Template not found")
-
         // When
         val result = reportEntryValidator.ValidateEntry(entry)
 
         // Then
-        assertFalse(result)
+        assertFalse(result.result)
         coVerify { reportRepository.getReportById(entry.reportId) }
         coVerify { reportTemplateRepository.GetTemplateById(entry.templateId) }
     }
@@ -80,17 +78,16 @@ class ReportEntryValidatorTests {
     fun `should return false when field type validation fails`() = runTest {
         // Given
         val entry = ReportEntry(reportId = 1, templateId = 1, value = "Invalid Value", timestamp = "")
-        val mockReport = mockk<Reports>()
         val mockTemplate = ReportTemplateField(reportId = 1, fieldType = FieldType.NUMBER, name = "test")
 
-        coEvery { reportRepository.getReportById(entry.reportId) } returns mockReport
+        coEvery { reportRepository.getReportById(entry.reportId) } returns mockk()
         coEvery { reportTemplateRepository.GetTemplateById(entry.templateId) } returns mockTemplate
 
         // When
         val result = reportEntryValidator.ValidateEntry(entry)
 
         // Then
-        assertFalse(result)
+        assertFalse(result.result)
         coVerify { reportRepository.getReportById(entry.reportId) }
         coVerify { reportTemplateRepository.GetTemplateById(entry.templateId) }
     }

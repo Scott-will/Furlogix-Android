@@ -3,6 +3,7 @@ package com.example.vetapp.reports
 import android.widget.Toast
 import com.example.vetapp.Database.Entities.ReportEntry
 import com.example.vetapp.Database.Entities.ReportTemplateField
+import com.example.vetapp.R
 import com.example.vetapp.VetApplication
 import com.example.vetapp.repositories.IReportTemplateRepository
 import com.example.vetapp.repositories.IReportsRepository
@@ -12,32 +13,29 @@ class ReportEntryValidator @Inject constructor(
     private val reportTemplateRepository : IReportTemplateRepository,
     private val reportRepository : IReportsRepository,
 ) {
-    suspend fun ValidateEntry(entry : ReportEntry) : Boolean{
+    suspend fun ValidateEntry(entry : ReportEntry) : com.example.vetapp.Result{
         //validate type and value are okay
         try{
             var report = reportRepository.getReportById(entry.reportId)
         }
         catch(e : Exception){
-            return false
+            return com.example.vetapp.Result(false, "Report does not exist")
         }
         var template : ReportTemplateField
         try{
             template = reportTemplateRepository.GetTemplateById(entry.templateId)
         }
         catch(e : Exception){
-            Toast.makeText(VetApplication.applicationContext(), "Report Template doesn't exist for report entry", Toast.LENGTH_SHORT).show()
-            return false
+            return com.example.vetapp.Result(false, "Report template does not exist")
         }
         if(entry.value.isEmpty())
         {
-            Toast.makeText(VetApplication.applicationContext(), "Value is empty", Toast.LENGTH_SHORT).show()
-            return false
+            return com.example.vetapp.Result(false, "Value is empty for ${template.name}")
         }
         if(!FieldTypeValidator.validateFieldTypeWithValue(template.fieldType, entry.value)){
-            Toast.makeText(VetApplication.applicationContext(), "Value entered is not valid according to the field type", Toast.LENGTH_SHORT).show()
-            return false
+            return com.example.vetapp.Result(false, "Value is not valid for ${template.name}")
         }
 
-        return true
+        return com.example.vetapp.Result(true, "Entry added successfully")
     }
 }

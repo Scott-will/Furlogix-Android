@@ -3,6 +3,7 @@ package com.example.vetapp.repositories
 import android.widget.Toast
 import com.example.vetapp.Database.DAO.ReportEntryDao
 import com.example.vetapp.Database.Entities.ReportEntry
+import com.example.vetapp.Result
 import com.example.vetapp.VetApplication
 import com.example.vetapp.reports.ReportEntryValidator
 import kotlinx.coroutines.flow.Flow
@@ -13,17 +14,17 @@ class ReportEntryRepository @Inject constructor(
     private val reportEntryValidator: ReportEntryValidator
 ) : IReportEntryRepository {
 
-    override suspend fun insertEntries(entries : List<ReportEntry> ) : Boolean{
+    override suspend fun insertEntries(entries : List<ReportEntry> ) : com.example.vetapp.Result{
         entries.forEach { entry ->
-            if(!reportEntryValidator.ValidateEntry(entry)){
-                return false
+            var result = reportEntryValidator.ValidateEntry(entry)
+            if(!result.result){
+                return result
             }
         }
         entries.forEach { entry ->
             reportEntryDao.insert(entry)
         }
-        Toast.makeText(VetApplication.applicationContext(), "Entries saved successfully", Toast.LENGTH_SHORT).show()
-        return true
+        return Result(true, "Entries added successfully")
     }
 
     override fun getAllEntriesForReport(reportId : Int) : Flow<ReportEntry>{
