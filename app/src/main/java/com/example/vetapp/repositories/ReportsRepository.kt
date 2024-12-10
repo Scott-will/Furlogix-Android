@@ -2,6 +2,7 @@ package com.example.vetapp.repositories
 
 import com.example.vetapp.Database.DAO.ReportsDao
 import com.example.vetapp.Database.Entities.Reports
+import com.example.vetapp.Result
 import com.example.vetapp.reports.ReportValidator
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
@@ -30,18 +31,22 @@ class ReportsRepository @Inject constructor(
         return reportDao.getByReportId(id)
     }
 
-    override suspend  fun insertReport(report: Reports) {
-        if(!reportValidator.ValidateReport(report)){
-            return
+    override suspend  fun insertReport(report: Reports) : Result{
+        var result = reportValidator.ValidateReport(report)
+        if(!result.result){
+            return result
         }
-        return reportDao.insert(report)
+        reportDao.insert(report)
+        return Result(true, "Report added successfully")
     }
 
-    override suspend  fun updateReport(report: Reports) {
-        if(!reportValidator.ValidateReport(report)){
-            return
+    override suspend  fun updateReport(report: Reports) : Result{
+        var result = reportValidator.ValidateReport(report)
+        if(!result.result){
+            return result
         }
-        return reportDao.update(report)
+        reportDao.update(report)
+        return Result(true, "Report added successfully")
     }
 
     override suspend  fun deleteReport(report: Reports) {

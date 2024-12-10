@@ -60,7 +60,8 @@ class ReportViewModel @Inject constructor(
         val report = Reports(name = name)
         viewModelScope.launch {
             withContext(Dispatchers.IO){
-                reportRepository.insertReport(report)
+                val result = reportRepository.insertReport(report)
+                UpdateErrorState(!result.result, result.msg)
             }
 
         }
@@ -78,7 +79,8 @@ class ReportViewModel @Inject constructor(
     fun updateReport( report : Reports ){
         viewModelScope.launch {
             withContext(Dispatchers.IO){
-                reportRepository.updateReport(report)
+                val result = reportRepository.updateReport(report)
+                UpdateErrorState(!result.result, result.msg)
             }
 
         }
@@ -87,7 +89,8 @@ class ReportViewModel @Inject constructor(
     fun insertReportTemplateField(field : ReportTemplateField){
         viewModelScope.launch {
             withContext(Dispatchers.IO){
-                reportTemplateRepository.insertReportTemplateField(field)
+                val result = reportTemplateRepository.insertReportTemplateField(field)
+                UpdateErrorState(!result.result, result.msg)
             }
         }
     }
@@ -103,7 +106,8 @@ class ReportViewModel @Inject constructor(
     fun updateReportTemplateField(field : ReportTemplateField){
         viewModelScope.launch {
             withContext(Dispatchers.IO){
-                reportTemplateRepository.updateReportTemplateField(field)
+                val result = reportTemplateRepository.updateReportTemplateField(field)
+                UpdateErrorState(!result.result, result.msg)
             }
         }
     }
@@ -129,16 +133,6 @@ class ReportViewModel @Inject constructor(
     }
 
     fun gatherReportData(reportId : Int){
-        /*get all information from database
-        *information is:
-        * report name
-        * templates
-        * data entry
-        *
-        * once all data is retrieved
-        * send to csvBuilder and generate csv file
-        *
-        * send to email handler as file attachment */
         viewModelScope.launch {
             withContext(Dispatchers.IO){
                 val reportName = reportRepository.getReportById(reportId).name

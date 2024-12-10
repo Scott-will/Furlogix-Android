@@ -37,7 +37,7 @@ class ReportTemplateValidatorTest {
             val result = reportTemplateValidator.ValidateTemplate(template)
 
             // Then
-            assertTrue(result)
+            assertTrue(result.result)
         }
 
     @Test
@@ -47,7 +47,7 @@ class ReportTemplateValidatorTest {
         val result = reportTemplateValidator.ValidateTemplate(template)
 
         // Then
-        assertFalse(result)
+        assertFalse(result.result)
     }
 }
 

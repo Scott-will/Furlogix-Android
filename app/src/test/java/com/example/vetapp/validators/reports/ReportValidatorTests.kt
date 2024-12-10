@@ -20,7 +20,7 @@ class ReportValidatorTest {
         val result = reportValidator.ValidateReport(report)
 
         // Then
-        assertTrue(result)
+        assertTrue(result.result)
     }
 
     @Test
@@ -32,6 +32,6 @@ class ReportValidatorTest {
         val result = reportValidator.ValidateReport(report)
 
         // Then
-        assertFalse(result)
+        assertFalse(result.result)
     }
 }

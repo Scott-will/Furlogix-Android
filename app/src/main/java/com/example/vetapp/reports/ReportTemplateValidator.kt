@@ -8,10 +8,10 @@ import javax.inject.Inject
 class ReportTemplateValidator @Inject constructor(
 ){
 
-    suspend fun ValidateTemplate(template : ReportTemplateField) : Boolean{
+    suspend fun ValidateTemplate(template : ReportTemplateField) : com.example.vetapp.Result{
         if(template.name.isNullOrEmpty()){
-            return false
+            return com.example.vetapp.Result(false, "Template name is empty")
         }
-        return true
+        return com.example.vetapp.Result(true, "")
     }
 }

@@ -1,6 +1,7 @@
 package com.example.vetapp.repositories
 
 import com.example.vetapp.Database.Entities.ReportTemplateField
+import com.example.vetapp.Result
 import kotlinx.coroutines.flow.Flow
 
 interface IReportTemplateRepository {
@@ -8,7 +9,7 @@ interface IReportTemplateRepository {
 
     suspend fun GetAllReportTemplates() : List<ReportTemplateField>
 
-    suspend fun insertReportTemplateField(reportTemplateField : ReportTemplateField)
+    suspend fun insertReportTemplateField(reportTemplateField : ReportTemplateField) : Result
     
     suspend fun GetReportByIdFlow(id : Int) : Flow<List<ReportTemplateField>>
 
@@ -18,6 +19,6 @@ interface IReportTemplateRepository {
 
     suspend fun deleteReportTemplateField(reportTemplateField : ReportTemplateField)
 
-    suspend fun updateReportTemplateField(reportTemplateField : ReportTemplateField)
+    suspend fun updateReportTemplateField(reportTemplateField : ReportTemplateField) : Result
 
 }

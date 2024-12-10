@@ -32,10 +32,10 @@ import com.example.vetapp.viewmodels.ReportViewModel
 fun ReportEntryScreen(navController: NavController, reportId : Int = 0, viewModel: ReportViewModel = hiltViewModel()
 ) {
     val reportName = viewModel.getReportNameById(reportId).collectAsState("")//reportName.value.filter { it.Id == reportId }.first().name
-    var templateValueMap = remember { mutableMapOf<Int, MutableState<String>>() }
+    val templateValueMap = remember { mutableMapOf<Int, MutableState<String>>() }
     val templates = viewModel.reportTemplateFields.collectAsState().value.filter { it.reportId == reportId }
-    var isError = viewModel.isError.collectAsState()
-    var errorMsg = viewModel.errorMsg.collectAsState()
+    val isError = viewModel.isError.collectAsState()
+    val errorMsg = viewModel.errorMsg.collectAsState()
     templates.forEach { template ->
         templateValueMap[template.uid] = mutableStateOf("")
     }
