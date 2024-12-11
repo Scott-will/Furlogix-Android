@@ -1,10 +1,8 @@
 package com.example.vetapp.repositories
 
-import android.widget.Toast
 import com.example.vetapp.Database.DAO.ReportEntryDao
 import com.example.vetapp.Database.Entities.ReportEntry
 import com.example.vetapp.Result
-import com.example.vetapp.VetApplication
 import com.example.vetapp.reports.ReportEntryValidator
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject

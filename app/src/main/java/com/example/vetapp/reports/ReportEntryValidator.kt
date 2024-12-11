@@ -1,10 +1,7 @@
 package com.example.vetapp.reports
 
-import android.widget.Toast
 import com.example.vetapp.Database.Entities.ReportEntry
 import com.example.vetapp.Database.Entities.ReportTemplateField
-import com.example.vetapp.R
-import com.example.vetapp.VetApplication
 import com.example.vetapp.repositories.IReportTemplateRepository
 import com.example.vetapp.repositories.IReportsRepository
 import javax.inject.Inject

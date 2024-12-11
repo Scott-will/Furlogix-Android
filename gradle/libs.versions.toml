@@ -1,22 +1,24 @@
 [versions]
-agp = "8.7.2"
+agp = "8.7.3"
 kotlin = "2.0.20"
 coreKtx = "1.13.1"
 junit = "4.13.2"
 junitVersion = "1.2.1"
-espressoCore = "3.6.1"
-lifecycleRuntimeKtx = "2.8.6"
+lifecycleRuntimeKtx = "2.8.7"
 activityCompose = "1.9.3"
-composeBom = "2024.04.01"
-mockitoCoreVersion = "5.11.0"
-uiTestAndroid = "1.7.2"
+composeBom = "2024.11.00"
+uiTestAndroid = "1.7.5"
 runtimeLivedata = "1.7.5"
+mockkVersion = "1.13.4"
+navigationComposeVersion = "2.8.4"
+roomVersion = "2.6.1"
+daggerVersion = "2.52"
+hiltNavigationVersion = "1.2.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
-androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
 androidx-lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycleRuntimeKtx" }
 androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activityCompose" }
 androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "composeBom" }
@@ -29,10 +31,17 @@ androidx-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit
 androidx-material3 = { group = "androidx.compose.material3", name = "material3" }
 androidx-ui-test-android = { group = "androidx.compose.ui", name = "ui-test-android", version.ref = "uiTestAndroid" }
 androidx-runtime-livedata = { group = "androidx.compose.runtime", name = "runtime-livedata", version.ref = "runtimeLivedata" }
-mockito-mockito-core = { module = "org.mockito:mockito-core", version.ref = "mockitoCoreVersion" }
+io-mockk = {group = "io.mockk", name = "mockk", version.ref = "mockkVersion"}
+androidx-navigation = {group = "androidx.navigation", name = "navigation-compose", version.ref = "navigationComposeVersion"}
+androidx-room-runtime = {group = "androidx.room", name = "room-runtime", version.ref = "roomVersion"}
+androidx-room-ktx = {group = "androidx.room", name = "room-ktx", version.ref = "roomVersion"}
+androidx-room-compiler = {group = "androidx.room", name = "room-compiler", version.ref = "roomVersion"}
+androidx-room-testing = {group = "androidx.room", name = "room-testing", version.ref = "roomVersion"}
+com-google-dagger = {group = "com.google.dagger", name = "hilt-android", version.ref = "daggerVersion"}
+com-google-dagger-compiler = {group = "com.google.dagger", name = "hilt-compiler", version.ref = "daggerVersion"}
+androidx-hilt-navigation = {group = "androidx.hilt", name = "hilt-navigation-compose", version.ref = "hiltNavigationVersion"}
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
-

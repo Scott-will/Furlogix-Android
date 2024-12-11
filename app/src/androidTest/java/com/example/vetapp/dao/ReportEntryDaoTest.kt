@@ -5,7 +5,6 @@ import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import com.example.vetapp.Database.AppDatabase
 import com.example.vetapp.Database.DAO.ReportEntryDao
-import com.example.vetapp.Database.DAO.ReportsDao
 import com.example.vetapp.R
 import org.junit.After
 import org.junit.Before
