@@ -19,6 +19,7 @@ import androidx.navigation.NavController
 import com.example.vetapp.Database.Entities.ReportTemplateField
 import com.example.vetapp.Database.Entities.Reports
 import com.example.vetapp.ui.componets.common.DeleteButton
+import com.example.vetapp.ui.componets.common.DeleteWarning
 import com.example.vetapp.ui.componets.common.EditButton
 import com.example.vetapp.ui.navigation.Screen
 
@@ -29,6 +30,7 @@ fun ReportItem(data: Reports,
                onUpdateClick : (Reports) -> Unit,
                editable: Boolean = true) {
     var showDialog by remember { mutableStateOf(false) }
+    var showDeleteWarning by remember { mutableStateOf(false) }
     Surface(
         modifier = Modifier
             .fillMaxWidth()
@@ -50,10 +52,10 @@ fun ReportItem(data: Reports,
                 fontWeight = FontWeight.Bold // Optional: Makes the text bold
             )
             Spacer(modifier = Modifier.width(8.dp))
-            if(editable){
+            if (editable) {
                 EditButton { showDialog = true }
                 Spacer(modifier = Modifier.width(8.dp))
-                DeleteButton {onDeleteClick(data)  }
+                DeleteButton { showDeleteWarning = true }
                 if (showDialog) {
                     AddReportDialog(
                         onDismiss = { showDialog = false },
@@ -67,10 +69,18 @@ fun ReportItem(data: Reports,
                     )
                 }
             }
+            if (showDeleteWarning) {
+                DeleteWarning(
+                    { showDeleteWarning = false },
+                    {onDeleteClick(data)},
+                    "Deleting this report will delete all associated templates and data"
+                )
+            }
 
         }
     }
 }
+
 
 @Composable
 fun ReportsList(dataList: List<Reports>,
