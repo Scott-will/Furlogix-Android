@@ -17,15 +17,20 @@ class VetApplication : Application() {
 
     companion object {
         private var instance: VetApplication? = null
+        private var notificationManager : NotificationManager? = null
 
         fun applicationContext() : Context {
             return instance!!.applicationContext
+        }
+
+        fun getNotificationManager() : NotificationManager{
+            return notificationManager!!
         }
     }
 
     override fun onCreate() {
         super.onCreate()
-        val context: Context = VetApplication.applicationContext()
+        val context: Context = this.applicationContext
         createNotificationChannel(context)
     }
 
@@ -40,9 +45,8 @@ class VetApplication : Application() {
                 description = "Channel for reminder notifications"
             }
 
-            val notificationManager: NotificationManager =
-                context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-            notificationManager.createNotificationChannel(channel)
+            notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            notificationManager!!.createNotificationChannel(channel)
         }
     }
 

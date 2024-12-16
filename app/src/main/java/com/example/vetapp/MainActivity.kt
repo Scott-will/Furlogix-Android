@@ -22,6 +22,8 @@ import androidx.navigation.navArgument
 import androidx.room.Room
 import com.example.vetapp.Database.AppDatabase
 import com.example.vetapp.broadcastreceivers.EmailBroadcastReceiver
+import com.example.vetapp.broadcastreceivers.FillOutReportsNotificationReceiver
+import com.example.vetapp.broadcastreceivers.SendReportsNotificationReceiver
 import com.example.vetapp.ui.AppHeader
 import com.example.vetapp.ui.navigation.Screen
 import com.example.vetapp.ui.screens.LoginScreen
@@ -38,7 +40,6 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class MainActivity : ComponentActivity()  {
 
-    private val emailReceiver : EmailBroadcastReceiver = EmailBroadcastReceiver()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         //init database
@@ -46,8 +47,6 @@ class MainActivity : ComponentActivity()  {
             applicationContext,
             AppDatabase::class.java, R.string.database_name.toString()
         ).build()
-        //init broadcast receivers
-        this.InitBroadcastReceivers()
         enableEdgeToEdge()
         setContent {
             VetAppTheme {
@@ -58,18 +57,6 @@ class MainActivity : ComponentActivity()  {
 
     override fun onDestroy() {
         super.onDestroy()
-        unregisterReceiver(emailReceiver)
-    }
-
-    fun InitBroadcastReceivers(){
-        //register broadcast receivers
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            registerReceiver(
-                this.emailReceiver,
-                IntentFilter(Intent.ACTION_SENDTO),
-                RECEIVER_NOT_EXPORTED
-            )
-        }
     }
 }
 

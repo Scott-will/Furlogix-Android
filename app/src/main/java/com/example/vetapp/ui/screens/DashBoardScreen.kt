@@ -38,5 +38,13 @@ fun DashboardScreen(navController: NavController) {
         ) {
             Text("Submit Reports")
         }
+        Button(
+            onClick = {
+                navController.navigate(Screen.Reports.route)
+            },
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text("Setup a Reminder")
+        }
     }
 }

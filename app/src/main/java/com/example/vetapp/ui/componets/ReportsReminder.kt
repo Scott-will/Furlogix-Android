@@ -14,7 +14,7 @@ import androidx.compose.ui.unit.dp
 import java.util.*
 
 @Composable
-fun ReminderApp() {
+fun ReportsReminder() {
     var reminderText by remember { mutableStateOf("") }
     var selectedDate by remember { mutableStateOf<Calendar?>(null) }
     var selectedTime by remember { mutableStateOf<Calendar?>(null) }
