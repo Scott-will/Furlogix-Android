@@ -1,12 +1,16 @@
 package com.example.vetapp
 
+import android.Manifest
 import android.content.Intent
 import android.content.IntentFilter
+import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
+import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
@@ -14,6 +18,7 @@ import androidx.navigation.NavType
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.core.content.ContextCompat
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import com.example.vetapp.ui.theme.VetAppTheme
@@ -33,6 +38,7 @@ import com.example.vetapp.ui.screens.ManageReportScreen
 import com.example.vetapp.ui.screens.ReportEntryScreen
 import com.example.vetapp.ui.screens.ReportTemplateScreen
 import com.example.vetapp.ui.screens.ProfileScreen
+import com.example.vetapp.ui.screens.RemindersScreen
 import com.example.vetapp.ui.screens.ReportsScreen
 
 import dagger.hilt.android.AndroidEntryPoint
@@ -53,10 +59,15 @@ class MainActivity : ComponentActivity()  {
                 VetApp()
             }
         }
+        requestPermissions()
     }
 
     override fun onDestroy() {
         super.onDestroy()
+    }
+
+    private fun requestPermissions() {
+
     }
 }
 
@@ -104,6 +115,7 @@ fun VetApp() {
             composable(Screen.Profile.route) { ProfileScreen(navController = navController) }
             composable(Screen.ManageReports.route) { ManageReportScreen(navController) }
             composable(Screen.Reports.route) { ReportsScreen(navController) }
+            composable(Screen.Reminders.route) { RemindersScreen(navController) }
         }
     }
 }

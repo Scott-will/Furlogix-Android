@@ -1,127 +1,127 @@
 package com.example.vetapp.ui.componets
 
-import android.app.TimePickerDialog
-import android.app.DatePickerDialog
-import androidx.compose.runtime.Composable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material3.*
+import androidx.compose.material3.ExposedDropdownMenuDefaults.TrailingIcon
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import java.util.*
+import com.example.vetapp.ui.componets.common.DatePickerDialog
+import com.example.vetapp.ui.componets.common.TimePickerDialog
+import com.example.vetapp.viewmodels.RemindersViewModel
 
+
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ReportsReminder() {
-    var reminderText by remember { mutableStateOf("") }
-    var selectedDate by remember { mutableStateOf<Calendar?>(null) }
-    var selectedTime by remember { mutableStateOf<Calendar?>(null) }
-    var showTimePicker by remember { mutableStateOf(false) }
-    var showDatePicker by remember { mutableStateOf(false) }
+fun ReportsReminder(remindersViewModel: RemindersViewModel) {
+    var selectedDate by remember { mutableStateOf("") }
+    var selectedTime by remember { mutableStateOf("") }
+    var recurrenceOption by remember { mutableStateOf("Once") }
+    var reminderType by remember { mutableStateOf("Send") }
+    var isDatePickerOpen by remember { mutableStateOf(false) }
+    var isTimePickerOpen by remember { mutableStateOf(false) }
+    var expanded by remember { mutableStateOf(false) }
+
+    val recurrenceOptions = listOf("Once", "Daily", "Weekly", "Monthly")
+    val reminderTypes = listOf("Send", "Fill")
+
+    if (isDatePickerOpen) {
+        DatePickerDialog(onDateSelected = { date ->
+            selectedDate = date
+            isDatePickerOpen = false
+        })
+    }
+
+    // Time Picker Dialog
+    if (isTimePickerOpen) {
+        TimePickerDialog(onTimeSelected = { time ->
+            selectedTime = time
+            isTimePickerOpen = false
+        })
+    }
 
     Column(
         modifier = Modifier
             .fillMaxSize()
             .padding(16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
     ) {
-        Text("Set a Reminder")
+        Text(text = "Schedule a Reminder", style = MaterialTheme.typography.titleLarge)
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        BasicTextField(
-            value = reminderText,
-            onValueChange = { reminderText = it },
-            modifier = Modifier.fillMaxWidth().padding(8.dp),
-            decorationBox = { innerTextField ->
-                if (reminderText.isEmpty()) {
-                    Text("Enter reminder message...")
-                }
-                innerTextField()
-            }
-        )
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        Button(onClick = {
-            showDatePicker = true
-        }) {
-            Text("Select Date")
+        // Date Picker Button
+        OutlinedButton(onClick = { isDatePickerOpen = true }) {
+            Text(text = if (selectedDate.isEmpty()) "Select Date" else "Date: $selectedDate")
         }
 
+        Spacer(modifier = Modifier.height(16.dp))
+
+        // Time Picker Button
+        OutlinedButton(onClick = { isTimePickerOpen = true }) {
+            Text(text = if (selectedTime.isEmpty()) "Select Time" else "Time: $selectedTime")
+        }
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        // Recurrence Option Dropdown
+        Text(text = "Recurrence", style = MaterialTheme.typography.bodyMedium)
         Spacer(modifier = Modifier.height(8.dp))
+        ExposedDropdownMenuBox(
+            expanded = expanded,
+            onExpandedChange = { expanded = it },
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            ExposedDropdownMenu(
+                expanded = expanded,
+                onDismissRequest = { },
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                recurrenceOptions.forEach { option ->
+                    DropdownMenuItem(
+                        onClick = {
+                            recurrenceOption = option
+                        },
+                        text = {Text(text = option)} ,
+                    )
+                }
+            }
+        }
 
-        Button(onClick = {
-            showTimePicker = true
-        }) {
-            Text("Select Time")
+        Text(text = "Reminder Type", style = MaterialTheme.typography.bodyMedium)
+        Spacer(modifier = Modifier.height(8.dp))
+        ExposedDropdownMenuBox(
+            expanded = expanded,
+            onExpandedChange = {expanded = it },
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            ExposedDropdownMenu(
+                expanded = expanded,
+                onDismissRequest = { },
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                reminderTypes.forEach { option ->
+                    DropdownMenuItem(
+                        onClick = {
+                            reminderType = option
+                        },
+                        text = {Text(text = option)} ,
+                    )
+                }
+            }
         }
 
         Spacer(modifier = Modifier.height(16.dp))
 
+        // Schedule Button
         Button(onClick = {
-            if (reminderText.isNotEmpty() && selectedDate != null && selectedTime != null) {
-                val calendar = Calendar.getInstance()
-                calendar.set(Calendar.YEAR, selectedDate!!.get(Calendar.YEAR))
-                calendar.set(Calendar.MONTH, selectedDate!!.get(Calendar.MONTH))
-                calendar.set(Calendar.DAY_OF_MONTH, selectedDate!!.get(Calendar.DAY_OF_MONTH))
-                calendar.set(Calendar.HOUR_OF_DAY, selectedTime!!.get(Calendar.HOUR_OF_DAY))
-                calendar.set(Calendar.MINUTE, selectedTime!!.get(Calendar.MINUTE))
-                //setReminder(context = LocalContext.current, reminderText = reminderText, calendar)
+            if (selectedDate.isNotEmpty() && selectedTime.isNotEmpty()) {
+                remindersViewModel.scheduleReminder(selectedDate, selectedTime, recurrenceOption, reminderType)
             }
         }) {
-            Text("Set Reminder")
+            Text(text = "Schedule Reminder")
         }
     }
-    if(showDatePicker){
-        showDatePicker( { date ->
-            selectedDate = date
-            showDatePicker = false
-        })
-    }
-    if(showTimePicker){
-        showTimePicker({ time ->
-            selectedTime = time
-            showTimePicker = false
-        })
-    }
-}
-
-@Composable
-fun showDatePicker(onDateSelected: (Calendar) -> Unit) {
-    val calendar = Calendar.getInstance()
-    val datePicker = DatePickerDialog(
-        LocalContext.current,
-        { _, year, month, dayOfMonth ->
-            val selectedDate = Calendar.getInstance().apply {
-                set(year, month, dayOfMonth)
-            }
-            onDateSelected(selectedDate)
-        },
-        calendar.get(Calendar.YEAR),
-        calendar.get(Calendar.MONTH),
-        calendar.get(Calendar.DAY_OF_MONTH)
-    )
-    datePicker.show()
-}
-
-@Composable
-fun showTimePicker(onTimeSelected: (Calendar) -> Unit) {
-    val calendar = Calendar.getInstance()
-    val timePicker = TimePickerDialog(
-        LocalContext.current,
-        { _, hourOfDay, minute ->
-            val selectedTime = Calendar.getInstance().apply {
-                set(Calendar.HOUR_OF_DAY, hourOfDay)
-                set(Calendar.MINUTE, minute)
-            }
-            onTimeSelected(selectedTime)
-        },
-        calendar.get(Calendar.HOUR_OF_DAY),
-        calendar.get(Calendar.MINUTE),
-        true
-    )
-    timePicker.show()
 }
