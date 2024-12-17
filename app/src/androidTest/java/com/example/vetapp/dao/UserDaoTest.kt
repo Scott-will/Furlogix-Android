@@ -1,4 +1,4 @@
-package com.example.vetapp
+package com.example.vetapp.dao
 
 import android.content.Context
 import androidx.room.Room
