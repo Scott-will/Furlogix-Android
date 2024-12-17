@@ -14,7 +14,7 @@ interface PetDao {
     fun getAll(): Flow<List<Pet>>
 
     @Insert
-    fun insert(pet: Pet)
+    fun insert(pet: Pet): Long
 
     @Insert
     fun insertAll(vararg pets: Pet)

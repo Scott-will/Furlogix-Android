@@ -34,7 +34,7 @@ class UserDaoTest {
 
     @Test
     fun insertAndRetrieveUser() = runBlocking {
-        val user = User(name = "Test", surname = "User", petName = "testpet", email = "test@example.com")
+        val user = User(name = "Test", surname = "User", email = "test@example.com")
         userDao.insert(user)
         val users = userDao.getAll()
         assertEquals(users.size, 1)
@@ -43,7 +43,7 @@ class UserDaoTest {
 
     @Test
     fun updateUser() = runBlocking {
-        val user = User(name = "Original Name", surname = "User", petName = "testpet", email = "email@example.com")
+        val user = User(name = "Original Name", surname = "User", email = "email@example.com")
         userDao.insert(user)
         val insertedUser = userDao.getAll().first()
         val updatedUser = insertedUser.copy(name = "Updated Name")
@@ -55,7 +55,7 @@ class UserDaoTest {
 
     @Test
     fun deleteUser() = runBlocking {
-        val user = User(name = "User to Delete", surname = "User", petName = "testpet", email = "delete@example.com")
+        val user = User(name = "User to Delete", surname = "User", email = "delete@example.com")
         userDao.insert(user)
         val insertedUser = userDao.getAll().first()
         userDao.delete(insertedUser)
