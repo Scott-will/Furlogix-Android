@@ -10,7 +10,7 @@ import androidx.compose.ui.test.performClick
 import com.example.vetapp.Database.Entities.ReportTemplateField
 import com.example.vetapp.R
 import com.example.vetapp.reports.FieldType
-import com.example.vetapp.ui.componets.reports.ReportTemplateItem
+import com.example.vetapp.ui.components.reports.ReportTemplateItem
 import org.junit.Rule
 import org.junit.Test
 import java.lang.Thread.sleep

@@ -1,4 +1,4 @@
-package com.example.vetapp.ui.componets.reports
+package com.example.vetapp.ui.components.reports
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -15,12 +15,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.navigation.NavController
-import com.example.vetapp.Database.Entities.ReportTemplateField
 import com.example.vetapp.Database.Entities.Reports
-import com.example.vetapp.ui.componets.common.DeleteButton
-import com.example.vetapp.ui.componets.common.EditButton
-import com.example.vetapp.ui.navigation.Screen
+import com.example.vetapp.ui.components.common.DeleteButton
+import com.example.vetapp.ui.components.common.EditButton
 
 @Composable
 fun ReportItem(data: Reports,

@@ -21,9 +21,9 @@ import androidx.compose.ui.unit.dp
 import com.example.vetapp.viewmodels.ReportViewModel
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.example.vetapp.ui.componets.common.AddItemButton
-import com.example.vetapp.ui.componets.reports.AddReportDialog
-import com.example.vetapp.ui.componets.reports.ReportsList
+import com.example.vetapp.ui.components.common.AddItemButton
+import com.example.vetapp.ui.components.reports.AddReportDialog
+import com.example.vetapp.ui.components.reports.ReportsList
 import com.example.vetapp.ui.navigation.Screen
 
 @Composable

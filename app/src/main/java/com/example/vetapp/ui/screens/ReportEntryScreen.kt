@@ -18,11 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.example.vetapp.VetApplication
-import com.example.vetapp.email.EmailHandler
-import com.example.vetapp.email.EmailWrapper
-import com.example.vetapp.email.IEmailHandler
-import com.example.vetapp.ui.componets.reports.ReportEntryForm
+import com.example.vetapp.ui.components.reports.ReportEntryForm
 import com.example.vetapp.viewmodels.ReportViewModel
 
 @Composable

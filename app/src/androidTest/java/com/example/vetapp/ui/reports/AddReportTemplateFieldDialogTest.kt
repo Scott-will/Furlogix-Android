@@ -7,10 +7,8 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTextReplacement
 import com.example.vetapp.Database.Entities.ReportTemplateField
-import com.example.vetapp.Database.Entities.Reports
 import com.example.vetapp.reports.FieldType
-import com.example.vetapp.ui.componets.reports.AddReportDialog
-import com.example.vetapp.ui.componets.reports.AddReportTemplateDialog
+import com.example.vetapp.ui.components.reports.AddReportTemplateDialog
 import org.junit.Rule
 import org.junit.Test
 

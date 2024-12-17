@@ -1,4 +1,4 @@
-package com.example.vetapp.ui.componets.reports
+package com.example.vetapp.ui.components.reports
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -20,8 +20,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.example.vetapp.Database.Entities.ReportTemplateField
-import com.example.vetapp.ui.componets.common.DeleteButton
-import com.example.vetapp.ui.componets.common.EditButton
+import com.example.vetapp.ui.components.common.DeleteButton
+import com.example.vetapp.ui.components.common.EditButton
 
 
 @Composable
