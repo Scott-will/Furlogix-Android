@@ -48,6 +48,7 @@ import com.example.vetapp.ui.screens.ReportEntryScreen
 import com.example.vetapp.ui.screens.ReportTemplateScreen
 import com.example.vetapp.ui.screens.ProfileScreen
 import com.example.vetapp.ui.screens.ReportsScreen
+import com.example.vetapp.ui.components.ActionDialog
 
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -151,51 +152,12 @@ fun VetApp() {
         if (showDialog) {
             ActionDialog(
                 onDismiss = { showDialog = false },
-                onAddPet = { /* Add pet logic */ },
-                onViewPets = { /* View pets logic */ },
-                onManageReports = { /* Manage reports logic */ }
+                onAddPet = {  },
+                onViewPets = {  },
+                onAddPetPhoto = { },
+                onManageReports = { }
             )
         }
     }
 }
 
-@Composable
-private fun ActionDialog(
-    onDismiss: () -> Unit,
-    onAddPet: () -> Unit,
-    onViewPets: () -> Unit,
-    onManageReports: () -> Unit
-) {
-    androidx.compose.material3.AlertDialog(
-        onDismissRequest = { onDismiss() },
-        text = {
-            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                Button(onClick = onAddPet,
-                    colors = ButtonDefaults.buttonColors(
-                    containerColor = Color(0xFF4A148C),
-                    contentColor = Color.White
-                    ),
-                    modifier = Modifier.fillMaxWidth()) {
-                    Text("Add Pet")
-                }
-                Button(onClick = onViewPets,
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = Color(0xFF4A148C),
-                        contentColor = Color.White
-                    ),
-                    modifier = Modifier.fillMaxWidth()) {
-                    Text("View Pets")
-                }
-            }
-        },
-        confirmButton = {
-            Button(onClick = onDismiss,
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = Color(0xFF4A148C),
-                    contentColor = Color.White
-                )) {
-                Text("Close")
-            }
-        }
-    )
-}
