@@ -16,15 +16,19 @@ import java.util.Date
 
 class CsvBuilder {
 
-    fun buildCsv(context: Context, reportName : String, entries : List<ReportEntry>, templates : List<ReportTemplateField>) : Uri{
+    fun buildAndWriteCsv(context: Context, reportName : String, entries : List<ReportEntry>, templates : List<ReportTemplateField>) : Uri{
         val directory = context.filesDir // This is for internal storage
         val fileName = "${reportName}_${Date().toString()}.csv"
         val file = File(directory, fileName)
         file.createNewFile()
         val writer = BufferedWriter(FileWriter(file))
-        writer.write("\"\"\"")
+        this.buildCsv(writer, entries, templates)
+        writer.close()
+        return getUriForFile(file)
+    }
+
+    fun buildCsv( writer : BufferedWriter, entries : List<ReportEntry>, templates : List<ReportTemplateField>){
         writer.write(templates.joinToString(",") { it.name })
-        writer.write("\"\"\"")
         writer.newLine()
         val reportMap: Map<String, List<ReportEntry>> = entries.groupBy { it.timestamp }
 
@@ -38,11 +42,7 @@ class CsvBuilder {
             }
             writer.newLine()
         }
-        writer.close()
-        return getUriForFile(file)
     }
-
-
 
     fun getUriForFile(file: File): Uri {
         return FileProvider.getUriForFile(VetApplication.applicationContext(), "com.example.vetapp.provider" , file)

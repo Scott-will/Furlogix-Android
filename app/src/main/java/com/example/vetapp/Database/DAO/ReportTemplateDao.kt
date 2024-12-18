@@ -28,9 +28,14 @@ interface ReportTemplateDao {
     @Query("SELECT * FROM REPORTTEMPLATEFIELD WHERE reportId = :id")
     fun getReportById(id: Int): List<ReportTemplateField>
 
+    @Query("SELECT * FROM REPORTTEMPLATEFIELD WHERE uid = :id")
+    fun getTemplateById(id : Int) : ReportTemplateField
+
     @Update
     fun update(vararg report : ReportTemplateField)
 
     @Delete
     fun delete(vararg report : ReportTemplateField)
+
+
 }

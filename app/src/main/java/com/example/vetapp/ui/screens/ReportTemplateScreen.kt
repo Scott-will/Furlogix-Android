@@ -26,6 +26,9 @@ import com.example.vetapp.ui.components.common.AddItemButton
 import com.example.vetapp.ui.components.common.NoDataAvailable
 import com.example.vetapp.ui.components.reports.AddReportTemplateDialog
 import com.example.vetapp.ui.components.reports.ReporttemplatesList
+import androidx.lifecycle.asLiveData
+import com.example.vetapp.ui.components.common.ErrorDialog
+import com.example.vetapp.ui.components.reports.AddReportDialog
 
 @Composable
 fun ReportTemplateScreen(navController: NavController, reportId : Int = 0, viewModel: ReportViewModel = hiltViewModel()
@@ -33,8 +36,10 @@ fun ReportTemplateScreen(navController: NavController, reportId : Int = 0, viewM
 
     val reportTemplateState = viewModel.reportTemplateFields.collectAsState()
     var showDialog by remember { mutableStateOf(false) }
-    var label by remember { mutableStateOf("") }
-    var selectedType by remember { mutableStateOf(FieldType.values().first().toString()) }
+    val label by remember { mutableStateOf("") }
+    val selectedType by remember { mutableStateOf(FieldType.entries.first().toString()) }
+    val isError = viewModel.isError.collectAsState()
+    val errorMsg = viewModel.errorMsg.collectAsState()
 
     Column(
         modifier = Modifier
@@ -72,5 +77,10 @@ fun ReportTemplateScreen(navController: NavController, reportId : Int = 0, viewM
                 reportId = reportId
             )
         }
+    }
+    if(isError.value){
+        ErrorDialog( {
+            viewModel.UpdateErrorState(false, "")
+        }, errorMsg.value)
     }
 }

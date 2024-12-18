@@ -12,6 +12,7 @@ import com.example.vetapp.Database.Entities.Reports
 import com.example.vetapp.R
 import com.example.vetapp.reports.FieldType
 import junit.framework.TestCase.assertEquals
+import junit.framework.TestCase.assertNull
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.runBlocking
@@ -46,7 +47,7 @@ class ReportsTemplateDaoTest {
     fun insertAndRetrieveTemplate() = runBlocking {
         val reportTemplateField = ReportTemplateField(name = "Test", fieldType = FieldType.NUMBER, reportId = 1)
         reportTemplateDao.insert(reportTemplateField)
-        val templates = reportTemplateDao.getAll().first()
+        val templates = reportTemplateDao.getAll()
         assertEquals(templates.count(), 1)
         assertEquals(templates.firstOrNull()?.name, "Test")
     }
@@ -54,22 +55,22 @@ class ReportsTemplateDaoTest {
     fun updateTemplate() = runBlocking {
         val reportTemplateField = ReportTemplateField(name = "Original Name", fieldType = FieldType.TEXT, reportId = 1)
         reportTemplateDao.insert(reportTemplateField)
-        val insertedTemplate = reportTemplateDao.getAll().firstOrNull()?.first()
+        val insertedTemplate = reportTemplateDao.getAll().firstOrNull()
         val updatedTemplate = insertedTemplate?.copy(name = "Updated Name")
         reportTemplateDao.update(updatedTemplate!!)
 
-        val result = reportTemplateDao.getAll().firstOrNull { x -> x.first().uid == insertedTemplate.uid }
-        assertEquals(result?.first()?.name, "Updated Name")
+        val result = reportTemplateDao.getAll().firstOrNull { x -> x.uid == insertedTemplate.uid }
+        assertEquals(result?.name, "Updated Name")
     }
 
     @Test
     fun deleteTemplate() = runBlocking {
         val template = ReportTemplateField(name = "Test", fieldType = FieldType.BOOLEAN, reportId = 1)
         reportTemplateDao.insert(template)
-        val insertedUser = reportTemplateDao.getAll().first().first()
+        val insertedUser = reportTemplateDao.getAll().first()
         reportTemplateDao.delete(insertedUser)
 
-        val result = reportTemplateDao.getReportById(1).first()
+        val result = reportTemplateDao.getReportById(1)
         assert(result.isEmpty())
     }
 
