@@ -1,4 +1,4 @@
-package com.example.vetapp.ui.componets.common
+package com.example.vetapp.ui.components.common
 
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
