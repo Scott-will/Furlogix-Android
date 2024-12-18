@@ -22,6 +22,7 @@ import com.example.vetapp.viewmodels.ReportViewModel
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.vetapp.ui.componets.common.AddItemButton
+import com.example.vetapp.ui.componets.common.ErrorDialog
 import com.example.vetapp.ui.componets.reports.AddReportDialog
 import com.example.vetapp.ui.componets.reports.ReportsList
 import com.example.vetapp.ui.navigation.Screen
@@ -32,6 +33,8 @@ fun ManageReportScreen(navController: NavController, viewModel: ReportViewModel 
     var reports = viewModel.reports.collectAsState()
     var showDialog by remember { mutableStateOf(false) }
     var label by remember { mutableStateOf("") }
+    val isError = viewModel.isError.collectAsState()
+    val errorMsg = viewModel.errorMsg.collectAsState()
 
     // Button to show the dialog
     Column(
@@ -67,5 +70,10 @@ fun ManageReportScreen(navController: NavController, viewModel: ReportViewModel 
             },
             currentLabel = label,
         )
+    }
+    if(isError.value){
+        ErrorDialog( {
+            viewModel.UpdateErrorState(false, "")
+        }, errorMsg.value)
     }
 }

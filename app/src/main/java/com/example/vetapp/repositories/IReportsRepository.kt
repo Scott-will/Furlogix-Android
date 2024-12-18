@@ -14,9 +14,9 @@ interface IReportsRepository {
 
     suspend fun getReportById(id: Int) : Reports
 
-    suspend fun insertReport(report : Reports)
+    suspend fun insertReport(report : Reports) : com.example.vetapp.Result
 
-    suspend fun updateReport(report : Reports)
+    suspend fun updateReport(report : Reports) : com.example.vetapp.Result
 
     suspend fun deleteReport(report : Reports)
 

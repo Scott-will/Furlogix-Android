@@ -17,6 +17,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.vetapp.ui.componets.common.AddItemButton
+import com.example.vetapp.ui.componets.common.ErrorDialog
 import com.example.vetapp.ui.componets.reports.ReportsList
 import com.example.vetapp.ui.navigation.Screen
 import com.example.vetapp.viewmodels.ReportViewModel
@@ -24,7 +25,10 @@ import com.example.vetapp.viewmodels.ReportViewModel
 @Composable
 fun ReportsScreen(navController: NavController, viewModel: ReportViewModel = hiltViewModel()) {
 
-    var reports = viewModel.reports.collectAsState()
+    val reports = viewModel.reports.collectAsState()
+    val isError = viewModel.isError.collectAsState()
+    val errorMsg = viewModel.errorMsg.collectAsState()
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -39,6 +43,11 @@ fun ReportsScreen(navController: NavController, viewModel: ReportViewModel = hil
             onClick = {data -> navController.navigate(Screen.ReportEntry.route.replace("{reportId}", "${data.Id}"))},
             editable = false)
         Spacer(modifier = Modifier.height(16.dp))
+    }
+    if(isError.value){
+        ErrorDialog( {
+            viewModel.UpdateErrorState(false, "")
+        }, errorMsg.value)
     }
 
 }

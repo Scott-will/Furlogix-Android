@@ -2,6 +2,8 @@ package com.example.vetapp.repositories
 
 import com.example.vetapp.Database.DAO.ReportsDao
 import com.example.vetapp.Database.Entities.Reports
+import com.example.vetapp.Result
+import com.example.vetapp.reports.ReportValidator
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -10,7 +12,7 @@ import javax.inject.Singleton
 
 @Singleton
 class ReportsRepository @Inject constructor(
-    private val dispatcher: CoroutineDispatcher = Dispatchers.IO,
+    private val reportValidator: ReportValidator,
     private val reportDao : ReportsDao) : IReportsRepository  {
 
     override fun reportsObservable(): Flow<List<Reports>> {
@@ -29,12 +31,22 @@ class ReportsRepository @Inject constructor(
         return reportDao.getByReportId(id)
     }
 
-    override suspend  fun insertReport(report: Reports) {
-        return reportDao.insert(report)
+    override suspend  fun insertReport(report: Reports) : Result{
+        var result = reportValidator.ValidateReport(report)
+        if(!result.result){
+            return result
+        }
+        reportDao.insert(report)
+        return Result(true, "Report added successfully")
     }
 
-    override suspend  fun updateReport(report: Reports) {
-        return reportDao.update(report)
+    override suspend  fun updateReport(report: Reports) : Result{
+        var result = reportValidator.ValidateReport(report)
+        if(!result.result){
+            return result
+        }
+        reportDao.update(report)
+        return Result(true, "Report added successfully")
     }
 
     override suspend  fun deleteReport(report: Reports) {
