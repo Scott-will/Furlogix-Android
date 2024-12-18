@@ -1,8 +1,9 @@
 package com.example.vetapp.ui.componets
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material3.*
-import androidx.compose.material3.ExposedDropdownMenuDefaults.TrailingIcon
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -21,7 +22,8 @@ fun ReportsReminder(remindersViewModel: RemindersViewModel) {
     var reminderType by remember { mutableStateOf("Send") }
     var isDatePickerOpen by remember { mutableStateOf(false) }
     var isTimePickerOpen by remember { mutableStateOf(false) }
-    var expanded by remember { mutableStateOf(false) }
+    var reminderExpanded by remember { mutableStateOf(false) }
+    var recurrenceExpanded by remember { mutableStateOf(false) }
 
     val recurrenceOptions = listOf("Once", "Daily", "Weekly", "Monthly")
     val reminderTypes = listOf("Send", "Fill")
@@ -67,24 +69,33 @@ fun ReportsReminder(remindersViewModel: RemindersViewModel) {
         Spacer(modifier = Modifier.height(16.dp))
 
         // Recurrence Option Dropdown
-        Text(text = "Recurrence", style = MaterialTheme.typography.bodyMedium)
+        Text(text = "Frequency", style = MaterialTheme.typography.bodyMedium)
         Spacer(modifier = Modifier.height(8.dp))
         ExposedDropdownMenuBox(
-            expanded = expanded,
-            onExpandedChange = { expanded = it },
-            modifier = Modifier.fillMaxWidth()
+            expanded = recurrenceExpanded,
+            onExpandedChange = { recurrenceExpanded = !recurrenceExpanded },
         ) {
+            OutlinedTextField(
+                value = recurrenceOption,
+                onValueChange = { },
+                readOnly = true,
+                label = { Text("Select Frequency") },
+                trailingIcon = {
+                    Icon(Icons.Default.ArrowDropDown, contentDescription = null)
+                },
+                modifier = Modifier.menuAnchor()
+            )
             ExposedDropdownMenu(
-                expanded = expanded,
-                onDismissRequest = { },
-                modifier = Modifier.fillMaxWidth()
+                expanded = recurrenceExpanded,
+                onDismissRequest = { recurrenceExpanded = false }
             ) {
-                recurrenceOptions.forEach { option ->
+                recurrenceOptions.forEach { type ->
                     DropdownMenuItem(
                         onClick = {
-                            recurrenceOption = option
+                            recurrenceOption = type
+                            recurrenceExpanded = false // Close the dropdown when an item is selected
                         },
-                        text = {Text(text = option)} ,
+                        text = {Text( text = type )}
                     )
                 }
             }
@@ -93,26 +104,34 @@ fun ReportsReminder(remindersViewModel: RemindersViewModel) {
         Text(text = "Reminder Type", style = MaterialTheme.typography.bodyMedium)
         Spacer(modifier = Modifier.height(8.dp))
         ExposedDropdownMenuBox(
-            expanded = expanded,
-            onExpandedChange = {expanded = it },
-            modifier = Modifier.fillMaxWidth()
+            expanded = reminderExpanded,
+            onExpandedChange = { reminderExpanded = !reminderExpanded },
         ) {
+            OutlinedTextField(
+                value = reminderType,
+                onValueChange = { },
+                readOnly = true,
+                label = { Text("Select Reminder Type") },
+                trailingIcon = {
+                    Icon(Icons.Default.ArrowDropDown, contentDescription = null)
+                },
+                modifier = Modifier.menuAnchor()
+            )
             ExposedDropdownMenu(
-                expanded = expanded,
-                onDismissRequest = { },
-                modifier = Modifier.fillMaxWidth()
+                expanded = reminderExpanded,
+                onDismissRequest = { reminderExpanded = false }
             ) {
-                reminderTypes.forEach { option ->
+                reminderTypes.forEach { type ->
                     DropdownMenuItem(
                         onClick = {
-                            reminderType = option
+                            reminderType = type
+                            reminderExpanded = false // Close the dropdown when an item is selected
                         },
-                        text = {Text(text = option)} ,
+                        text = {Text( text = type )}
                     )
                 }
             }
         }
-
         Spacer(modifier = Modifier.height(16.dp))
 
         // Schedule Button

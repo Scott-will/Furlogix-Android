@@ -7,19 +7,35 @@ import android.content.Intent
 import android.os.Build
 import android.util.Log
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.example.vetapp.Database.Entities.Reminder
 import com.example.vetapp.VetApplication
 import com.example.vetapp.broadcastreceivers.FillOutReportsNotificationReceiver
 import com.example.vetapp.broadcastreceivers.SendReportsNotificationReceiver
+import com.example.vetapp.repositories.RemindersRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
 import javax.inject.Inject
 
 @HiltViewModel
-class RemindersViewModel @Inject constructor() : ViewModel() {
+class RemindersViewModel @Inject constructor(
+    private val remindersRepository: RemindersRepository
+) : ViewModel() {
 
     private val TAG = "VetApp:" + ReportViewModel::class.qualifiedName
+
+    private var _isError = MutableStateFlow<Boolean>(false)
+    private var _errorMsg = MutableStateFlow<String>("")
+
+    var isError : StateFlow<Boolean> = _isError
+    var errorMsg : StateFlow<String> = _errorMsg
 
     public fun scheduleReminder(date : String, time : String, recurrence : String, type : String){
         val context = VetApplication.applicationContext()
@@ -86,5 +102,24 @@ class RemindersViewModel @Inject constructor() : ViewModel() {
         else{
             return false;
         }
+    }
+
+    fun getAllReminders(){
+        remindersRepository.getAllReminders()
+    }
+
+    fun insertReminder(reminder: Reminder){
+        viewModelScope.launch {
+            withContext(Dispatchers.IO){
+                val result = remindersRepository.insertReminder(reminder)
+                UpdateErrorState(!result.result, result.msg)
+            }
+        }
+    }
+
+    fun UpdateErrorState(isError : Boolean, errorMsg : String){
+        this._isError.value = isError
+        this._errorMsg.value = errorMsg
+
     }
 }
