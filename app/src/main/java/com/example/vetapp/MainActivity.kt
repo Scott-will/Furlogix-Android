@@ -46,6 +46,7 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class MainActivity : ComponentActivity()  {
 
+    private val intentFilter : IntentFilter = IntentFilter()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         //init database
@@ -59,14 +60,14 @@ class MainActivity : ComponentActivity()  {
                 VetApp()
             }
         }
-        requestPermissions()
+
     }
 
     override fun onDestroy() {
         super.onDestroy()
     }
 
-    private fun requestPermissions() {
+    private fun initBroadcastReceivers() {
 
     }
 }

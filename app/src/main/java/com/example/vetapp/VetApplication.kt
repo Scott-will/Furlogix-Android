@@ -38,7 +38,7 @@ class VetApplication : Application() {
     fun createNotificationChannel(context: Context) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val channel = NotificationChannel(
-                "reminder_channel",
+                context.getString(R.string.notification_channel_id),
                 "Reminder Notifications",
                 NotificationManager.IMPORTANCE_DEFAULT
             ).apply {
