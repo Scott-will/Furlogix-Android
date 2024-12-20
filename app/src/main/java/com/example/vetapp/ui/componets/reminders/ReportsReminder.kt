@@ -1,4 +1,4 @@
-package com.example.vetapp.ui.componets
+package com.example.vetapp.ui.componets.reminders
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons

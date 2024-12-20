@@ -6,17 +6,23 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.util.Log
+import androidx.compose.runtime.toMutableStateList
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.vetapp.Database.Entities.Reminder
 import com.example.vetapp.VetApplication
 import com.example.vetapp.broadcastreceivers.FillOutReportsNotificationReceiver
 import com.example.vetapp.broadcastreceivers.SendReportsNotificationReceiver
+import com.example.vetapp.repositories.IRemindersRepository
 import com.example.vetapp.repositories.RemindersRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.text.SimpleDateFormat
@@ -26,10 +32,11 @@ import javax.inject.Inject
 
 @HiltViewModel
 class RemindersViewModel @Inject constructor(
-    private val remindersRepository: RemindersRepository
+    private val remindersRepository: IRemindersRepository
 ) : ViewModel() {
 
     private val TAG = "VetApp:" + ReportViewModel::class.qualifiedName
+    val reminders = remindersRepository.getAllReminders().stateIn(viewModelScope, SharingStarted.Lazily, emptyList())
 
     private var _isError = MutableStateFlow<Boolean>(false)
     private var _errorMsg = MutableStateFlow<String>("")
@@ -91,6 +98,9 @@ class RemindersViewModel @Inject constructor(
             else -> return
         }
         Log.d(TAG, "Set a reminder for ${type}")
+        val reminder = Reminder(type = type, frequency = recurrence, startTime = time)
+        insertReminder(reminder)
+        Log.d(TAG, "Saved reminder to database")
     }
 
     fun checkAndRequestExactAlarmPermission() : Boolean{
@@ -104,15 +114,19 @@ class RemindersViewModel @Inject constructor(
         }
     }
 
-    fun getAllReminders(){
-        remindersRepository.getAllReminders()
-    }
-
     fun insertReminder(reminder: Reminder){
         viewModelScope.launch {
             withContext(Dispatchers.IO){
                 val result = remindersRepository.insertReminder(reminder)
                 UpdateErrorState(!result.result, result.msg)
+            }
+        }
+    }
+
+    fun deleteReminder(reminder: Reminder){
+        viewModelScope.launch {
+            withContext(Dispatchers.IO){
+                val result = remindersRepository.deleteReminder(reminder)
             }
         }
     }

@@ -11,13 +11,19 @@ class RemindersRepository @Inject constructor(
     //validator
 ) : IRemindersRepository{
 
-    override fun getAllReminders(): Flow<Reminder> {
+    override fun getAllReminders(): Flow<List<Reminder>> {
        return remindersDao.getAllRemindersFlow()
     }
 
     override suspend fun insertReminder(reminder: Reminder): Result {
         //validate
         remindersDao.insert(reminder)
+        return Result(true, "Reminder added to database successfully")
+    }
+
+    override suspend fun deleteReminder(reminder: Reminder): Result {
+        //validate
+        remindersDao.delete(reminder)
         return Result(true, "Reminder added to database successfully")
     }
 }

@@ -50,7 +50,7 @@ class ReportViewModel @Inject constructor(
     var errorMsg : StateFlow<String> = _errorMsg
 
     fun getReportNameById(id : Int) = flow {
-        var report = reportRepository.getReportByIdFlow(id).collect{
+        reportRepository.getReportByIdFlow(id).collect{
             result -> emit(result.name)
         }
     }

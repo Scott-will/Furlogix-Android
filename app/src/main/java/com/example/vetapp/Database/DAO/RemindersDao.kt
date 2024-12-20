@@ -1,6 +1,7 @@
 package com.example.vetapp.Database.DAO
 
 import androidx.room.Dao
+import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import com.example.vetapp.Database.Entities.Reminder
@@ -11,6 +12,9 @@ interface RemindersDao {
     @Insert
     fun insert(vararg reminder : Reminder)
 
+    @Delete
+    fun delete(vararg reminder : Reminder)
+
     @Query("Select * From Reminder")
-    fun getAllRemindersFlow() : Flow<Reminder>
+    fun getAllRemindersFlow() : Flow<List<Reminder>>
 }
