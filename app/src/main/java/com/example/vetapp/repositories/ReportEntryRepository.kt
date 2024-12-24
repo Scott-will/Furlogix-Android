@@ -34,4 +34,12 @@ class ReportEntryRepository @Inject constructor(
     override suspend fun getAllReportEntries(reportId : Int) : List<ReportEntry>{
         return reportEntryDao.getAllReportEntries(reportId)
     }
+
+    override suspend fun updateReportEntries(entries : List<ReportEntry>){
+        return reportEntryDao.updateReportEntries(*entries.toTypedArray())
+    }
+
+    override suspend fun deleteSentReportEntries(){
+        return reportEntryDao.deleteSentReportEntries()
+    }
 }

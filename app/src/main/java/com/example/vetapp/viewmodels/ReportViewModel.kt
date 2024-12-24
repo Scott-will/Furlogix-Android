@@ -1,5 +1,6 @@
 package com.example.vetapp.viewmodels
 
+import android.util.Log
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -143,6 +144,11 @@ class ReportViewModel @Inject constructor(
                 //TODO: Add pet name here
                 val emailWrapper = EmailWrapper(user?.email!!, "Pet Reports", "${reportName}_${Date()}", fileUri)
                 SendEmail(emailWrapper)
+                entries.forEach(){
+                    x ->
+                    x.sent = true
+                }
+                reportEntryRepository.updateReportEntries(entries)
             }
 
         }

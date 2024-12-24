@@ -11,6 +11,8 @@ composeBom = "2024.04.01"
 mockitoCoreVersion = "5.11.0"
 uiTestAndroid = "1.7.2"
 runtimeLivedata = "1.7.5"
+workerWersion = "2.8.1"
+hiltCommon = "1.2.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -30,6 +32,8 @@ androidx-material3 = { group = "androidx.compose.material3", name = "material3" 
 androidx-ui-test-android = { group = "androidx.compose.ui", name = "ui-test-android", version.ref = "uiTestAndroid" }
 androidx-runtime-livedata = { group = "androidx.compose.runtime", name = "runtime-livedata", version.ref = "runtimeLivedata" }
 mockito-mockito-core = { module = "org.mockito:mockito-core", version.ref = "mockitoCoreVersion" }
+work-runtime-ktx = { module = "androidx.work:work-runtime-ktx", version.ref = "workerWersion" }
+androidx-hilt-common = { group = "androidx.hilt", name = "hilt-common", version.ref = "hiltCommon" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

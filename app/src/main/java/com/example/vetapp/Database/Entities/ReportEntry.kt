@@ -29,5 +29,6 @@ data class ReportEntry (
     var value : String,
     var reportId: Int,
     var templateId : Int,
-    var timestamp : String
+    var timestamp : String,
+    var sent : Boolean = false
 )
