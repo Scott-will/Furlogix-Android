@@ -1,13 +1,14 @@
 package com.example.vetapp.repositories
 
-import android.widget.Toast
 import com.example.vetapp.Database.DAO.ReportEntryDao
 import com.example.vetapp.Database.Entities.ReportEntry
 import com.example.vetapp.Result
-import com.example.vetapp.VetApplication
 import com.example.vetapp.reports.ReportEntryValidator
 import kotlinx.coroutines.flow.Flow
+import java.io.ByteArrayOutputStream
+import java.io.ObjectOutputStream
 import javax.inject.Inject
+
 
 class ReportEntryRepository @Inject constructor(
     private val reportEntryDao : ReportEntryDao,
@@ -31,8 +32,8 @@ class ReportEntryRepository @Inject constructor(
         return reportEntryDao.getAllEntriesForReport(reportId)
     }
 
-    override suspend fun getAllReportEntries(reportId : Int) : List<ReportEntry>{
-        return reportEntryDao.getAllReportEntries(reportId)
+    override suspend fun getAllReportEntriesById(reportId : Int) : List<ReportEntry>{
+        return reportEntryDao.getAllReportEntriesById(reportId)
     }
 
     override suspend fun updateReportEntries(entries : List<ReportEntry>){
@@ -41,5 +42,14 @@ class ReportEntryRepository @Inject constructor(
 
     override suspend fun deleteSentReportEntries(){
         return reportEntryDao.deleteSentReportEntries()
+    }
+
+    override suspend fun getSizeOfReportEntryTableKB(): Int {
+        var entries = reportEntryDao.getAllReportEntries()
+        val byteArrayOutputStream = ByteArrayOutputStream()
+        ObjectOutputStream(byteArrayOutputStream).use { objectOutputStream ->
+            objectOutputStream.writeObject(entries)
+        }
+        return byteArrayOutputStream.size()/1024
     }
 }

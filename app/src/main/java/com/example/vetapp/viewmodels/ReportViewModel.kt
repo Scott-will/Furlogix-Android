@@ -46,9 +46,10 @@ class ReportViewModel @Inject constructor(
     val reports = reportRepository.reportsObservable().stateIn(viewModelScope, SharingStarted.Lazily, emptyList())
     private var _isError = MutableStateFlow<Boolean>(false)
     private var _errorMsg = MutableStateFlow<String>("")
-
+    private var _isTooManyReports = MutableStateFlow(this.isTooManyReportEntries())
     var isError : StateFlow<Boolean> = _isError
     var errorMsg : StateFlow<String> = _errorMsg
+    var isTooManyReports = _isTooManyReports
 
     fun getReportNameById(id : Int) = flow {
         var report = reportRepository.getReportByIdFlow(id).collect{
@@ -138,7 +139,7 @@ class ReportViewModel @Inject constructor(
             withContext(Dispatchers.IO){
                 val reportName = reportRepository.getReportById(reportId).name
                 val templates = reportTemplateRepository.GetReportById(reportId)
-                val entries = reportEntryRepository.getAllReportEntries(reportId)
+                val entries = reportEntryRepository.getAllReportEntriesById(reportId)
                 var fileUri = CsvBuilder().buildAndWriteCsv(VetApplication.applicationContext(), reportName, entries, templates)
                 val user = userDao.getUserById(1)
                 //TODO: Add pet name here
@@ -165,5 +166,13 @@ class ReportViewModel @Inject constructor(
         this._isError.value = isError
         this._errorMsg.value = errorMsg
 
+    }
+
+    private fun isTooManyReportEntries() : Boolean{
+        var size = 0
+        runBlocking {
+            size = reportEntryRepository.getSizeOfReportEntryTableKB()
+        }
+        return  size > 100
     }
 }
