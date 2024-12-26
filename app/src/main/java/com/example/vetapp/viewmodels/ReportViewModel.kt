@@ -46,11 +46,15 @@ class ReportViewModel @Inject constructor(
     val reports = reportRepository.reportsObservable().stateIn(viewModelScope, SharingStarted.Lazily, emptyList())
     private var _isError = MutableStateFlow<Boolean>(false)
     private var _errorMsg = MutableStateFlow<String>("")
-    private var _isTooManyReports = MutableStateFlow(this.isTooManyReportEntries())
+    private var _isTooManyReports = MutableStateFlow(false)
     var isError : StateFlow<Boolean> = _isError
     var errorMsg : StateFlow<String> = _errorMsg
     var isTooManyReports = _isTooManyReports
 
+    //this is called everytime viewModel is created
+    init{
+        checkTooManyReportEntries()
+    }
     fun getReportNameById(id : Int) = flow {
         var report = reportRepository.getReportByIdFlow(id).collect{
             result -> emit(result.name)
@@ -168,11 +172,25 @@ class ReportViewModel @Inject constructor(
 
     }
 
-    private fun isTooManyReportEntries() : Boolean{
-        var size = 0
-        runBlocking {
-            size = reportEntryRepository.getSizeOfReportEntryTableKB()
+    private fun checkTooManyReportEntries() {
+        viewModelScope.launch {
+            withContext(Dispatchers.IO){
+                _isTooManyReports.value = isTooManyReportEntries()
+            }
+
         }
-        return  size > 100
+    }
+
+    private suspend fun isTooManyReportEntries(): Boolean {
+        val size = reportEntryRepository.getSizeOfReportEntryTableKB() // suspend function
+        return size > 100
+    }
+
+    public fun DeleteSentReports(){
+        viewModelScope.launch { withContext(Dispatchers.IO){
+            reportEntryRepository.deleteSentReportEntries()
+            }
+        }
+
     }
 }

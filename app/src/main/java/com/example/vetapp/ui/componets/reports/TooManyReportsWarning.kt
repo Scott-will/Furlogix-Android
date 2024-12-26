@@ -31,7 +31,7 @@ fun TooManyReportsWarning() {
                 modifier = Modifier.padding(end = 8.dp)
             )
             Text(
-                text = "The size of the reports database is growing too large. Please send your reports",
+                text = "The size of the reports database has grown too large. Please send your reports",
                 style = MaterialTheme.typography.bodyMedium,
                 color = Color.White
             )

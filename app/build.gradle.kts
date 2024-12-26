@@ -55,6 +55,7 @@ dependencies {
     implementation(libs.androidx.runtime.livedata)
     implementation(libs.work.runtime.ktx)
     implementation(libs.androidx.hilt.common)
+    implementation(libs.androidx.hilt.work)
     testImplementation(libs.junit)
     testImplementation("io.mockk:mockk:1.13.4") // For mocking the IReportsRepository
     androidTestImplementation(libs.androidx.junit)

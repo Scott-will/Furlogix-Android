@@ -61,14 +61,8 @@ fun ReportEntryScreen(navController: NavController, reportId : Int = 0, viewMode
         }) {
             Text("Save")
         }
-        Box(
-            modifier = Modifier.fillMaxSize(),
-            contentAlignment = Alignment.BottomCenter
-        )
-        {
-            Button(onClick = { viewModel.gatherReportData(reportId) }) {
-                Text("Send Reports")
-            }
+        Button(onClick = { viewModel.gatherReportData(reportId) }) {
+            Text("Send Reports")
         }
     }
     if(isError.value){

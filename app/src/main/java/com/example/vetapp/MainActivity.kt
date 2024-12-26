@@ -1,6 +1,7 @@
 package com.example.vetapp
 
 import ReportCleanerWorker
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.IntentFilter
 import android.os.Build
@@ -21,7 +22,6 @@ import com.example.vetapp.ui.theme.VetAppTheme
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import androidx.room.Room
-import androidx.work.Constraints
 import androidx.work.PeriodicWorkRequest
 import androidx.work.WorkManager
 import com.example.vetapp.Database.AppDatabase
@@ -80,13 +80,13 @@ class MainActivity : ComponentActivity()  {
         }
     }
 
+    @SuppressLint("NewApi")
     fun scheduleReportCleaner(){
         val reportCleanerWorkRequest = PeriodicWorkRequest.Builder(
             ReportCleanerWorker::class.java,
             14,
             TimeUnit.DAYS
-        )
-            .build()
+        ).build()
 
         WorkManager.getInstance(this.applicationContext)
             .enqueue(reportCleanerWorkRequest)

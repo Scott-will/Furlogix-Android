@@ -8,6 +8,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.Button
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
@@ -19,6 +21,7 @@ import androidx.navigation.NavController
 import com.example.vetapp.ui.componets.common.AddItemButton
 import com.example.vetapp.ui.componets.common.ErrorDialog
 import com.example.vetapp.ui.componets.reports.ReportsList
+import com.example.vetapp.ui.componets.reports.TooManyReportsWarning
 import com.example.vetapp.ui.navigation.Screen
 import com.example.vetapp.viewmodels.ReportViewModel
 
@@ -28,6 +31,7 @@ fun ReportsScreen(navController: NavController, viewModel: ReportViewModel = hil
     val reports = viewModel.reports.collectAsState()
     val isError = viewModel.isError.collectAsState()
     val errorMsg = viewModel.errorMsg.collectAsState()
+    val isTooManyReports = viewModel.isTooManyReports.collectAsState()
 
     Column(
         modifier = Modifier
@@ -35,6 +39,13 @@ fun ReportsScreen(navController: NavController, viewModel: ReportViewModel = hil
             .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        if(isTooManyReports.value){
+            TooManyReportsWarning()
+            Spacer(modifier = Modifier.height(16.dp))
+            Button(onClick = { viewModel.DeleteSentReports() }) {
+                Text("Delete Sent Reports")
+            }
+        }
         // Show the list of form items
         Spacer(modifier = Modifier.height(16.dp))
         ReportsList(reports.value,
