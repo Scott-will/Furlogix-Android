@@ -1,6 +1,7 @@
 package com.example.vetapp.repositories
 
 import androidx.lifecycle.LiveData
+import com.example.vetapp.Database.Entities.ReportEntry
 import com.example.vetapp.Database.Entities.Reports
 import kotlinx.coroutines.flow.Flow
 

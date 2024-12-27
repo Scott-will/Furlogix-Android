@@ -44,6 +44,7 @@ fun ReportTemplateScreen(navController: NavController, reportId : Int = 0, viewM
     val isError = viewModel.isError.collectAsState()
     val errorMsg = viewModel.errorMsg.collectAsState()
 
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -59,7 +60,8 @@ fun ReportTemplateScreen(navController: NavController, reportId : Int = 0, viewM
         else{
             ReporttemplatesList(reportsTemplates,
                 onDeleteClick = {item -> viewModel.deleteReportTemplateField(item)},
-                onUpdateClick = {item -> viewModel.updateReportTemplateField(item)})
+                onUpdateClick = {item -> viewModel.updateReportTemplateField(item)},
+                navController)
         }
         Spacer(modifier = Modifier.height(16.dp))
         AddItemButton(onClick = { showDialog = true }, localModifier = Modifier

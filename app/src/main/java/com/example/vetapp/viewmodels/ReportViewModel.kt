@@ -1,6 +1,8 @@
 package com.example.vetapp.viewmodels
 
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.State
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -22,9 +24,11 @@ import com.example.vetapp.repositories.IReportTemplateRepository
 import com.example.vetapp.repositories.IReportsRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
@@ -43,6 +47,9 @@ class ReportViewModel @Inject constructor(
 {
     val reportTemplateFields = reportTemplateRepository.ReportTemplateObservable().stateIn(viewModelScope, SharingStarted.Lazily, emptyList())
     val reports = reportRepository.reportsObservable().stateIn(viewModelScope, SharingStarted.Lazily, emptyList())
+
+    private var _reportEntries = MutableStateFlow<List<ReportEntry>>(emptyList())
+    val reportEntries : StateFlow<List<ReportEntry>> = _reportEntries
     private var _isError = MutableStateFlow<Boolean>(false)
     private var _errorMsg = MutableStateFlow<String>("")
 
@@ -159,5 +166,16 @@ class ReportViewModel @Inject constructor(
         this._isError.value = isError
         this._errorMsg.value = errorMsg
 
+    }
+
+    fun PopulateReportEntriesProperty(reportTemplateId : Int) {
+        viewModelScope.launch {
+            withContext(Dispatchers.IO){
+                reportEntryRepository.getAllReportEntriesForTemplate(reportTemplateId).collect{
+                    entries ->
+                    _reportEntries.value = entries
+                }
+            }
+        }
     }
 }

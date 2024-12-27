@@ -31,6 +31,7 @@ import com.example.vetapp.ui.screens.ManageReportScreen
 import com.example.vetapp.ui.screens.ReportEntryScreen
 import com.example.vetapp.ui.screens.ReportTemplateScreen
 import com.example.vetapp.ui.screens.ProfileScreen
+import com.example.vetapp.ui.screens.ReportEntryHistoryScreen
 import com.example.vetapp.ui.screens.ReportsScreen
 
 import dagger.hilt.android.AndroidEntryPoint
@@ -104,6 +105,14 @@ fun VetApp() {
                 }
                 else{
                     ReportTemplateScreen(navController)
+                }
+            }
+            composable(Screen.ReportEntryHistory.route, listOf(navArgument("reportTemplateId"){type = NavType.IntType})) { backStackEntry -> val reportTemplateId = backStackEntry.arguments?.getInt("reportTemplateId")
+                if (reportTemplateId != null) {
+                    ReportEntryHistoryScreen(navController, reportTemplateId)
+                }
+                else{
+                    ReportEntryHistoryScreen(navController)
                 }
             }
             composable(Screen.ReportEntry.route, listOf(navArgument("reportId"){type = NavType.IntType})) { backStackEntry -> val reportId = backStackEntry.arguments?.getInt("reportId")
