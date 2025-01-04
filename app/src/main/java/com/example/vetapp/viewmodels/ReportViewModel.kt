@@ -157,12 +157,10 @@ class ReportViewModel @Inject constructor(
             }
 
         }
-
-
     }
 
     fun SendEmail(wrapper : EmailWrapper){
-        val emailHandler: IEmailHandler = EmailHandler(VetApplication.applicationContext())
+        val emailHandler: IEmailHandler = EmailHandler(VetApplication.applicationContext(), userDao)
         emailHandler.CreateAndSendEmail(wrapper)
     }
 

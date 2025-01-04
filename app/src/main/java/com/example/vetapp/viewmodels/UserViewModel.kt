@@ -6,15 +6,22 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asFlow
 import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.vetapp.Database.DAO.UserDao
 import com.example.vetapp.Database.Entities.User
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
 class UserViewModel @Inject constructor(private val userDao: UserDao) : ViewModel() {
+    private var _currentUser = MutableStateFlow<User?>(null);
+    val currentUser : StateFlow<User?> = _currentUser
+
     val userName = userDao.getCurrentUserName().asFlow()
     val userEmail = userDao.getCurrentUserEmail().asFlow()
 
@@ -40,6 +47,14 @@ class UserViewModel @Inject constructor(private val userDao: UserDao) : ViewMode
     fun updateUserProfile(name: String, email: String) {
         viewModelScope.launch {
             userDao.updateUser(name, email) // Assuming updateUser is defined in your UserDao
+        }
+    }
+
+    fun populateCurrentUser(){
+        viewModelScope.launch {
+            withContext(Dispatchers.IO){
+                _currentUser.value = userDao.getUserById(1)
+            }
         }
     }
 
@@ -97,5 +112,23 @@ class UserViewModel @Inject constructor(private val userDao: UserDao) : ViewMode
         }
 
         return isValid
+    }
+
+    fun setNoPendingReportsForUser(){
+        viewModelScope.launch {
+            withContext(Dispatchers.IO){
+                userDao.setNoPendingReportsForUser(1)
+                populateCurrentUser()
+            }
+        }
+    }
+
+    fun setPendingReportsForUser(){
+        viewModelScope.launch {
+            withContext(Dispatchers.IO){
+                userDao.setPendingReportsForUser(1)
+                populateCurrentUser()
+            }
+        }
     }
 }

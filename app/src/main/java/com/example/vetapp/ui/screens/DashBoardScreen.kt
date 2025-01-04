@@ -7,14 +7,25 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.example.vetapp.ui.componets.reports.PendingReportsDialog
 import com.example.vetapp.ui.navigation.Screen
+import com.example.vetapp.viewmodels.UserViewModel
 
 @Composable
-fun DashboardScreen(navController: NavController) {
+fun DashboardScreen(navController: NavController, userViewModel: UserViewModel = hiltViewModel()) {
+    userViewModel.populateCurrentUser()
+    val currentUser = userViewModel.currentUser.collectAsState()
+    if(currentUser.value != null && currentUser.value?.pendingSentReports!!){
+        PendingReportsDialog(onConfirm = {userViewModel.setNoPendingReportsForUser() }, onDismiss = {navController.navigate(Screen.Reports.route)})
+    }
     Column(
         modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
