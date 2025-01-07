@@ -1,18 +1,23 @@
 package com.example.vetapp
 
+import android.Manifest
 import android.content.Intent
 import android.content.IntentFilter
+import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
+import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.core.content.ContextCompat
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -21,6 +26,8 @@ import androidx.navigation.navArgument
 import androidx.room.Room
 import com.example.vetapp.Database.AppDatabase
 import com.example.vetapp.broadcastreceivers.EmailBroadcastReceiver
+import com.example.vetapp.broadcastreceivers.FillOutReportsNotificationReceiver
+import com.example.vetapp.broadcastreceivers.SendReportsNotificationReceiver
 import com.example.vetapp.ui.AppHeader
 import com.example.vetapp.ui.navigation.Screen
 import com.example.vetapp.ui.screens.CreateAccountScreen
@@ -30,6 +37,8 @@ import com.example.vetapp.ui.screens.ManageReportScreen
 import com.example.vetapp.ui.screens.ProfileScreen
 import com.example.vetapp.ui.screens.ReportEntryScreen
 import com.example.vetapp.ui.screens.ReportTemplateScreen
+import com.example.vetapp.ui.screens.ProfileScreen
+import com.example.vetapp.ui.screens.RemindersScreen
 import com.example.vetapp.ui.screens.ReportEntryHistoryScreen
 import com.example.vetapp.ui.screens.ReportsScreen
 import com.example.vetapp.ui.theme.VetAppTheme
@@ -38,7 +47,7 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class MainActivity : ComponentActivity()  {
 
-    private val emailReceiver : EmailBroadcastReceiver = EmailBroadcastReceiver()
+    private val intentFilter : IntentFilter = IntentFilter()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         //init database
@@ -46,30 +55,21 @@ class MainActivity : ComponentActivity()  {
             applicationContext,
             AppDatabase::class.java, R.string.database_name.toString()
         ).build()
-        //init broadcast receivers
-        this.InitBroadcastReceivers()
         enableEdgeToEdge()
         setContent {
             VetAppTheme {
                 VetApp()
             }
         }
+
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        unregisterReceiver(emailReceiver)
     }
 
-    fun InitBroadcastReceivers(){
-        //register broadcast receivers
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            registerReceiver(
-                this.emailReceiver,
-                IntentFilter(Intent.ACTION_SENDTO),
-                RECEIVER_NOT_EXPORTED
-            )
-        }
+    private fun initBroadcastReceivers() {
+
     }
 }
 
@@ -125,6 +125,7 @@ fun VetApp() {
             composable(Screen.Profile.route) { ProfileScreen(navController = navController) }
             composable(Screen.ManageReports.route) { ManageReportScreen(navController) }
             composable(Screen.Reports.route) { ReportsScreen(navController) }
+            composable(Screen.Reminders.route) { RemindersScreen(navController) }
         }
     }
 }
