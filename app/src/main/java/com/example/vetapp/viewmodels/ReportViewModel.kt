@@ -1,15 +1,9 @@
 package com.example.vetapp.viewmodels
 
+import android.util.Log
 import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.State
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.vetapp.Database.DAO.UserDao
 import com.example.vetapp.Database.Entities.ReportEntry
 import com.example.vetapp.Database.Entities.ReportTemplateField
@@ -24,18 +18,14 @@ import com.example.vetapp.repositories.IReportTemplateRepository
 import com.example.vetapp.repositories.IReportsRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import java.util.Date
-import java.util.Observable
 import javax.inject.Inject
 
 @HiltViewModel
@@ -53,11 +43,14 @@ class ReportViewModel @Inject constructor(
     private var _isError = MutableStateFlow<Boolean>(false)
     private var _errorMsg = MutableStateFlow<String>("")
 
+    private val TAG = "VetApp:" + ReportViewModel::class.qualifiedName
+
+
     var isError : StateFlow<Boolean> = _isError
     var errorMsg : StateFlow<String> = _errorMsg
 
     fun getReportNameById(id : Int) = flow {
-        var report = reportRepository.getReportByIdFlow(id).collect{
+        reportRepository.getReportByIdFlow(id).collect{
             result -> emit(result.name)
         }
     }
@@ -67,8 +60,10 @@ class ReportViewModel @Inject constructor(
         val report = Reports(name = name)
         viewModelScope.launch {
             withContext(Dispatchers.IO){
+                Log.d(TAG, "Inserting report ${report.Id}, ${report.name}")
                 val result = reportRepository.insertReport(report)
                 UpdateErrorState(!result.result, result.msg)
+                Log.d(TAG, "Result of inserting report ${report.Id}, ${report.name} : ${result.result}")
             }
 
         }
@@ -77,6 +72,7 @@ class ReportViewModel @Inject constructor(
     fun deleteReport( report : Reports ){
         viewModelScope.launch {
             withContext(Dispatchers.IO){
+                Log.d(TAG, "Deleting report ${report.Id}, ${report.name}")
                 reportRepository.deleteReport(report)
             }
 
@@ -86,8 +82,10 @@ class ReportViewModel @Inject constructor(
     fun updateReport( report : Reports ){
         viewModelScope.launch {
             withContext(Dispatchers.IO){
+                Log.d(TAG, "Updating report ${report.Id}, ${report.name}")
                 val result = reportRepository.updateReport(report)
                 UpdateErrorState(!result.result, result.msg)
+                Log.d(TAG, "Result of updating report ${report.Id}, ${report.name} : ${result.result}")
             }
 
         }
@@ -96,8 +94,10 @@ class ReportViewModel @Inject constructor(
     fun insertReportTemplateField(field : ReportTemplateField){
         viewModelScope.launch {
             withContext(Dispatchers.IO){
+                Log.d(TAG, "Inserting report template field ${field.uid}, ${field.name}")
                 val result = reportTemplateRepository.insertReportTemplateField(field)
                 UpdateErrorState(!result.result, result.msg)
+                Log.d(TAG, "Result of inserting report template field ${field.uid}, ${field.name} : ${result.result}")
             }
         }
     }
@@ -105,6 +105,7 @@ class ReportViewModel @Inject constructor(
     fun deleteReportTemplateField(field : ReportTemplateField){
         viewModelScope.launch {
             withContext(Dispatchers.IO){
+                Log.d(TAG, "Deleting report template field ${field.uid}, ${field.name}")
                 reportTemplateRepository.deleteReportTemplateField(field)
             }
         }
@@ -113,8 +114,10 @@ class ReportViewModel @Inject constructor(
     fun updateReportTemplateField(field : ReportTemplateField){
         viewModelScope.launch {
             withContext(Dispatchers.IO){
+                Log.d(TAG, "Updating report template field ${field.uid}, ${field.name}")
                 val result = reportTemplateRepository.updateReportTemplateField(field)
                 UpdateErrorState(!result.result, result.msg)
+                Log.d(TAG, "Result of updating report template field ${field.uid}, ${field.name} : ${result.result}")
             }
         }
     }
@@ -133,7 +136,9 @@ class ReportViewModel @Inject constructor(
         }
        viewModelScope.launch {
            withContext(Dispatchers.IO) {
+               Log.d(TAG, "Inserting ${entries.count()} report entries")
                var result = reportEntryRepository.insertEntries(entries)
+               Log.d(TAG, "Result of inserting ${entries.count()} report entries : ${result.result}")
                UpdateErrorState(!result.result, result.msg)
            }
        }
@@ -142,6 +147,7 @@ class ReportViewModel @Inject constructor(
     fun gatherReportData(reportId : Int){
         viewModelScope.launch {
             withContext(Dispatchers.IO){
+                Log.d(TAG, "Gathering report data to send in email")
                 val reportName = reportRepository.getReportById(reportId).name
                 val templates = reportTemplateRepository.GetReportById(reportId)
                 val entries = reportEntryRepository.getAllReportEntries(reportId)
@@ -158,8 +164,10 @@ class ReportViewModel @Inject constructor(
     }
 
     fun SendEmail(wrapper : EmailWrapper){
+        Log.d(TAG, "Starting process of sending email")
         val emailHandler: IEmailHandler = EmailHandler(VetApplication.applicationContext())
         emailHandler.CreateAndSendEmail(wrapper)
+        Log.d(TAG, "finished process of sending email")
     }
 
     fun UpdateErrorState(isError : Boolean, errorMsg : String){

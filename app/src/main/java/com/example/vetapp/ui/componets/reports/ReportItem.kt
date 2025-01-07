@@ -1,26 +1,29 @@
 package com.example.vetapp.ui.componets.reports
 
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Text
 import androidx.compose.material3.Surface
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.navigation.NavController
-import com.example.vetapp.Database.Entities.ReportTemplateField
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
 import com.example.vetapp.Database.Entities.Reports
 import com.example.vetapp.ui.componets.common.DeleteButton
+import com.example.vetapp.ui.componets.common.DeleteWarning
 import com.example.vetapp.ui.componets.common.EditButton
-import com.example.vetapp.ui.navigation.Screen
 
 @Composable
 fun ReportItem(data: Reports,
@@ -29,6 +32,7 @@ fun ReportItem(data: Reports,
                onUpdateClick : (Reports) -> Unit,
                editable: Boolean = true) {
     var showDialog by remember { mutableStateOf(false) }
+    var showDeleteWarning by remember { mutableStateOf(false) }
     Surface(
         modifier = Modifier
             .fillMaxWidth()
@@ -50,10 +54,10 @@ fun ReportItem(data: Reports,
                 fontWeight = FontWeight.Bold // Optional: Makes the text bold
             )
             Spacer(modifier = Modifier.width(8.dp))
-            if(editable){
+            if (editable) {
                 EditButton { showDialog = true }
                 Spacer(modifier = Modifier.width(8.dp))
-                DeleteButton {onDeleteClick(data)  }
+                DeleteButton { showDeleteWarning = true }
                 if (showDialog) {
                     AddReportDialog(
                         onDismiss = { showDialog = false },
@@ -67,10 +71,18 @@ fun ReportItem(data: Reports,
                     )
                 }
             }
+            if (showDeleteWarning) {
+                DeleteWarning(
+                    { showDeleteWarning = false },
+                    {onDeleteClick(data)},
+                    "Deleting this report will delete all associated templates and data"
+                )
+            }
 
         }
     }
 }
+
 
 @Composable
 fun ReportsList(dataList: List<Reports>,
