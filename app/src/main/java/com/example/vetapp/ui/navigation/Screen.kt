@@ -10,4 +10,5 @@ sealed class Screen(val route: String) {
     object ManageReports : Screen("manage_reports")
     object Reports : Screen("reports")
     object Reminders : Screen("reminders")
+    object ReportEntryHistory : Screen("report_entry/history/{reportTemplateId}")
 }

@@ -14,15 +14,14 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
-import androidx.navigation.NavType
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.core.content.ContextCompat
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.rememberNavController
-import com.example.vetapp.ui.theme.VetAppTheme
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import androidx.room.Room
 import com.example.vetapp.Database.AppDatabase
@@ -31,16 +30,18 @@ import com.example.vetapp.broadcastreceivers.FillOutReportsNotificationReceiver
 import com.example.vetapp.broadcastreceivers.SendReportsNotificationReceiver
 import com.example.vetapp.ui.AppHeader
 import com.example.vetapp.ui.navigation.Screen
-import com.example.vetapp.ui.screens.LoginScreen
 import com.example.vetapp.ui.screens.CreateAccountScreen
 import com.example.vetapp.ui.screens.DashboardScreen
+import com.example.vetapp.ui.screens.LoginScreen
 import com.example.vetapp.ui.screens.ManageReportScreen
+import com.example.vetapp.ui.screens.ProfileScreen
 import com.example.vetapp.ui.screens.ReportEntryScreen
 import com.example.vetapp.ui.screens.ReportTemplateScreen
 import com.example.vetapp.ui.screens.ProfileScreen
 import com.example.vetapp.ui.screens.RemindersScreen
+import com.example.vetapp.ui.screens.ReportEntryHistoryScreen
 import com.example.vetapp.ui.screens.ReportsScreen
-
+import com.example.vetapp.ui.theme.VetAppTheme
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -103,6 +104,14 @@ fun VetApp() {
                 }
                 else{
                     ReportTemplateScreen(navController)
+                }
+            }
+            composable(Screen.ReportEntryHistory.route, listOf(navArgument("reportTemplateId"){type = NavType.IntType})) { backStackEntry -> val reportTemplateId = backStackEntry.arguments?.getInt("reportTemplateId")
+                if (reportTemplateId != null) {
+                    ReportEntryHistoryScreen(navController, reportTemplateId)
+                }
+                else{
+                    ReportEntryHistoryScreen(navController)
                 }
             }
             composable(Screen.ReportEntry.route, listOf(navArgument("reportId"){type = NavType.IntType})) { backStackEntry -> val reportId = backStackEntry.arguments?.getInt("reportId")

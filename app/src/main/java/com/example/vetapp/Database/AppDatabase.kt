@@ -8,12 +8,12 @@ import com.example.vetapp.Database.DAO.RemindersDao
 import com.example.vetapp.Database.DAO.ReportEntryDao
 import com.example.vetapp.Database.DAO.ReportTemplateDao
 import com.example.vetapp.Database.DAO.ReportsDao
-import com.example.vetapp.Database.Entities.User
 import com.example.vetapp.Database.DAO.UserDao
 import com.example.vetapp.Database.Entities.Reminder
 import com.example.vetapp.Database.Entities.ReportEntry
 import com.example.vetapp.Database.Entities.ReportTemplateField
 import com.example.vetapp.Database.Entities.Reports
+import com.example.vetapp.Database.Entities.User
 
 @Database(entities = [User::class,
     ReportTemplateField::class,
