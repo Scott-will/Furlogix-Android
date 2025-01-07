@@ -53,5 +53,4 @@ class ReportTemplateRepository @Inject constructor(
     override suspend fun GetTemplateById(id : Int) : ReportTemplateField{
         return reportTemplateDao.getTemplateById(id)
     }
-
 }

@@ -1,5 +1,6 @@
 package com.example.vetapp.ui.componets.reports
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -19,16 +20,19 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.example.vetapp.Database.Entities.ReportTemplateField
 import com.example.vetapp.ui.componets.common.DeleteButton
 import com.example.vetapp.ui.componets.common.DeleteWarning
 import com.example.vetapp.ui.componets.common.EditButton
+import com.example.vetapp.ui.navigation.Screen
 
 
 @Composable
 fun ReportTemplateItem(data: ReportTemplateField,
                        onDeleteClick : (ReportTemplateField) -> Unit,
-                       onUpdateClick : (ReportTemplateField) -> Unit) {
+                       onUpdateClick : (ReportTemplateField) -> Unit,
+                       navController: NavController) {
     var showDialog by remember { mutableStateOf(false) }
     var showDeleteWarning by remember { mutableStateOf(false) }
 
@@ -42,7 +46,8 @@ fun ReportTemplateItem(data: ReportTemplateField,
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(16.dp),
+                .padding(16.dp)
+                .clickable{navController.navigate(Screen.ReportEntryHistory.route.replace("{reportTemplateId}", "${data.uid}"))}, //go to page to see all previous entries in table format
             verticalAlignment = Alignment.CenterVertically
         ) {
             // Left-aligned text
@@ -78,10 +83,11 @@ fun ReportTemplateItem(data: ReportTemplateField,
 @Composable
 fun ReporttemplatesList(dataList: List<ReportTemplateField>,
                         onDeleteClick : (ReportTemplateField) -> Unit,
-                        onUpdateClick : (ReportTemplateField) -> Unit) {
+                        onUpdateClick : (ReportTemplateField) -> Unit,
+                        navController: NavController) {
     Column(modifier = Modifier.padding(16.dp)) {
         dataList.forEach { data ->
-            ReportTemplateItem(data = data, onUpdateClick = onUpdateClick, onDeleteClick = onDeleteClick)
+            ReportTemplateItem(data = data, onUpdateClick = onUpdateClick, onDeleteClick = onDeleteClick, navController = navController)
         }
     }
 }

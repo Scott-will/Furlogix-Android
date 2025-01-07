@@ -37,6 +37,9 @@ class ReportViewModel @Inject constructor(
 {
     val reportTemplateFields = reportTemplateRepository.ReportTemplateObservable().stateIn(viewModelScope, SharingStarted.Lazily, emptyList())
     val reports = reportRepository.reportsObservable().stateIn(viewModelScope, SharingStarted.Lazily, emptyList())
+
+    private var _reportEntries = MutableStateFlow<List<ReportEntry>>(emptyList())
+    val reportEntries : StateFlow<List<ReportEntry>> = _reportEntries
     private var _isError = MutableStateFlow<Boolean>(false)
     private var _errorMsg = MutableStateFlow<String>("")
 
@@ -171,5 +174,16 @@ class ReportViewModel @Inject constructor(
         this._isError.value = isError
         this._errorMsg.value = errorMsg
 
+    }
+
+    fun PopulateReportEntriesProperty(reportTemplateId : Int) {
+        viewModelScope.launch {
+            withContext(Dispatchers.IO){
+                reportEntryRepository.getAllReportEntriesForTemplate(reportTemplateId).collect{
+                    entries ->
+                    _reportEntries.value = entries
+                }
+            }
+        }
     }
 }

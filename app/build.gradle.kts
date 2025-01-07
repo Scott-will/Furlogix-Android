@@ -53,6 +53,7 @@ dependencies {
     implementation(libs.androidx.material3)
     implementation(libs.androidx.ui.test.android)
     implementation(libs.androidx.runtime.livedata)
+    implementation(libs.androidx.navigation.testing)
     testImplementation(libs.junit)
     testImplementation(libs.io.mockk)
     androidTestImplementation(libs.androidx.junit)
