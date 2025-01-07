@@ -6,6 +6,7 @@ import androidx.test.core.app.ApplicationProvider
 import com.example.vetapp.Database.AppDatabase
 import com.example.vetapp.Database.DAO.ReportsDao
 import com.example.vetapp.Database.Entities.Reports
+import com.example.vetapp.Database.Entities.User
 import com.example.vetapp.R
 import junit.framework.TestCase.assertEquals
 import junit.framework.TestCase.assertNotNull
@@ -26,6 +27,8 @@ class ReportsDaoTest {
         context.deleteDatabase(R.string.database_name.toString())
         db = Room.inMemoryDatabaseBuilder(context, AppDatabase::class.java).build()
         reportDao = db.reportsDao()
+        val userDao = db.userDao()
+        userDao.insert(User(name = "abcd", surname = "abcd", email = "abcd", petName = "abcd"))
     }
 
     @After
@@ -35,7 +38,7 @@ class ReportsDaoTest {
 
     @Test
     fun insertAndRetrieveReports() = runBlocking {
-        val report = Reports(name = "Test")
+        val report = Reports(name = "Test", userId = 1)
         reportDao.insert(report)
         val reports = reportDao.getAllFlow().first()
         assertEquals(reports.count(), 1)
@@ -44,7 +47,7 @@ class ReportsDaoTest {
 
     @Test
     fun updateReports() = runBlocking {
-        val report = Reports(name = "Reports to Update")
+        val report = Reports(name = "Reports to Update", userId = 1)
         reportDao.insert(report)
         val insertedReports = reportDao.getAllFlow().first().first()
         val updatedReports = insertedReports.copy(name = "Updated Name")
@@ -56,7 +59,7 @@ class ReportsDaoTest {
 
     @Test
     fun deleteReports() = runBlocking {
-        val report = Reports(name = "Reports to Delete")
+        val report = Reports(name = "Reports to Delete", userId = 1)
         reportDao.insert(report)
         val insertedReports = reportDao.getAllFlow().first().first()
         assertNotNull(insertedReports)

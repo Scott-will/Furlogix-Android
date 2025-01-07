@@ -1,6 +1,7 @@
 package com.example.vetapp.viewmodels
 
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -46,6 +47,12 @@ class ReportViewModel @Inject constructor(
     private var _isError = MutableStateFlow<Boolean>(false)
     private var _errorMsg = MutableStateFlow<String>("")
 
+    private var _favouriteReportTemplates = MutableStateFlow<List<ReportTemplateField>>(emptyList())
+    val favouriteReportTemplates : StateFlow<List<ReportTemplateField>> = _favouriteReportTemplates
+
+    private var _favouriteReportTemplatesData = MutableStateFlow<MutableMap<Int, List<ReportEntry>>>(mutableMapOf())
+    val favouriteReportTemplatesData : StateFlow<Map<Int, List<ReportEntry>>> = _favouriteReportTemplatesData
+
     var isError : StateFlow<Boolean> = _isError
     var errorMsg : StateFlow<String> = _errorMsg
 
@@ -57,7 +64,7 @@ class ReportViewModel @Inject constructor(
 
     fun insertReport( name : String ){
         //insert report
-        val report = Reports(name = name)
+        val report = Reports(name = name, userId = 1)
         viewModelScope.launch {
             withContext(Dispatchers.IO){
                 val result = reportRepository.insertReport(report)
@@ -159,5 +166,23 @@ class ReportViewModel @Inject constructor(
         this._isError.value = isError
         this._errorMsg.value = errorMsg
 
+    }
+
+    fun PopulateFavouriteReportTemplates(){
+        viewModelScope.launch {
+            withContext(Dispatchers.IO){
+                _favouriteReportTemplates.value = reportTemplateRepository.GetFavouriteReportTemplatesForUser(1)
+            }
+        }
+    }
+
+    fun PopulateFavouriteReportTemplateData(){
+        viewModelScope.launch {
+            withContext(Dispatchers.IO){
+                for(template in favouriteReportTemplates.value){
+                    _favouriteReportTemplatesData.value[template.uid] = reportEntryRepository.getAllEntriesForReportTemplate(template.uid)
+                }
+            }
+        }
     }
 }

@@ -31,6 +31,10 @@ class ReportEntryRepository @Inject constructor(
         return reportEntryDao.getAllEntriesForReport(reportId)
     }
 
+    override suspend fun getAllEntriesForReportTemplate(reportTemplateId : Int) : List<ReportEntry>{
+        return reportEntryDao.getAllReportEntriesForTemplate(reportTemplateId)
+    }
+
     override suspend fun getAllReportEntries(reportId : Int) : List<ReportEntry>{
         return reportEntryDao.getAllReportEntries(reportId)
     }

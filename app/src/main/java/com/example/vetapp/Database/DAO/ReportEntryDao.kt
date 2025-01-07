@@ -16,4 +16,7 @@ interface ReportEntryDao {
 
     @Query("SELECT * FROM REPORTENTRY where reportId = :reportId")
     fun getAllReportEntries(reportId: Int) : List<ReportEntry>
+
+    @Query("SELECT * FROM REPORTENTRY where templateId = :templateId")
+    fun getAllReportEntriesForTemplate(templateId: Int) : List<ReportEntry>
 }

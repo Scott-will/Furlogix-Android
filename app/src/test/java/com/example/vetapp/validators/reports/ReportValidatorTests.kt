@@ -14,7 +14,7 @@ class ReportValidatorTest {
     @Test
     fun `should return true for a valid report with a non-empty name`() = runTest {
         // Given
-        val report = Reports(name = "Valid Report")
+        val report = Reports(name = "Valid Report", userId = 1)
 
         // When
         val result = reportValidator.ValidateReport(report)
@@ -26,7 +26,7 @@ class ReportValidatorTest {
     @Test
     fun `should return false for an invalid report with an empty name`() = runTest {
         // Given
-        val report = Reports(name = "")
+        val report = Reports(name = "", userId = 1)
 
         // When
         val result = reportValidator.ValidateReport(report)

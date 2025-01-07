@@ -9,6 +9,7 @@ import com.example.vetapp.Database.DAO.ReportTemplateDao
 import com.example.vetapp.Database.DAO.ReportsDao
 import com.example.vetapp.Database.Entities.ReportTemplateField
 import com.example.vetapp.Database.Entities.Reports
+import com.example.vetapp.Database.Entities.User
 import com.example.vetapp.R
 import com.example.vetapp.reports.FieldType
 import junit.framework.TestCase.assertEquals
@@ -34,7 +35,9 @@ class ReportsTemplateDaoTest {
         db = Room.inMemoryDatabaseBuilder(context, AppDatabase::class.java).build()
         reportTemplateDao = db.reportTemplateDao()
         reportDao = db.reportsDao()
-        reportDao.insert(Reports(name = "Test"))
+        val userDao = db.userDao()
+        userDao.insert(User(name = "abcd", surname = "abcd", email = "abcd", petName = "abcd"))
+        reportDao.insert(Reports(name = "Test", userId = 1))
     }
 
     @After
