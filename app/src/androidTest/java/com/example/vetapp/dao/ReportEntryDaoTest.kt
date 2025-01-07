@@ -27,9 +27,4 @@ class ReportEntryDaoTest {
     fun closeDb() {
         db.close()
     }
-
-    @Test
-    fun InsertAndRetrieveReportEntries(){
-
-    }
 }

@@ -9,6 +9,9 @@ activityCompose = "1.9.3"
 composeBom = "2024.11.00"
 uiTestAndroid = "1.7.5"
 runtimeLivedata = "1.7.5"
+workerWersion = "2.8.1"
+hiltCommon = "1.2.0"
+hiltWork = "1.2.0"
 mockkVersion = "1.13.4"
 navigationComposeVersion = "2.8.4"
 roomVersion = "2.6.1"
@@ -32,6 +35,9 @@ androidx-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit
 androidx-material3 = { group = "androidx.compose.material3", name = "material3" }
 androidx-ui-test-android = { group = "androidx.compose.ui", name = "ui-test-android", version.ref = "uiTestAndroid" }
 androidx-runtime-livedata = { group = "androidx.compose.runtime", name = "runtime-livedata", version.ref = "runtimeLivedata" }
+work-runtime-ktx = { module = "androidx.work:work-runtime-ktx", version.ref = "workerWersion" }
+androidx-hilt-common = { group = "androidx.hilt", name = "hilt-common", version.ref = "hiltCommon" }
+androidx-hilt-work = { group = "androidx.hilt", name = "hilt-work", version.ref = "hiltWork" }
 io-mockk = {group = "io.mockk", name = "mockk", version.ref = "mockkVersion"}
 androidx-navigation = {group = "androidx.navigation", name = "navigation-compose", version.ref = "navigationComposeVersion"}
 androidx-room-runtime = {group = "androidx.room", name = "room-runtime", version.ref = "roomVersion"}

@@ -1,5 +1,7 @@
 package com.example.vetapp
 
+import ReportCleanerWorker
+import android.annotation.SuppressLint
 import android.Manifest
 import android.content.Intent
 import android.content.IntentFilter
@@ -24,6 +26,8 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import androidx.room.Room
+import androidx.work.PeriodicWorkRequest
+import androidx.work.WorkManager
 import com.example.vetapp.Database.AppDatabase
 import com.example.vetapp.broadcastreceivers.EmailBroadcastReceiver
 import com.example.vetapp.broadcastreceivers.FillOutReportsNotificationReceiver
@@ -43,6 +47,7 @@ import com.example.vetapp.ui.screens.ReportEntryHistoryScreen
 import com.example.vetapp.ui.screens.ReportsScreen
 import com.example.vetapp.ui.theme.VetAppTheme
 import dagger.hilt.android.AndroidEntryPoint
+import java.util.concurrent.TimeUnit
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity()  {
@@ -55,6 +60,10 @@ class MainActivity : ComponentActivity()  {
             applicationContext,
             AppDatabase::class.java, R.string.database_name.toString()
         ).build()
+        //schedule report cleaner
+        //TODO: should have handling to warn user it will be deleted if not sent....
+        this.scheduleReportCleaner()
+
         enableEdgeToEdge()
         setContent {
             VetAppTheme {
@@ -70,6 +79,18 @@ class MainActivity : ComponentActivity()  {
 
     private fun initBroadcastReceivers() {
 
+    }
+
+    @SuppressLint("NewApi")
+    fun scheduleReportCleaner(){
+        val reportCleanerWorkRequest = PeriodicWorkRequest.Builder(
+            ReportCleanerWorker::class.java,
+            14,
+            TimeUnit.DAYS
+        ).build()
+
+        WorkManager.getInstance(this.applicationContext)
+            .enqueue(reportCleanerWorkRequest)
     }
 }
 

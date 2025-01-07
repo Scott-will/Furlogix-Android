@@ -4,6 +4,8 @@ import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.Index
 import androidx.room.PrimaryKey
+import java.io.Serializable
+import java.util.Date
 
 @Entity(foreignKeys = [ForeignKey(
     entity = Reports::class,
@@ -28,5 +30,6 @@ data class ReportEntry (
     var value : String,
     var reportId: Int,
     var templateId : Int,
-    var timestamp : String
-)
+    var timestamp : String,
+    var sent : Boolean = false
+) : Serializable

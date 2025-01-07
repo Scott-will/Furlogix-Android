@@ -4,13 +4,20 @@ import android.app.Application
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
+import android.util.Log
+import androidx.work.Configuration
+import com.example.vetapp.di.CustomHiltWorkerFactory
 import android.os.Build
 
 import dagger.hilt.android.HiltAndroidApp
+import javax.inject.Inject
 
 
 @HiltAndroidApp
-class VetApplication : Application() {
+class VetApplication : Application(), Configuration.Provider {
+
+    @Inject
+    lateinit var workerFactory: CustomHiltWorkerFactory
     init {
         instance = this
     }
@@ -33,6 +40,12 @@ class VetApplication : Application() {
         val context: Context = this.applicationContext
         createNotificationChannel(context)
     }
+
+    override fun getWorkManagerConfiguration(): Configuration =
+        Configuration.Builder()
+            .setMinimumLoggingLevel(Log.DEBUG)
+            .setWorkerFactory(workerFactory)
+            .build()
 
     //required for reminders
     fun createNotificationChannel(context: Context) {

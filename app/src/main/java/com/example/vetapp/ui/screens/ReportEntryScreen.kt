@@ -20,6 +20,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.vetapp.ui.componets.common.ErrorDialog
 import com.example.vetapp.ui.componets.reports.ReportEntryForm
+import com.example.vetapp.ui.componets.reports.TooManyReportsWarning
 import com.example.vetapp.viewmodels.ReportViewModel
 
 @Composable
@@ -30,6 +31,7 @@ fun ReportEntryScreen(navController: NavController, reportId : Int = 0, viewMode
     val templates = viewModel.reportTemplateFields.collectAsState().value.filter { it.reportId == reportId }
     val isError = viewModel.isError.collectAsState()
     val errorMsg = viewModel.errorMsg.collectAsState()
+    val isTooManyReports = viewModel.isTooManyReports.collectAsState()
     templates.forEach { template ->
         templateValueMap[template.uid] = mutableStateOf("")
     }
@@ -39,6 +41,9 @@ fun ReportEntryScreen(navController: NavController, reportId : Int = 0, viewMode
             .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        if(isTooManyReports.value){
+            TooManyReportsWarning()
+        }
         ReportEntryForm(
             reportName = reportName.value,
             fields = templates,
@@ -50,15 +55,8 @@ fun ReportEntryScreen(navController: NavController, reportId : Int = 0, viewMode
         }) {
             Text("Save")
         }
-
-        Box(
-            modifier = Modifier.fillMaxSize(),
-            contentAlignment = Alignment.BottomCenter
-        )
-        {
-            Button(onClick = { viewModel.gatherReportData(reportId) }) {
-                Text("Send Reports")
-            }
+        Button(onClick = { viewModel.gatherReportData(reportId) }) {
+            Text("Send Reports")
         }
     }
     if(isError.value){
