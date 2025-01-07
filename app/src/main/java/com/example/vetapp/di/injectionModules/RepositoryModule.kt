@@ -5,9 +5,6 @@ import com.example.vetapp.Database.DAO.ReportEntryDao
 import com.example.vetapp.Database.DAO.ReportTemplateDao
 import com.example.vetapp.Database.DAO.ReportsDao
 import com.example.vetapp.Database.DAO.UserDao
-import com.example.vetapp.email.EmailHandler
-import com.example.vetapp.email.IEmailHandler
-import com.example.vetapp.reports.ReportEntryValidator
 import com.example.vetapp.reports.ReportTemplateValidator
 import com.example.vetapp.reports.ReportValidator
 import com.example.vetapp.repositories.IReportEntryRepository

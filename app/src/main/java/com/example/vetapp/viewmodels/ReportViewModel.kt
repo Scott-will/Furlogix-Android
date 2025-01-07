@@ -1,13 +1,8 @@
 package com.example.vetapp.viewmodels
 
 import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.vetapp.Database.DAO.UserDao
 import com.example.vetapp.Database.Entities.ReportEntry
 import com.example.vetapp.Database.Entities.ReportTemplateField
@@ -28,10 +23,8 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import java.util.Date
-import java.util.Observable
 import javax.inject.Inject
 
 @HiltViewModel
