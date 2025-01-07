@@ -2,7 +2,6 @@ package com.example.vetapp.validators.reports
 
 import com.example.vetapp.reports.FieldType
 import com.example.vetapp.reports.FieldTypeValidator
-import io.mockk.*
 import junit.framework.TestCase.assertFalse
 import junit.framework.TestCase.assertTrue
 import org.junit.Test

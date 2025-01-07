@@ -1,5 +1,6 @@
 package com.example.vetapp.viewmodels
 
+import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -25,6 +26,8 @@ class UserViewModel @Inject constructor(private val userDao: UserDao) : ViewMode
     val userName = userDao.getCurrentUserName().asFlow()
     val userEmail = userDao.getCurrentUserEmail().asFlow()
 
+    private val TAG = "VetApp:" + ReportViewModel::class.qualifiedName
+
     var name by mutableStateOf("")
         private set
     var surname by mutableStateOf("")
@@ -46,6 +49,7 @@ class UserViewModel @Inject constructor(private val userDao: UserDao) : ViewMode
 
     fun updateUserProfile(name: String, email: String) {
         viewModelScope.launch {
+            Log.d(TAG, "Updating user ${name}")
             userDao.updateUser(name, email) // Assuming updateUser is defined in your UserDao
         }
     }
@@ -67,6 +71,7 @@ class UserViewModel @Inject constructor(private val userDao: UserDao) : ViewMode
 
     fun addUser(user: User) {
         viewModelScope.launch(Dispatchers.IO) {
+            Log.d(TAG, "Adding user ${user.name}")
             userDao.insert(user)
         }
     }

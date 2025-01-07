@@ -32,6 +32,10 @@ class ReportEntryRepository @Inject constructor(
         return reportEntryDao.getAllEntriesForReport(reportId)
     }
 
+    override suspend fun getAllReportEntries(reportId : Int) : List<ReportEntry>{
+        return reportEntryDao.getAllReportEntries()
+    }
+
     override suspend fun getAllReportEntriesById(reportId : Int) : List<ReportEntry>{
         return reportEntryDao.getAllReportEntriesById(reportId)
     }
@@ -51,5 +55,9 @@ class ReportEntryRepository @Inject constructor(
             objectOutputStream.writeObject(entries)
         }
         return byteArrayOutputStream.size()/1024
+    }
+
+    override suspend fun getAllReportEntriesForTemplate(reportTemplateId : Int) : Flow<List<ReportEntry>>{
+        return reportEntryDao.getAllReportEntriesForTemplate(reportTemplateId)
     }
 }

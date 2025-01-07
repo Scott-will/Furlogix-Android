@@ -20,7 +20,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import com.example.vetapp.viewmodels.ReportViewModel
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.vetapp.ui.componets.common.AddItemButton
@@ -29,6 +28,7 @@ import com.example.vetapp.ui.componets.reports.AddReportDialog
 import com.example.vetapp.ui.componets.reports.ReportsList
 import com.example.vetapp.ui.componets.reports.TooManyReportsWarning
 import com.example.vetapp.ui.navigation.Screen
+import com.example.vetapp.viewmodels.ReportViewModel
 
 @Composable
 fun ManageReportScreen(navController: NavController, viewModel: ReportViewModel = hiltViewModel()) {

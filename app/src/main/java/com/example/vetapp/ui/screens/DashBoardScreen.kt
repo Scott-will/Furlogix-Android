@@ -1,5 +1,9 @@
 package com.example.vetapp.ui.screens
 
+import android.Manifest
+import android.content.pm.PackageManager
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -16,6 +20,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.vetapp.ui.componets.reports.PendingReportsDialog
+import androidx.core.content.ContextCompat
+import com.example.vetapp.VetApplication
 import com.example.vetapp.ui.navigation.Screen
 import com.example.vetapp.viewmodels.UserViewModel
 
@@ -48,6 +54,14 @@ fun DashboardScreen(navController: NavController, userViewModel: UserViewModel =
             modifier = Modifier.fillMaxWidth()
         ) {
             Text("Submit Reports")
+        }
+        Button(
+            onClick = {
+                navController.navigate(Screen.Reminders.route)
+            },
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text("Setup a Reminder")
         }
     }
 }
