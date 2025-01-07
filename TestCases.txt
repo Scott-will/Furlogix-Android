@@ -1,0 +1,47 @@
+Users:
+- create user
+- delete user
+
+Pets:
+
+Reports:
+- create report
+- show reports
+	- 1
+	- 10
+	- 1000
+- delete reports
+- edit reports
+
+Report Templates:
+- create template
+- show templates
+	- 1
+	- 10
+	- 1000
+
+
+Report Entries:
+- create entry
+- show entry
+	- 1
+	- 10
+	- 1000
+
+Send Reports:
+- as csv to gmail
+- 5 entries
+- 1k entries
+- marks report entry as sent
+
+
+Notifications:
+- set reminder for send
+- set reminder for add
+
+
+clean Up reports:
+- deletes sent after 2 week
+- shows warning over 100Kb
+
+

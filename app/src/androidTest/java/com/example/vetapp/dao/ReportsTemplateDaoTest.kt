@@ -13,9 +13,6 @@ import com.example.vetapp.Database.Entities.User
 import com.example.vetapp.R
 import com.example.vetapp.reports.FieldType
 import junit.framework.TestCase.assertEquals
-import junit.framework.TestCase.assertNull
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.runBlocking
 import org.junit.After
 import org.junit.Before

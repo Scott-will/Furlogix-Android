@@ -4,8 +4,6 @@ import com.example.vetapp.Database.DAO.ReportTemplateDao
 import com.example.vetapp.Database.Entities.ReportTemplateField
 import com.example.vetapp.Result
 import com.example.vetapp.reports.ReportTemplateValidator
-import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -59,5 +57,4 @@ class ReportTemplateRepository @Inject constructor(
     override suspend fun GetFavouriteReportTemplatesForUser(userId : Int) : List<ReportTemplateField>{
         return reportTemplateDao.getFavouriteReportTemplateForUser(userId)
     }
-
 }

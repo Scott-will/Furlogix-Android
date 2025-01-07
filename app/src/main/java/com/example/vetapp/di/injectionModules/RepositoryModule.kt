@@ -1,18 +1,18 @@
 package com.example.vetapp.di.injectionModules
 
 import com.example.vetapp.Database.AppDatabase
+import com.example.vetapp.Database.DAO.RemindersDao
 import com.example.vetapp.Database.DAO.ReportEntryDao
 import com.example.vetapp.Database.DAO.ReportTemplateDao
 import com.example.vetapp.Database.DAO.ReportsDao
 import com.example.vetapp.Database.DAO.UserDao
-import com.example.vetapp.email.EmailHandler
-import com.example.vetapp.email.IEmailHandler
-import com.example.vetapp.reports.ReportEntryValidator
 import com.example.vetapp.reports.ReportTemplateValidator
 import com.example.vetapp.reports.ReportValidator
+import com.example.vetapp.repositories.IRemindersRepository
 import com.example.vetapp.repositories.IReportEntryRepository
 import com.example.vetapp.repositories.IReportTemplateRepository
 import com.example.vetapp.repositories.IReportsRepository
+import com.example.vetapp.repositories.RemindersRepository
 import com.example.vetapp.repositories.ReportEntryRepository
 import com.example.vetapp.repositories.ReportTemplateRepository
 import com.example.vetapp.repositories.ReportsRepository
@@ -36,6 +36,8 @@ abstract class RepositoryModule {
     @Binds
     abstract fun bindReportEntryRepository(reportsRepository: ReportEntryRepository): IReportEntryRepository
 
+    @Binds
+    abstract fun bindReminderRepository(reminderRepository: RemindersRepository): IRemindersRepository
 
     companion object {
         @Provides
@@ -56,6 +58,11 @@ abstract class RepositoryModule {
         @Provides
         fun provideUserDao(database: AppDatabase): UserDao {
             return database.userDao()
+        }
+
+        @Provides
+        fun provideReminderDao(database: AppDatabase): RemindersDao {
+            return database.remindersDao()
         }
 
         @Provides

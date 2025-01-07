@@ -3,12 +3,15 @@ package com.example.vetapp.email
 import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
-import android.net.Uri
 import android.widget.Toast
+import com.example.vetapp.Database.DAO.UserDao
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class EmailHandler @Inject constructor(
-    private val context: Context
+    private val context: Context,
+    private val userDao: UserDao
 ) : IEmailHandler {
     val TAG: String = "EmailService"
     override fun SendEmail(email: EmailWrapper?) {
@@ -40,8 +43,13 @@ class EmailHandler @Inject constructor(
         this.SendEmail(emailIntent)
         return emailIntent
     }
+
     override  fun CreateAndSendEmail(email: EmailWrapper){
         val emailIntent = this.CreateEmail(email)
+        GlobalScope.launch {
+            userDao.setPendingReportsForUser(1)
+        }
+
         this.SendEmail(emailIntent)
     }
 }

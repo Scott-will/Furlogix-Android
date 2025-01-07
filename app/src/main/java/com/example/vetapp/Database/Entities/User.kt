@@ -10,4 +10,5 @@ data class User(
     val surname: String,
     val petName: String,
     val email: String,
+    val pendingSentReports : Boolean = false
 )

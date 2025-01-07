@@ -1,5 +1,9 @@
 package com.example.vetapp.ui.screens
 
+import android.Manifest
+import android.content.pm.PackageManager
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -16,13 +20,21 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.vetapp.ui.componets.common.NoDataAvailable
 import com.example.vetapp.ui.componets.graphs.GraphsWidget
+import com.example.vetapp.ui.componets.reports.PendingReportsDialog
 import com.example.vetapp.ui.navigation.Screen
 import com.example.vetapp.viewmodels.ReportViewModel
+import com.example.vetapp.viewmodels.UserViewModel
+
 
 @Composable
-fun DashboardScreen(navController: NavController, reportViewModel: ReportViewModel = hiltViewModel()) {
+fun DashboardScreen(navController: NavController, userViewModel: UserViewModel = hiltViewModel(), reportViewModel: ReportViewModel = hiltViewModel()) {
     reportViewModel.PopulateFavouriteReportTemplates()
     var favouriteReports = reportViewModel.favouriteReportTemplates.collectAsState()
+    userViewModel.populateCurrentUser()
+    val currentUser = userViewModel.currentUser.collectAsState()
+    if(currentUser.value != null && currentUser.value?.pendingSentReports!!){
+        PendingReportsDialog(onConfirm = {userViewModel.setNoPendingReportsForUser() }, onDismiss = {navController.navigate(Screen.Reports.route)})
+    }
     Column(
         modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -51,6 +63,14 @@ fun DashboardScreen(navController: NavController, reportViewModel: ReportViewMod
             modifier = Modifier.fillMaxWidth()
         ) {
             Text("Submit Reports")
+        }
+        Button(
+            onClick = {
+                navController.navigate(Screen.Reminders.route)
+            },
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text("Setup a Reminder")
         }
     }
 }

@@ -2,16 +2,13 @@ package com.example.vetapp.email
 
 import android.content.Context
 import android.net.Uri
-import android.os.Build
 import androidx.core.content.FileProvider
 import com.example.vetapp.Database.Entities.ReportEntry
 import com.example.vetapp.Database.Entities.ReportTemplateField
-import com.example.vetapp.VetApp
 import com.example.vetapp.VetApplication
 import java.io.BufferedWriter
 import java.io.File
 import java.io.FileWriter
-import java.io.StringWriter
 import java.util.Date
 
 class CsvBuilder {
