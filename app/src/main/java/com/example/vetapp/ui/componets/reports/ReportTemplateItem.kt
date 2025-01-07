@@ -21,6 +21,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.example.vetapp.Database.Entities.ReportTemplateField
 import com.example.vetapp.ui.componets.common.DeleteButton
+import com.example.vetapp.ui.componets.common.DeleteWarning
 import com.example.vetapp.ui.componets.common.EditButton
 
 
@@ -29,6 +30,8 @@ fun ReportTemplateItem(data: ReportTemplateField,
                        onDeleteClick : (ReportTemplateField) -> Unit,
                        onUpdateClick : (ReportTemplateField) -> Unit) {
     var showDialog by remember { mutableStateOf(false) }
+    var showDeleteWarning by remember { mutableStateOf(false) }
+
     Surface(
         modifier = Modifier
             .fillMaxWidth()
@@ -51,7 +54,7 @@ fun ReportTemplateItem(data: ReportTemplateField,
             Spacer(modifier = Modifier.width(8.dp))
             EditButton { showDialog = true }
             Spacer(modifier = Modifier.width(8.dp))
-            DeleteButton {onDeleteClick(data)  }
+            DeleteButton {showDeleteWarning = true  }
         }
         if (showDialog) {
             AddReportTemplateDialog(
@@ -65,6 +68,9 @@ fun ReportTemplateItem(data: ReportTemplateField,
                 update = true,
                 reportField = data
             )
+        }
+        if(showDeleteWarning){
+            DeleteWarning({showDeleteWarning = false}, {onDeleteClick(data)}, "Deleting this report template will delete all associated data")
         }
     }
 }
