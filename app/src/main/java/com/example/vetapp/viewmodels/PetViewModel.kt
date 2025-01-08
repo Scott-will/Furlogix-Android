@@ -13,12 +13,15 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
 class PetViewModel @Inject constructor(private val petDao: PetDao) : ViewModel() {
     private val _pets = MutableStateFlow<List<Pet>>(emptyList())
     val pets: StateFlow<List<Pet>> = _pets.asStateFlow()
+    private val _photoUri = MutableStateFlow<String?>(null)
+    val photoUri: StateFlow<String?> = _photoUri.asStateFlow()
 
     var name = MutableStateFlow("")
     var type = MutableStateFlow("")
@@ -37,6 +40,10 @@ class PetViewModel @Inject constructor(private val petDao: PetDao) : ViewModel()
         }
     }
 
+    fun savePetPhotoUri(uri: String) {
+        _photoUri.value = uri
+    }
+
     fun addPet(userId: Long) {
         viewModelScope.launch(Dispatchers.IO) {
             val pet = Pet(
@@ -45,6 +52,12 @@ class PetViewModel @Inject constructor(private val petDao: PetDao) : ViewModel()
                 description = description.value.ifEmpty { "No description" },
                 userId = userId
             )
+            petDao.insert(pet)
+        }
+    }
+
+    fun addPetObj(pet: Pet) {
+        viewModelScope.launch(Dispatchers.IO) {
             petDao.insert(pet)
         }
     }
@@ -66,6 +79,16 @@ class PetViewModel @Inject constructor(private val petDao: PetDao) : ViewModel()
         name.value = ""
         type.value = ""
         description.value = ""
+    }
+
+    fun deletePet(pet: Pet) {
+        viewModelScope.launch(Dispatchers.IO) {
+            petDao.delete(pet)
+
+            // update list of pets after delete
+            val updatedPets = petDao.getPetsForUser(pet.userId)
+            _pets.value = updatedPets
+        }
     }
 
 

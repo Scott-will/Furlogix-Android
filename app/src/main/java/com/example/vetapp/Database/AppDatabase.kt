@@ -15,7 +15,7 @@ import com.example.vetapp.Database.Entities.ReportEntry
 import com.example.vetapp.Database.Entities.ReportTemplateField
 import com.example.vetapp.Database.Entities.Reports
 
-@Database(entities = [User::class, ReportTemplateField::class, Reports::class, ReportEntry::class, Pet::class], version = 6)
+@Database(entities = [User::class, ReportTemplateField::class, Reports::class, ReportEntry::class, Pet::class], version = 7)
 abstract class AppDatabase : RoomDatabase() {
 
     abstract fun userDao(): UserDao

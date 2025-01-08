@@ -46,6 +46,7 @@ fun ProfileScreen(
     var name by remember { mutableStateOf(userName.ifBlank { "Guest" }) }
     var email by remember { mutableStateOf(userEmail.ifBlank { "example@example.com" }) }
     var selectedPet by remember { mutableStateOf<Pet?>(null) }
+    var showConfirmDelete by remember { mutableStateOf(false) }
     val pets by petViewModel.pets.collectAsState()
     var showDeleteConfirmation by remember { mutableStateOf(false) }
 
@@ -149,7 +150,7 @@ fun ProfileScreen(
         }
     }
 
-    if (selectedPet != null) {
+    if (selectedPet != null && !showConfirmDelete) {
         androidx.compose.material3.AlertDialog(
             onDismissRequest = { selectedPet = null },
             title = { Text(text = "Pet Details") },
@@ -157,6 +158,45 @@ fun ProfileScreen(
             confirmButton = {
                 Button(onClick = { selectedPet = null }) {
                     Text("Close")
+                }
+            },
+            dismissButton = {
+                Button(onClick = { showConfirmDelete = true  },
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = Color.Red,
+                        contentColor = Color.White
+                    )
+                ){
+                    Text("Delete")
+                }
+            }
+        )
+    }
+
+    if (showConfirmDelete && selectedPet != null) {
+        AlertDialog(
+            onDismissRequest = { showConfirmDelete = false },
+            title = { Text("Confirm Deletion") },
+            text = { Text("Are you sure you want to delete ${selectedPet?.name}?") },
+            confirmButton = {
+                Button(
+                    onClick = {
+                        petViewModel.deletePet(selectedPet!!)
+                        // Reset UI state
+                        showConfirmDelete = false
+                        selectedPet = null
+                    },
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = Color.Red,
+                        contentColor = Color.White
+                    )
+                ) {
+                    Text("Yes, Delete")
+                }
+            },
+            dismissButton = {
+                Button(onClick = { showConfirmDelete = false }) {
+                    Text("Cancel")
                 }
             }
         )

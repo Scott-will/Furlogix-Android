@@ -9,4 +9,7 @@ sealed class Screen(val route: String) {
     object ReportEntry : Screen("report_entry/{reportId}")
     object ManageReports : Screen("manage_reports")
     object Reports : Screen("reports")
+    object AddPet : Screen("add_pet/{userId}")
+    object UploadPetPhoto : Screen("upload_pet_photo")
+
 }

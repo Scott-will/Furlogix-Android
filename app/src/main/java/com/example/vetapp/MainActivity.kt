@@ -7,6 +7,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.viewModels
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -30,6 +31,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import com.example.vetapp.ui.theme.VetAppTheme
@@ -49,13 +51,19 @@ import com.example.vetapp.ui.screens.ReportTemplateScreen
 import com.example.vetapp.ui.screens.ProfileScreen
 import com.example.vetapp.ui.screens.ReportsScreen
 import com.example.vetapp.ui.components.ActionDialog
+import com.example.vetapp.ui.screens.AddPetFormScreen
+import com.example.vetapp.ui.screens.UploadPetPhotoScreen
+import com.example.vetapp.viewmodels.PetViewModel
+import com.example.vetapp.viewmodels.UserViewModel
 
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity()  {
 
     private val emailReceiver : EmailBroadcastReceiver = EmailBroadcastReceiver()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         //init database
@@ -91,9 +99,12 @@ class MainActivity : ComponentActivity()  {
 }
 
 @Composable
-fun VetApp() {
+fun VetApp(
+    userViewModel: UserViewModel = hiltViewModel(),
+    petViewModel: PetViewModel = hiltViewModel()
+) {
+    val userId by userViewModel.userId.collectAsState(initial = 0L)
     val navController = rememberNavController()
-
     val currentBackStackEntry by navController.currentBackStackEntryFlow.collectAsState(null)
     val currentRoute = currentBackStackEntry?.destination?.route
 
@@ -121,7 +132,7 @@ fun VetApp() {
         ) {
             composable(Screen.Login.route) { LoginScreen(navController) }
             composable(Screen.CreateAccount.route) { CreateAccountScreen(navController) }
-            composable(Screen.Dashboard.route) { DashboardScreen(navController) }
+            composable(Screen.Dashboard.route) { DashboardScreen(navController, petViewModel) }
             composable(Screen.ReportsTemplate.route, listOf(navArgument("reportId"){type = NavType.IntType})) { backStackEntry -> val reportId = backStackEntry.arguments?.getInt("reportId")
                 if (reportId != null) {
                     ReportTemplateScreen(navController, reportId)
@@ -142,19 +153,34 @@ fun VetApp() {
                 Screen.Profile.route,
                 arguments = listOf(navArgument("userId") { type = NavType.LongType })
             ) { backStackEntry ->
-                val userId = backStackEntry.arguments?.getLong("userId") ?: 0L
                 ProfileScreen(userId = userId, navController = navController)
             }
             composable(Screen.ManageReports.route) { ManageReportScreen(navController) }
             composable(Screen.Reports.route) { ReportsScreen(navController) }
+            composable(
+                Screen.AddPet.route,
+                arguments = listOf(navArgument("userId") { type = NavType.LongType })
+            ) { backStackEntry ->
+                AddPetFormScreen(navController = navController, userId = userId)
+            }
+            composable(Screen.UploadPetPhoto.route) {
+                UploadPetPhotoScreen(navController, petViewModel)
+            }
         }
 
         if (showDialog) {
             ActionDialog(
                 onDismiss = { showDialog = false },
-                onAddPet = {  },
-                onViewPets = {  },
-                onAddPetPhoto = { },
+                onAddPet = {
+                    showDialog = false
+                    navController.navigate("add_pet/$userId") },
+                onViewPets = {
+                    showDialog = false
+                    navController.navigate("profile/$userId")
+                },
+                onAddPetPhoto = {
+                    showDialog = false
+                    navController.navigate("upload_pet_photo") },
                 onManageReports = { }
             )
         }

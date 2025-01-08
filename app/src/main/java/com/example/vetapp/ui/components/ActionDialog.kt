@@ -39,7 +39,8 @@ fun ActionDialog(
                     modifier = Modifier.fillMaxWidth()) {
                     Text("View Pets")
                 }
-                Button(onClick = onAddPetPhoto,
+                Button(
+                    onClick = onAddPetPhoto,
                     colors = ButtonDefaults.buttonColors(
                         containerColor = Color(0xFF4A148C),
                         contentColor = Color.White
