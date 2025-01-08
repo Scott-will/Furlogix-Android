@@ -4,12 +4,10 @@ import com.example.vetapp.Database.Entities.ReportEntry
 import com.example.vetapp.Database.Entities.ReportTemplateField
 import com.example.vetapp.email.CsvBuilder
 import com.example.vetapp.reports.FieldType
-import com.example.vetapp.ui.navigation.Screen
 import junit.framework.TestCase.assertEquals
 import org.junit.Test
 import java.io.BufferedWriter
 import java.io.StringWriter
-import java.util.Calendar
 
 class CsvBuilderTests {
 

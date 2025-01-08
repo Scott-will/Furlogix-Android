@@ -8,7 +8,7 @@ import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithText
 import com.example.vetapp.Database.Entities.ReportTemplateField
 import com.example.vetapp.reports.FieldType
-import com.example.vetapp.ui.components.reports.ReportEntryForm
+import com.example.vetapp.ui.componets.reports.ReportEntryForm
 import org.junit.Rule
 import org.junit.Test
 

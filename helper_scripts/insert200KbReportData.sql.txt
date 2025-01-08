@@ -1,0 +1,14 @@
+
+WITH RECURSIVE generate_data(i) AS (
+    SELECT 1
+    UNION ALL
+    SELECT i + 1 FROM generate_data WHERE i < 1001  -- We want 10 entries
+)
+INSERT INTO  ReportEntry (value, reportId, templateId, timestamp, sent)
+SELECT 
+    'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA', -- Each entry has 10240 characters (10 KB)
+    1, -- reportId (you can change this value as needed)
+    1, -- templateId (you can change this value as needed)
+    DATETIME('now'), -- timestamp (current date and time)
+    0  -- sent = false (assuming not sent yet)
+FROM generate_data;

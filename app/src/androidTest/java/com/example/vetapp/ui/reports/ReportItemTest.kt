@@ -99,6 +99,8 @@ class ReportItemTest {
 
         // When
         composeTestRule.onNodeWithContentDescription(R.string.delete_text.toString()).performClick()
+        composeTestRule.waitForIdle()
+        composeTestRule.onNodeWithText("OK").performClick()
 
         // Then
         assert(deletedReport != null)

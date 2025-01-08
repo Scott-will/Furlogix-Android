@@ -3,15 +3,11 @@ package com.example.vetapp.validators.reports
 import com.example.vetapp.Database.Entities.ReportTemplateField
 import com.example.vetapp.reports.FieldType
 import com.example.vetapp.reports.ReportTemplateValidator
-import com.example.vetapp.repositories.IReportsRepository
-import io.mockk.coEvery
-import io.mockk.coVerify
-import io.mockk.mockk
 import junit.framework.TestCase.assertFalse
 import junit.framework.TestCase.assertTrue
 import kotlinx.coroutines.test.runTest
-import org.junit.Test
 import org.junit.Before
+import org.junit.Test
 
 
 class ReportTemplateValidatorTest {

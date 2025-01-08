@@ -1,12 +1,14 @@
 package com.example.vetapp.ui.reports
 
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
+import androidx.navigation.testing.TestNavHostController
 import com.example.vetapp.Database.Entities.ReportTemplateField
 import com.example.vetapp.R
 import com.example.vetapp.reports.FieldType
@@ -22,10 +24,12 @@ class ReportTemplateItemTest {
         onDeleteClick: (ReportTemplateField) -> Unit = {},
         onUpdateClick: (ReportTemplateField) -> Unit = {}
     ){
+        val navController = TestNavHostController(LocalContext.current)
         ReportTemplateItem(
             data = data,
             onDeleteClick = onDeleteClick,
             onUpdateClick = onUpdateClick,
+            navController = navController
         )
     }
 
@@ -72,6 +76,7 @@ class ReportTemplateItemTest {
             )
         }
         composeTestRule.onNodeWithContentDescription(R.string.delete_text.toString()).performClick()
+        composeTestRule.onNodeWithText("OK").performClick()
 
         // Then
         assert(deletedTemplate != null)

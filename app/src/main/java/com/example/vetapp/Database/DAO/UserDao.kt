@@ -8,7 +8,6 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
 import com.example.vetapp.Database.Entities.User
-import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface UserDao {
@@ -53,4 +52,10 @@ interface UserDao {
 
     @Query("UPDATE user_table SET name = :name, email = :email")
     suspend fun updateUser(name: String, email: String)
+
+    @Query("UPDATE user_table Set pendingSentReports = true WHERE uid = :userId")
+    suspend fun setPendingReportsForUser(userId: Int)
+
+    @Query("UPDATE user_table Set pendingSentReports = false WHERE uid = :userId")
+    suspend fun setNoPendingReportsForUser(userId: Int)
 }

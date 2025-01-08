@@ -1,4 +1,4 @@
-package com.example.vetapp.ui.components.reports
+package com.example.vetapp.ui.componets.reports
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -14,7 +14,7 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.example.vetapp.Database.Entities.ReportTemplateField
-import com.example.vetapp.ui.components.common.NoDataAvailable
+import com.example.vetapp.ui.componets.common.NoDataAvailable
 
 @Composable
 fun ReportEntryForm(
