@@ -53,37 +53,27 @@ dependencies {
     implementation(libs.androidx.material3)
     implementation(libs.androidx.ui.test.android)
     implementation(libs.androidx.runtime.livedata)
+    implementation(libs.work.runtime.ktx)
+    implementation(libs.androidx.hilt.common)
+    implementation(libs.androidx.hilt.work)
+    implementation(libs.androidx.navigation.testing)
     testImplementation(libs.junit)
-    testImplementation("io.mockk:mockk:1.13.4") // For mocking the IReportsRepository
+    testImplementation(libs.io.mockk)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
-
-    implementation("androidx.navigation:navigation-compose:2.8.3")
-
-
+    implementation(libs.androidx.navigation)
     //room
-    val room_version = "2.6.1"
-
-    implementation("androidx.room:room-runtime:$room_version")
-    implementation("androidx.room:room-ktx:$room_version")
-    annotationProcessor("androidx.room:room-compiler:$room_version")
-
-    // To use Kotlin Symbol Processing (KSP)
-    ksp("androidx.room:room-compiler:$room_version")
-
-    // optional - Test helpers
-    testImplementation("androidx.room:room-testing:$room_version")
-
+    implementation(libs.androidx.room.runtime)
+    implementation(libs.androidx.room.ktx)
+    annotationProcessor(libs.androidx.room.compiler)
+    ksp(libs.androidx.room.compiler)
+    implementation(libs.androidx.room.testing)
     //di
-    implementation("com.google.dagger:hilt-android:2.52")
-    ksp("com.google.dagger:hilt-compiler:2.52")
-    implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
+    implementation(libs.com.google.dagger)
+    ksp(libs.com.google.dagger.compiler)
+    implementation(libs.androidx.hilt.navigation)
 
-    //for mocking
-    testImplementation(libs.mockito.mockito.core)
-    testImplementation("org.powermock:powermock-api-mockito2:2.0.9")
-    testImplementation("org.powermock:powermock-module-junit4:2.0.9")
 }
