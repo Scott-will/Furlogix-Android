@@ -1,11 +1,15 @@
 package com.example.vetapp.ui.componets.graphs
 
 import android.util.Log
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
@@ -13,6 +17,7 @@ import androidx.compose.material.icons.automirrored.filled.ArrowForward
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -47,31 +52,8 @@ fun GraphsWidget(reportViewModel: ReportViewModel = hiltViewModel()) {
             currentIndex--
         }
     }
-    Column(horizontalAlignment = Alignment.CenterHorizontally){
-        for(template in favouriteReportTemplates.value){
-            var data = favouriteReportTemplateData.value[template.uid]
-            if(template.fieldType == FieldType.TEXT){
+    Column(horizontalAlignment = Alignment.CenterHorizontally) {
 
-                if (data != null) {
-                    Log.d("GRAPHSWIDGET", "Building Pie Chart")
-                    PieChart(data, template.name)
-                }
-                else{
-                    Log.d("GRAPHSWIDGET", "data is null")
-                }
-            }
-            if(template.fieldType == FieldType.NUMBER){
-                if (data != null) {
-                    LineGraph(data, template.name)
-                }
-            }
-            if(template.fieldType == FieldType.BOOLEAN){
-                //bar graph
-            }
-        }
-        Spacer(modifier = Modifier.height(16.dp))
-
-        // Row containing the navigation arrows
         Row(horizontalArrangement = Arrangement.Center) {
             // Left Arrow
             IconButton(onClick = { previous() }) {
@@ -85,6 +67,33 @@ fun GraphsWidget(reportViewModel: ReportViewModel = hiltViewModel()) {
                 Icon(imageVector = Icons.AutoMirrored.Default.ArrowForward, contentDescription = "Next")
             }
         }
+        Box( modifier = Modifier
+            .size(250.dp).align(Alignment.CenterHorizontally)){
+            for(template in favouriteReportTemplates.value){
+                var data = favouriteReportTemplateData.value[template.uid]
+                if(template.fieldType == FieldType.TEXT){
+
+                    if (data != null) {
+                        Log.d("GRAPHSWIDGET", "Building Pie Chart")
+                        Log.d("GRAPHSWIDGET", "${data.size}")
+                        PieChart(data, template.name)
+                    }
+                    else{
+                        Log.d("GRAPHSWIDGET", "data is null")
+                    }
+                }
+                if(template.fieldType == FieldType.NUMBER){
+                    if (data != null) {
+                        LineGraph(data, template.name)
+                    }
+                }
+                if(template.fieldType == FieldType.BOOLEAN){
+                    //bar graph
+                }
+            }
+
+        }
     }
+
 }
 

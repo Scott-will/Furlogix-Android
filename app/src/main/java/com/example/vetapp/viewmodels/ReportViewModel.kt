@@ -247,8 +247,10 @@ class ReportViewModel @Inject constructor(
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
                 for (template in favouriteReportTemplates.value) {
+                    Log.d("ReportViewModel", "Populating fac template data")
                     _favouriteReportTemplatesData.value[template.uid] =
                         reportEntryRepository.getAllEntriesForReportTemplate(template.uid)
+                    Log.d("ReportViewModel", "populated for ${template.name}")
                 }
             }
         }
