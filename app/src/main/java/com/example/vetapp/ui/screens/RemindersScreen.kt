@@ -16,7 +16,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
@@ -25,8 +24,8 @@ import androidx.core.content.ContextCompat.startActivity
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.vetapp.VetApplication
-import com.example.vetapp.ui.componets.reminders.RemindersList
-import com.example.vetapp.ui.componets.reminders.ReportsReminder
+import com.example.vetapp.ui.components.reminders.RemindersList
+import com.example.vetapp.ui.components.reminders.ReportsReminder
 import com.example.vetapp.viewmodels.RemindersViewModel
 
 

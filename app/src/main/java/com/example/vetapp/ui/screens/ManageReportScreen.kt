@@ -22,11 +22,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.example.vetapp.ui.componets.common.AddItemButton
-import com.example.vetapp.ui.componets.common.ErrorDialog
-import com.example.vetapp.ui.componets.reports.AddReportDialog
-import com.example.vetapp.ui.componets.reports.ReportsList
-import com.example.vetapp.ui.componets.reports.TooManyReportsWarning
+import com.example.vetapp.ui.components.common.AddItemButton
+import com.example.vetapp.ui.components.common.ErrorDialog
+import com.example.vetapp.ui.components.reports.AddReportDialog
+import com.example.vetapp.ui.components.reports.ReportsList
+import com.example.vetapp.ui.components.reports.TooManyReportsWarning
 import com.example.vetapp.ui.navigation.Screen
 import com.example.vetapp.viewmodels.ReportViewModel
 

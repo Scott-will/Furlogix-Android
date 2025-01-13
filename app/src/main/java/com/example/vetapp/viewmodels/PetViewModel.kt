@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.vetapp.Database.DAO.PetDao
 import com.example.vetapp.Database.Entities.Pet
+import com.example.vetapp.repositories.IPetRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -17,7 +18,9 @@ import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
-class PetViewModel @Inject constructor(private val petDao: PetDao) : ViewModel() {
+class PetViewModel @Inject constructor(
+    private val petRepository: IPetRepository
+) : ViewModel() {
     private val _pets = MutableStateFlow<List<Pet>>(emptyList())
     val pets: StateFlow<List<Pet>> = _pets.asStateFlow()
     private val _photoUri = MutableStateFlow<String?>(null)
@@ -35,7 +38,7 @@ class PetViewModel @Inject constructor(private val petDao: PetDao) : ViewModel()
 
     fun loadPetsForUser(userId: Long) {
         viewModelScope.launch {
-            val userPets = petDao.getPetsForUser(userId)
+            val userPets = petRepository.getPetsForUser(userId)
             _pets.value = userPets
         }
     }
@@ -52,13 +55,13 @@ class PetViewModel @Inject constructor(private val petDao: PetDao) : ViewModel()
                 description = description.value.ifEmpty { "No description" },
                 userId = userId
             )
-            petDao.insert(pet)
+            petRepository.addPet(pet)
         }
     }
 
     fun addPetObj(pet: Pet) {
         viewModelScope.launch(Dispatchers.IO) {
-            petDao.insert(pet)
+            petRepository.addPet(pet)
         }
     }
 
@@ -83,10 +86,8 @@ class PetViewModel @Inject constructor(private val petDao: PetDao) : ViewModel()
 
     fun deletePet(pet: Pet) {
         viewModelScope.launch(Dispatchers.IO) {
-            petDao.delete(pet)
-
-            // update list of pets after delete
-            val updatedPets = petDao.getPetsForUser(pet.userId)
+            petRepository.deletePet(pet)
+            val updatedPets = petRepository.getPetsForUser(pet.userId)
             _pets.value = updatedPets
         }
     }

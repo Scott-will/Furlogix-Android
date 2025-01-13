@@ -155,7 +155,7 @@ fun VetApp(
         ) {
             composable(Screen.Login.route) { LoginScreen(navController) }
             composable(Screen.CreateAccount.route) { CreateAccountScreen(navController) }
-            composable(Screen.Dashboard.route) { DashboardScreen(navController, petViewModel) }
+            composable(Screen.Dashboard.route) { DashboardScreen(navController, userViewModel, petViewModel) }
             composable(Screen.ReportsTemplate.route, listOf(navArgument("reportId"){type = NavType.IntType})) { backStackEntry -> val reportId = backStackEntry.arguments?.getInt("reportId")
                 if (reportId != null) {
                     ReportTemplateScreen(navController, reportId)

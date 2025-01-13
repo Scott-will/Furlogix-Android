@@ -14,7 +14,8 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.example.vetapp.Database.Entities.ReportTemplateField
-import com.example.vetapp.ui.componets.common.NoDataAvailable
+import com.example.vetapp.ui.components.common.NoDataAvailable
+import com.example.vetapp.ui.components.reports.ReportEntry
 
 @Composable
 fun ReportEntryForm(

@@ -8,6 +8,7 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
 import com.example.vetapp.Database.Entities.User
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface UserDao {

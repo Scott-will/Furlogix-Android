@@ -23,7 +23,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.example.vetapp.ui.componets.reports.PendingReportsDialog
+import com.example.vetapp.ui.components.reports.PendingReportsDialog
 import androidx.core.content.ContextCompat
 import com.example.vetapp.VetApplication
 import coil3.compose.rememberAsyncImagePainter

@@ -16,14 +16,13 @@ import com.example.vetapp.Database.Entities.Reminder
 import com.example.vetapp.Database.Entities.ReportEntry
 import com.example.vetapp.Database.Entities.ReportTemplateField
 import com.example.vetapp.Database.Entities.Reports
-import com.example.vetapp.Database.Entities.User
 
 @Database(entities = [User::class,
     ReportTemplateField::class,
     Reports::class,
     ReportEntry::class,
     Reminder::class,
-    Pet::class], version = 7)
+    Pet::class], version = 8)
 abstract class AppDatabase : RoomDatabase() {
 
     abstract fun userDao(): UserDao
