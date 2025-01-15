@@ -56,6 +56,7 @@ fun ReportTemplateScreen(navController: NavController, reportId : Int = 0, viewM
             ReporttemplatesList(reportsTemplates,
                 onDeleteClick = {item -> viewModel.deleteReportTemplateField(item)},
                 onUpdateClick = {item -> viewModel.updateReportTemplateField(item)},
+                onFavouriteClick = {item -> viewModel.updateFavouriteReportTemplateItem(item.uid)},
                 navController)
         }
         Spacer(modifier = Modifier.height(16.dp))

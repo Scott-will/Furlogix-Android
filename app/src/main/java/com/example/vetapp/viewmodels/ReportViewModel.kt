@@ -213,6 +213,13 @@ class ReportViewModel @Inject constructor(
 
     }
 
+    fun updateFavouriteReportTemplateItem(reportTemplateId : Int){
+        viewModelScope.launch {
+            withContext(Dispatchers.IO){
+                reportTemplateRepository.flipFavouriteReportTemplateField(reportTemplateId)
+            }
+        }
+    }
     fun PopulateFavouriteReportTemplates() {
         viewModelScope.launch {
             withContext(Dispatchers.IO) {

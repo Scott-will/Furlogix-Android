@@ -25,6 +25,7 @@ import com.example.vetapp.Database.Entities.ReportTemplateField
 import com.example.vetapp.ui.componets.common.DeleteButton
 import com.example.vetapp.ui.componets.common.DeleteWarning
 import com.example.vetapp.ui.componets.common.EditButton
+import com.example.vetapp.ui.componets.common.FavouriteButton
 import com.example.vetapp.ui.navigation.Screen
 
 
@@ -32,6 +33,7 @@ import com.example.vetapp.ui.navigation.Screen
 fun ReportTemplateItem(data: ReportTemplateField,
                        onDeleteClick : (ReportTemplateField) -> Unit,
                        onUpdateClick : (ReportTemplateField) -> Unit,
+                       onFavouriteClick : (ReportTemplateField) -> Unit,
                        navController: NavController) {
     var showDialog by remember { mutableStateOf(false) }
     var showDeleteWarning by remember { mutableStateOf(false) }
@@ -60,6 +62,8 @@ fun ReportTemplateItem(data: ReportTemplateField,
             EditButton { showDialog = true }
             Spacer(modifier = Modifier.width(8.dp))
             DeleteButton {showDeleteWarning = true  }
+            Spacer(modifier = Modifier.width(8.dp))
+            FavouriteButton(onClick = { onFavouriteClick(data) }, isFavourite = data.favourite)
         }
         if (showDialog) {
             AddReportTemplateDialog(
@@ -84,10 +88,22 @@ fun ReportTemplateItem(data: ReportTemplateField,
 fun ReporttemplatesList(dataList: List<ReportTemplateField>,
                         onDeleteClick : (ReportTemplateField) -> Unit,
                         onUpdateClick : (ReportTemplateField) -> Unit,
+                        onFavouriteClick : (ReportTemplateField) -> Unit,
                         navController: NavController) {
     Column(modifier = Modifier.padding(16.dp)) {
         dataList.forEach { data ->
-            ReportTemplateItem(data = data, onUpdateClick = onUpdateClick, onDeleteClick = onDeleteClick, navController = navController)
+            ReportTemplateItem(data = data, onUpdateClick = onUpdateClick, onDeleteClick = onDeleteClick, onFavouriteClick = onFavouriteClick, navController = navController)
         }
     }
 }
+
+//TODO: feature:
+//favourite a template
+//
+//graphs:
+//show template name
+//show better axis for line graph
+//no data drawing
+//
+//tests for graph widget
+//tests for favourite button

@@ -23,4 +23,6 @@ interface IReportTemplateRepository {
 
     suspend fun updateReportTemplateField(reportTemplateField : ReportTemplateField) : Result
 
+    suspend fun flipFavouriteReportTemplateField(reportTemplateFieldId : Int)
+
 }

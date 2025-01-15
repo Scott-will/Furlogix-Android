@@ -84,7 +84,7 @@ fun GraphsWidget(reportViewModel: ReportViewModel = hiltViewModel()) {
                     LineGraph(data, template.name)
                 }
                 if(template.fieldType == FieldType.BOOLEAN){
-                    //bar graph
+                    BarGraph(data, template.name)
                 }
             }
             else{
