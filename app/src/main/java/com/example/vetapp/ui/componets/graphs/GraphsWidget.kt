@@ -54,13 +54,16 @@ fun GraphsWidget(reportViewModel: ReportViewModel = hiltViewModel()) {
     }
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
 
-        Row(horizontalArrangement = Arrangement.Center) {
+        Row(
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
             // Left Arrow
             IconButton(onClick = { previous() }) {
                 Icon(imageVector = Icons.AutoMirrored.Default.ArrowBack, contentDescription = "Previous")
             }
 
-            Spacer(modifier = Modifier.width(16.dp))
+            Spacer(modifier = Modifier.width(32.dp))
 
             // Right Arrow
             IconButton(onClick = { next() }) {
@@ -69,27 +72,23 @@ fun GraphsWidget(reportViewModel: ReportViewModel = hiltViewModel()) {
         }
         Box( modifier = Modifier
             .size(250.dp).align(Alignment.CenterHorizontally)){
-            for(template in favouriteReportTemplates.value){
-                var data = favouriteReportTemplateData.value[template.uid]
-                if(template.fieldType == FieldType.TEXT){
+            val template = favouriteReportTemplates.value[currentIndex];
+            val data = favouriteReportTemplateData.value[template.uid]
 
-                    if (data != null) {
-                        Log.d("GRAPHSWIDGET", "Building Pie Chart")
-                        Log.d("GRAPHSWIDGET", "${data.size}")
-                        PieChart(data, template.name)
-                    }
-                    else{
-                        Log.d("GRAPHSWIDGET", "data is null")
-                    }
+            Log.d("tag", "${data?.size}")
+            if (data != null && data.size != 0) {
+                if(template.fieldType == FieldType.TEXT){
+                    PieChart(data, template.name)
                 }
                 if(template.fieldType == FieldType.NUMBER){
-                    if (data != null) {
-                        LineGraph(data, template.name)
-                    }
+                    LineGraph(data, template.name)
                 }
                 if(template.fieldType == FieldType.BOOLEAN){
                     //bar graph
                 }
+            }
+            else{
+                //add data warning
             }
 
         }

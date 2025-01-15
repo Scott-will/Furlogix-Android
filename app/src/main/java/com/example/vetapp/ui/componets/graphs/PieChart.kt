@@ -3,6 +3,7 @@ package com.example.vetapp.ui.componets.graphs
 import android.graphics.Paint
 import android.util.Log
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.runtime.Composable
@@ -29,7 +30,7 @@ fun PieChart(entries : List<ReportEntry>, name : String) {
     }
     Log.d("PieChart", "size of dict ${entryDict.size}, size of list: ${entries.size}")
     Canvas(modifier = Modifier
-        .size(200.dp)) {
+        .fillMaxSize()) {
         val size = size.minDimension
         val center = Offset(size / 2f, size / 2f) // Correctly using Offset for center coordinates
         var startAngle = -90f // Start angle for the first segment (top of the circle)

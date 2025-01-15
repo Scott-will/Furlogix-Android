@@ -17,10 +17,10 @@ class ColourList {
 
         fun getNext() : Color{
             i += 1
-            if(i == colourList.size + 1){
+            if(i == colourList.size){
                 i = 0
             }
-            return colourList[i-1]
+            return colourList[i]
         }
     }
 
