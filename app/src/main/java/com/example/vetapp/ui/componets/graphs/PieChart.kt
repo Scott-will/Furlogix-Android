@@ -3,9 +3,14 @@ package com.example.vetapp.ui.componets.graphs
 import android.graphics.Paint
 import android.util.Log
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -16,6 +21,8 @@ import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.vetapp.Database.Entities.ReportEntry
@@ -29,39 +36,47 @@ fun PieChart(entries : List<ReportEntry>, name : String) {
         pieChartData.add(PieChartData(e.key, e.value.size/total.toFloat(), ColourList.getNext()))
     }
     Log.d("PieChart", "size of dict ${entryDict.size}, size of list: ${entries.size}")
-    Canvas(modifier = Modifier
-        .fillMaxSize()) {
-        val size = size.minDimension
-        val center = Offset(size / 2f, size / 2f) // Correctly using Offset for center coordinates
-        var startAngle = -90f // Start angle for the first segment (top of the circle)
+    Column(horizontalAlignment = Alignment.CenterHorizontally){
+        Text( text = name,
+            style = TextStyle(fontWeight = FontWeight.Bold),
+            modifier = Modifier.padding(top = 8.dp)
+        )
+        Spacer(modifier = Modifier.width(32.dp))
+        Canvas(modifier = Modifier
+            .fillMaxSize()) {
+            val size = size.minDimension
+            val center = Offset(size / 2f, size / 2f) // Correctly using Offset for center coordinates
+            var startAngle = -90f // Start angle for the first segment (top of the circle)
 
-        pieChartData.forEach { segment ->
-            // Calculate the sweep angle for this segment
-            val sweepAngle = 360f * (segment.percent)
+            pieChartData.forEach { segment ->
+                // Calculate the sweep angle for this segment
+                val sweepAngle = 360f * (segment.percent)
 
-            // Draw the slice
-            drawPieSlice(center, size / 2, startAngle, sweepAngle, segment.color)
-            val middleAngle = startAngle + sweepAngle / 2f
-            val radius = size / 4f  // You can adjust this value to control text positioning
+                // Draw the slice
+                drawPieSlice(center, size / 2, startAngle, sweepAngle, segment.color)
+                val middleAngle = startAngle + sweepAngle / 2f
+                val radius = size / 4f  // You can adjust this value to control text positioning
 
-            // Calculate the position of the text
-            val textX = center.x + radius * kotlin.math.cos(Math.toRadians(middleAngle.toDouble())).toFloat()
-            val textY = center.y + radius * kotlin.math.sin(Math.toRadians(middleAngle.toDouble())).toFloat()
+                // Calculate the position of the text
+                val textX = center.x + radius * kotlin.math.cos(Math.toRadians(middleAngle.toDouble())).toFloat()
+                val textY = center.y + radius * kotlin.math.sin(Math.toRadians(middleAngle.toDouble())).toFloat()
 
-            // Draw the text in the slice
-            drawIntoCanvas { canvas ->
-                val text = segment.value
-                val paint = Paint().apply {
-                    color = Color.Black.toArgb()  // Set text color
-                    textAlign = Paint.Align.CENTER
-                    textSize = 30f  // You can adjust text size
+                // Draw the text in the slice
+                drawIntoCanvas { canvas ->
+                    val text = segment.value
+                    val paint = Paint().apply {
+                        color = Color.Black.toArgb()  // Set text color
+                        textAlign = Paint.Align.CENTER
+                        textSize = 30f  // You can adjust text size
+                    }
+                    canvas.nativeCanvas.drawText(text, textX, textY, paint)
                 }
-                canvas.nativeCanvas.drawText(text, textX, textY, paint)
+                // Update the start angle for the next segment
+                startAngle += sweepAngle
             }
-            // Update the start angle for the next segment
-            startAngle += sweepAngle
         }
     }
+
 
 }
 

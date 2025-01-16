@@ -22,14 +22,17 @@ class ReportTemplateItemTest {
     fun ReportTemplateItemTestContent(
         data : ReportTemplateField,
         onDeleteClick: (ReportTemplateField) -> Unit = {},
-        onUpdateClick: (ReportTemplateField) -> Unit = {}
+        onUpdateClick: (ReportTemplateField) -> Unit = {},
+        onFavouriteClick : (ReportTemplateField) -> Unit = {}
+
     ){
         val navController = TestNavHostController(LocalContext.current)
         ReportTemplateItem(
             data = data,
             onDeleteClick = onDeleteClick,
             onUpdateClick = onUpdateClick,
-            navController = navController
+            navController = navController,
+            onFavouriteClick = onFavouriteClick
         )
     }
 
