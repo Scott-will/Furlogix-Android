@@ -98,11 +98,4 @@ fun ReporttemplatesList(dataList: List<ReportTemplateField>,
 }
 
 //TODO: feature:
-//
-//graphs:
-//no data drawing
-//
-//touching datapoint on graph
-//
-//tests for graph widget
 //tests for favourite button

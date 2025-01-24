@@ -50,6 +50,7 @@ class ReportsTemplateDaoTest {
         assertEquals(templates.count(), 1)
         assertEquals(templates.firstOrNull()?.name, "Test")
     }
+
     @Test
     fun updateTemplate() = runBlocking {
         val reportTemplateField = ReportTemplateField(name = "Original Name", fieldType = FieldType.TEXT, reportId = 1)
