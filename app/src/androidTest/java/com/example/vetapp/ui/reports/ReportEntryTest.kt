@@ -11,7 +11,7 @@ import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTextReplacement
 import com.example.vetapp.Database.Entities.ReportTemplateField
 import com.example.vetapp.reports.FieldType
-import com.example.vetapp.ui.componets.reports.ReportEntry
+import com.example.vetapp.ui.components.reports.ReportEntry
 import org.junit.Rule
 import org.junit.Test
 

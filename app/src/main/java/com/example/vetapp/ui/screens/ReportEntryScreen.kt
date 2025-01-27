@@ -18,9 +18,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.example.vetapp.ui.componets.common.ErrorDialog
+import com.example.vetapp.ui.components.common.ErrorDialog
 import com.example.vetapp.ui.componets.reports.ReportEntryForm
-import com.example.vetapp.ui.componets.reports.TooManyReportsWarning
+import com.example.vetapp.ui.components.reports.TooManyReportsWarning
 import com.example.vetapp.viewmodels.ReportViewModel
 
 @Composable

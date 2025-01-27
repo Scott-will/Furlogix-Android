@@ -12,6 +12,7 @@ import com.example.vetapp.Database.DAO.UserDao
 import com.example.vetapp.Database.Entities.User
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -25,14 +26,13 @@ class UserViewModel @Inject constructor(private val userDao: UserDao) : ViewMode
 
     val userName = userDao.getCurrentUserName().asFlow()
     val userEmail = userDao.getCurrentUserEmail().asFlow()
+    val userId: Flow<Long> = userDao.getCurrentUserId()
 
     private val TAG = "VetApp:" + ReportViewModel::class.qualifiedName
 
     var name by mutableStateOf("")
         private set
     var surname by mutableStateOf("")
-        private set
-    var petName by mutableStateOf("")
         private set
     var email by mutableStateOf("")
         private set
@@ -41,8 +41,6 @@ class UserViewModel @Inject constructor(private val userDao: UserDao) : ViewMode
     var nameError by mutableStateOf<String?>(null)
         private set
     var surnameError by mutableStateOf<String?>(null)
-        private set
-    var petNameError by mutableStateOf<String?>(null)
         private set
     var emailError by mutableStateOf<String?>(null)
         private set
@@ -69,8 +67,12 @@ class UserViewModel @Inject constructor(private val userDao: UserDao) : ViewMode
         }
     }
 
-    fun addUser(user: User) {
+    fun addUser(user: User, onUserAdded: (Long) -> Unit) {
         viewModelScope.launch(Dispatchers.IO) {
+            val userId = userDao.insert(user)
+            withContext(Dispatchers.Main) {
+                onUserAdded(userId)
+            }
             Log.d(TAG, "Adding user ${user.name}")
             userDao.insert(user)
         }
@@ -84,11 +86,6 @@ class UserViewModel @Inject constructor(private val userDao: UserDao) : ViewMode
     fun onSurnameChange(newSurname: String) {
         surname = newSurname
         surnameError = null
-    }
-
-    fun onPetNameChange(newPetName: String) {
-        petName = newPetName
-        petNameError = null
     }
 
     fun onEmailChange(newEmail: String) {
@@ -107,16 +104,18 @@ class UserViewModel @Inject constructor(private val userDao: UserDao) : ViewMode
             surnameError = "Surname cannot be empty"
             isValid = false
         }
-        if (petName.isBlank()) {
-            petNameError = "Pet Name cannot be empty"
-            isValid = false
-        }
         if (email.isBlank() || !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
             emailError = "Enter a valid email"
             isValid = false
         }
 
         return isValid
+    }
+
+    fun deleteUser(userId: Long) {
+        viewModelScope.launch(Dispatchers.IO) {
+            userDao.deleteUserById(userId)
+        }
     }
 
     fun setNoPendingReportsForUser(){

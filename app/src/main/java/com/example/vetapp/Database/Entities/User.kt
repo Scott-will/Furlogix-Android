@@ -8,7 +8,6 @@ data class User(
     @PrimaryKey(autoGenerate = true) val uid: Int = 0,
     val name: String,
     val surname: String,
-    val petName: String,
     val email: String,
     val pendingSentReports : Boolean = false
 )

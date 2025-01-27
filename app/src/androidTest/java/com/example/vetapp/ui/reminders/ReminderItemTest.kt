@@ -8,7 +8,7 @@ import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.onNodeWithContentDescription
 import com.example.vetapp.Database.Entities.Reminder
 import com.example.vetapp.R
-import com.example.vetapp.ui.componets.reminders.ReminderItem
+import com.example.vetapp.ui.components.reminders.ReminderItem
 import org.junit.Rule
 import org.junit.Test
 

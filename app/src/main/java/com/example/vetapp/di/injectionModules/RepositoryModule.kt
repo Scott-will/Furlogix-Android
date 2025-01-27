@@ -1,6 +1,7 @@
 package com.example.vetapp.di.injectionModules
 
 import com.example.vetapp.Database.AppDatabase
+import com.example.vetapp.Database.DAO.PetDao
 import com.example.vetapp.Database.DAO.RemindersDao
 import com.example.vetapp.Database.DAO.ReportEntryDao
 import com.example.vetapp.Database.DAO.ReportTemplateDao
@@ -8,10 +9,12 @@ import com.example.vetapp.Database.DAO.ReportsDao
 import com.example.vetapp.Database.DAO.UserDao
 import com.example.vetapp.reports.ReportTemplateValidator
 import com.example.vetapp.reports.ReportValidator
+import com.example.vetapp.repositories.IPetRepository
 import com.example.vetapp.repositories.IRemindersRepository
 import com.example.vetapp.repositories.IReportEntryRepository
 import com.example.vetapp.repositories.IReportTemplateRepository
 import com.example.vetapp.repositories.IReportsRepository
+import com.example.vetapp.repositories.PetRepository
 import com.example.vetapp.repositories.RemindersRepository
 import com.example.vetapp.repositories.ReportEntryRepository
 import com.example.vetapp.repositories.ReportTemplateRepository
@@ -39,6 +42,10 @@ abstract class RepositoryModule {
     @Binds
     abstract fun bindReminderRepository(reminderRepository: RemindersRepository): IRemindersRepository
 
+    @Binds
+    abstract fun bindPetRepository(petRepository: PetRepository): IPetRepository
+
+
     companion object {
         @Provides
         fun provideReportsDao(database: AppDatabase): ReportsDao {
@@ -58,6 +65,11 @@ abstract class RepositoryModule {
         @Provides
         fun provideUserDao(database: AppDatabase): UserDao {
             return database.userDao()
+        }
+
+        @Provides
+        fun providePetDao(database: AppDatabase): PetDao {
+            return database.petDao()
         }
 
         @Provides

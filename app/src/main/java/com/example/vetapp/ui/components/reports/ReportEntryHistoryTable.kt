@@ -1,4 +1,4 @@
-package com.example.vetapp.ui.componets.reports
+package com.example.vetapp.ui.components.reports
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
