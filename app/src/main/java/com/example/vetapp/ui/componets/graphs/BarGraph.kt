@@ -28,8 +28,8 @@ fun BarGraph(entries : List<ReportEntry>, name : String ) {
         return
     }
     val maxCount = maxOf(trueCount!!, falseCount!!)
-    val trueBarHeight = (trueCount / maxCount.toFloat()) * 200f // Adjust height scale as needed
-    val falseBarHeight = (falseCount / maxCount.toFloat()) * 200f // Adjust height scale as needed
+    val trueBarHeight = (trueCount / maxCount.toFloat()) * 100f // Adjust height scale as needed
+    val falseBarHeight = (falseCount / maxCount.toFloat()) * 100f // Adjust height scale as needed
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         Text( text = name,
             style = TextStyle(fontWeight = FontWeight.Bold),
