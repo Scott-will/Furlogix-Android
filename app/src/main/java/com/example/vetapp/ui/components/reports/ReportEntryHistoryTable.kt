@@ -1,4 +1,4 @@
-package com.example.vetapp.ui.componets.reports
+package com.example.vetapp.ui.components.reports
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -16,7 +16,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.example.vetapp.Database.Entities.ReportEntry
 import com.example.vetapp.viewmodels.ReportViewModel
 
 @Composable

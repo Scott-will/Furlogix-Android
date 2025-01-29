@@ -8,6 +8,7 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
 import com.example.vetapp.Database.Entities.User
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface UserDao {
@@ -15,7 +16,7 @@ interface UserDao {
     fun getAll(): List<User>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insert(user: User)
+    fun insert(user: User): Long
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertAll(vararg users: User)
@@ -25,6 +26,9 @@ interface UserDao {
 
     @Update
     fun update(user: User)
+
+    @Query("SELECT uid FROM user_table LIMIT 1")
+    fun getCurrentUserId(): Flow<Long>
 
     @Query("SELECT * FROM user_table WHERE uid = :userId")
     fun getUserById(userId: Int): User?
@@ -37,6 +41,9 @@ interface UserDao {
 
     @Query("DELETE FROM user_table")
     suspend fun deleteAllUsers()
+
+    @Query("DELETE FROM user_table WHERE uid = :userId")
+    suspend fun deleteUserById(userId: Long)
 
     @Query("SELECT name FROM user_table LIMIT 1")
     fun getCurrentUserName(): LiveData<String>

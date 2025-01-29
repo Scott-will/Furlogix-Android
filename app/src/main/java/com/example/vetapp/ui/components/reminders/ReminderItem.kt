@@ -1,6 +1,5 @@
-package com.example.vetapp.ui.componets.reminders
+package com.example.vetapp.ui.components.reminders
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -17,7 +16,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.example.vetapp.Database.Entities.Reminder
-import com.example.vetapp.ui.componets.common.DeleteButton
+import com.example.vetapp.ui.components.common.DeleteButton
 
 @Composable
 fun ReminderItem(data: Reminder,

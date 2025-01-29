@@ -1,10 +1,9 @@
-package com.example.vetapp.ui.componets.common
+package com.example.vetapp.ui.components.common
 
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
@@ -15,7 +14,7 @@ import androidx.compose.ui.unit.dp
 import com.example.vetapp.R
 
 @Composable
-fun FavouriteButton(onClick: () -> Unit, isFavourite : Boolean) {
+fun DeleteButton(onClick: () -> Unit) {
     IconButton(
         onClick = onClick,
         modifier = Modifier
@@ -23,10 +22,10 @@ fun FavouriteButton(onClick: () -> Unit, isFavourite : Boolean) {
             .clip(CircleShape) // Apply circular shape
     ) {
         Icon(
-            imageVector = Icons.Default.Favorite, // Pencil icon
-            contentDescription = R.string.favourite_text.toString(),
+            imageVector = Icons.Default.Delete, // Pencil icon
+            contentDescription = R.string.delete_text.toString(),
             modifier = Modifier.size(24.dp), // Icon size inside the circle
-            tint = if (isFavourite) Color.Red else Color.Gray
+            tint = Color.White // Icon color
         )
     }
 }

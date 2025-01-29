@@ -5,7 +5,6 @@ import androidx.room.ForeignKey
 import androidx.room.Index
 import androidx.room.PrimaryKey
 import java.io.Serializable
-import java.util.Date
 
 @Entity(foreignKeys = [ForeignKey(
     entity = Reports::class,

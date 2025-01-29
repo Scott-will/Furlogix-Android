@@ -21,11 +21,11 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.vetapp.reports.FieldType
-import com.example.vetapp.ui.componets.common.AddItemButton
-import com.example.vetapp.ui.componets.common.ErrorDialog
-import com.example.vetapp.ui.componets.common.NoDataAvailable
-import com.example.vetapp.ui.componets.reports.AddReportTemplateDialog
-import com.example.vetapp.ui.componets.reports.ReporttemplatesList
+import com.example.vetapp.ui.components.common.AddItemButton
+import com.example.vetapp.ui.components.common.ErrorDialog
+import com.example.vetapp.ui.components.common.NoDataAvailable
+import com.example.vetapp.ui.components.reports.AddReportTemplateDialog
+import com.example.vetapp.ui.components.reports.ReporttemplatesList
 import com.example.vetapp.viewmodels.ReportViewModel
 
 @Composable

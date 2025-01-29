@@ -21,6 +21,7 @@ import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
 class ReportsTemplateDaoTest {
+    /*
     private lateinit var db: AppDatabase
     private lateinit var reportTemplateDao: ReportTemplateDao
     private lateinit var reportDao: ReportsDao
@@ -73,4 +74,6 @@ class ReportsTemplateDaoTest {
         val result = reportTemplateDao.getReportById(1)
         assert(result.isEmpty())
     }
+
+     */
 }

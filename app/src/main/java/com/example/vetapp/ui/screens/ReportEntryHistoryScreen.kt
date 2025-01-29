@@ -6,7 +6,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.example.vetapp.ui.componets.reports.ReportEntryHistoryTable
+import com.example.vetapp.ui.components.reports.ReportEntryHistoryTable
 import com.example.vetapp.viewmodels.ReportViewModel
 
 @Composable

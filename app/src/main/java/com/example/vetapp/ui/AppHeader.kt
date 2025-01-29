@@ -22,12 +22,15 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.vetapp.ui.navigation.Screen
 import com.example.vetapp.viewmodels.UserViewModel
+import kotlinx.coroutines.flow.map
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AppHeader(navController: NavController, viewModel: UserViewModel = hiltViewModel()) {
-    val userName by viewModel.userName.collectAsState(initial = "Guest")
+fun AppHeader(navController: NavController, userViewModel: UserViewModel = hiltViewModel()) {
+    val userNameFlow = userViewModel.userName.map { it ?: "Guest" }
+    val userName by userNameFlow.collectAsState(initial = "Guest")
+    val userId by userViewModel.userId.collectAsState(initial = 0L)
 
     val currentBackStackEntry by navController.currentBackStackEntryFlow.collectAsState(null)
     val currentRoute = currentBackStackEntry?.destination?.route ?: Screen.Dashboard.route
@@ -62,7 +65,7 @@ fun AppHeader(navController: NavController, viewModel: UserViewModel = hiltViewM
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 Text(text = userName, color = Color.White)
-                IconButton(onClick = { navController.navigate(Screen.Profile.route) }) {
+                IconButton(onClick = { navController.navigate("profile/$userId") }) {
                     Icon(
                         imageVector = Icons.Filled.Person,
                         contentDescription = "User Profile",
