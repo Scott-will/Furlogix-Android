@@ -33,7 +33,7 @@ class AddReportDialogTest {
 
     @Test
     fun AddReportDialog_DisplaysRightName(){
-        val report = Reports(name = "Test")
+        val report = Reports(name = "Test", userId = 1)
 
         composeTestRule.setContent {
             AddReportDialogTestContent(report = report, currentLabel = report.name)
@@ -44,7 +44,7 @@ class AddReportDialogTest {
 
     @Test
     fun AddReportDialog_OnSaveTriggered(){
-        val report = Reports(name = "Test")
+        val report = Reports(name = "Test", userId = 1)
         var savedReport : Reports? = null
         val onUpdate: (Reports) -> Unit = {savedReport = it}
 
@@ -58,7 +58,7 @@ class AddReportDialogTest {
 
     @Test
     fun AddReportDialog_OnUpdate_True(){
-        var report = Reports(name = "Test")
+        var report = Reports(name = "Test", userId = 1)
         val onUpdate: (Reports) -> Unit = {report = it}
 
         composeTestRule.setContent {
@@ -75,7 +75,7 @@ class AddReportDialogTest {
 
     @Test
     fun AddReportDialog_OnUpdate_False(){
-        val report = Reports(name = "Test")
+        val report = Reports(name = "Test", userId = 1)
         var savedReport : Reports? = null
         val onUpdate: (Reports) -> Unit = {savedReport = it}
 
@@ -94,7 +94,7 @@ class AddReportDialogTest {
 
     @Test
     fun AddReportDialog_OnTextFieldChanges(){
-        val report = Reports(name = "Test")
+        val report = Reports(name = "Test", userId = 1)
 
         composeTestRule.setContent {
             AddReportDialogTestContent(report = report, currentLabel = report.name)

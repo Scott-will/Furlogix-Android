@@ -20,7 +20,6 @@ import com.example.vetapp.Database.Entities.User
 import com.example.vetapp.ui.navigation.Screen
 import com.example.vetapp.viewmodels.PetViewModel
 import com.example.vetapp.viewmodels.UserViewModel
-import kotlinx.coroutines.Dispatchers
 
 
 @Composable

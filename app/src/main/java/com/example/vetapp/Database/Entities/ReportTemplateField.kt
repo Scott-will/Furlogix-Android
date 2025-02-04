@@ -22,5 +22,6 @@ data class ReportTemplateField(
     @PrimaryKey(autoGenerate = true) val uid: Int = 0,
     var reportId: Int,
     var fieldType : FieldType,
-    var name : String
+    var name : String,
+    var favourite : Boolean = false
 )

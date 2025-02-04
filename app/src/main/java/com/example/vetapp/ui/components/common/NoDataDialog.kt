@@ -1,17 +1,16 @@
 package com.example.vetapp.ui.components.common
 
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 
 @Composable
-fun NoDataAvailable(dataType : String) {
+fun NoDataAvailable(dataType : String, modifier: Modifier) {
     // This will center the "No data available" text in the parent layout
     Box(
-        modifier = Modifier.fillMaxSize(),
+        modifier = modifier,
         contentAlignment = Alignment.Center
     ) {
         Text("No data available!! Please create some ${dataType}",)

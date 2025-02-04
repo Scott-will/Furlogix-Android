@@ -45,11 +45,17 @@ class ReportViewModel @Inject constructor(
     private var _errorMsg = MutableStateFlow<String>("")
     private var _isTooManyReports = MutableStateFlow(false)
 
+    private var _favouriteReportTemplates = MutableStateFlow<List<ReportTemplateField>>(emptyList())
+    val favouriteReportTemplates : StateFlow<List<ReportTemplateField>> = _favouriteReportTemplates
+
+    private var _favouriteReportTemplatesData = MutableStateFlow<MutableMap<Int, List<ReportEntry>>>(mutableMapOf())
+    val favouriteReportTemplatesData : StateFlow<Map<Int, List<ReportEntry>>> = _favouriteReportTemplatesData
+
+    var isError : StateFlow<Boolean> = _isError
+    var errorMsg : StateFlow<String> = _errorMsg
+
     private val TAG = "VetApp:" + ReportViewModel::class.qualifiedName
 
-
-    var isError: StateFlow<Boolean> = _isError
-    var errorMsg: StateFlow<String> = _errorMsg
     var isTooManyReports = _isTooManyReports
 
     //this is called everytime viewModel is created
@@ -65,7 +71,7 @@ class ReportViewModel @Inject constructor(
 
     fun insertReport(name: String) {
         //insert report
-        val report = Reports(name = name)
+        val report = Reports(name = name, userId = 1)
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
                 Log.d(TAG, "Inserting report ${report.Id}, ${report.name}")
@@ -207,6 +213,21 @@ class ReportViewModel @Inject constructor(
 
     }
 
+    fun updateFavouriteReportTemplateItem(reportTemplateId : Int){
+        viewModelScope.launch {
+            withContext(Dispatchers.IO){
+                reportTemplateRepository.flipFavouriteReportTemplateField(reportTemplateId)
+            }
+        }
+    }
+    fun PopulateFavouriteReportTemplates() {
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                _favouriteReportTemplates.value =
+                    reportTemplateRepository.GetFavouriteReportTemplatesForUser(1)
+            }
+        }
+    }
     private fun checkTooManyReportEntries() {
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
@@ -225,6 +246,19 @@ class ReportViewModel @Inject constructor(
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
                 reportEntryRepository.deleteSentReportEntries()
+            }
+        }
+    }
+
+    fun PopulateFavouriteReportTemplateData() {
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                for (template in favouriteReportTemplates.value) {
+                    Log.d("ReportViewModel", "Populating fac template data")
+                    _favouriteReportTemplatesData.value[template.uid] =
+                        reportEntryRepository.getAllEntriesForReportTemplate(template.uid)
+                    Log.d("ReportViewModel", "populated for ${template.name}")
+                }
             }
         }
     }

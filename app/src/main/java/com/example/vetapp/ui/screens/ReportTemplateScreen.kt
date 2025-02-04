@@ -50,12 +50,13 @@ fun ReportTemplateScreen(navController: NavController, reportId : Int = 0, viewM
         // Show the Material 3 Dialog for adding new item
         val reportsTemplates = reportTemplateState.value.filter { it.reportId == reportId }
         if(reportsTemplates.size == 0 ){
-            NoDataAvailable("Report Fields")
+            NoDataAvailable("Report Fields", Modifier.fillMaxSize())
         }
         else{
             ReporttemplatesList(reportsTemplates,
                 onDeleteClick = {item -> viewModel.deleteReportTemplateField(item)},
                 onUpdateClick = {item -> viewModel.updateReportTemplateField(item)},
+                onFavouriteClick = {item -> viewModel.updateFavouriteReportTemplateItem(item.uid)},
                 navController)
         }
         Spacer(modifier = Modifier.height(16.dp))

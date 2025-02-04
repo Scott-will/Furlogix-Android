@@ -2,6 +2,7 @@ package com.example.vetapp.ui.componets.reports
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -36,7 +37,7 @@ fun ReportEntryForm(
             Text(reportName)
             Spacer(modifier = Modifier.height(16.dp))
             if(fields.size == 0){
-                NoDataAvailable("Templates")
+                NoDataAvailable("Templates", Modifier.fillMaxSize())
             }
             else{
                 LazyColumn(modifier = Modifier.padding(16.dp)) {

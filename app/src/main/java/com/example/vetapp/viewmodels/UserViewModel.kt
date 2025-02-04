@@ -7,7 +7,6 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asFlow
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.vetapp.Database.DAO.UserDao
 import com.example.vetapp.Database.Entities.User
 import dagger.hilt.android.lifecycle.HiltViewModel

@@ -1,7 +1,6 @@
 package com.example.vetapp.Database.DAO
 
 import androidx.room.Dao
-import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
@@ -16,6 +15,10 @@ interface ReportEntryDao {
     @Query("SELECT * FROM REPORTENTRY Where reportId = :reportId")
     fun getAllEntriesForReport(reportId : Int) : Flow<ReportEntry>
 
+
+    @Query("SELECT * FROM REPORTENTRY where templateId = :templateId")
+    fun getAllReportEntriesForTemplate(templateId: Int) : List<ReportEntry>
+
     @Query("SELECT * FROM REPORTENTRY where reportId = :reportId")
     fun getAllReportEntriesById(reportId: Int) : List<ReportEntry>
 
@@ -29,5 +32,5 @@ interface ReportEntryDao {
     fun getAllReportEntries() : List<ReportEntry>
 
     @Query("SELECT * FROM REPORTENTRY WHERE templateId = :reportTemplateId")
-    fun getAllReportEntriesForTemplate(reportTemplateId : Int) : Flow<List<ReportEntry>>
+    fun getAllReportEntriesForTemplateAsFlow(reportTemplateId : Int) : Flow<List<ReportEntry>>
 }

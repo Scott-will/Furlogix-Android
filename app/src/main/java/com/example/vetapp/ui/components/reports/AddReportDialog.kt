@@ -66,6 +66,7 @@ fun AddReportDialog(
                         else{
                             val newField = Reports(
                                 name = textFieldValue,
+                                userId = 1
                             )
                             onSave(newField)
                         }

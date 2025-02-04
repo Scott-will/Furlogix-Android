@@ -53,4 +53,12 @@ class ReportTemplateRepository @Inject constructor(
     override suspend fun GetTemplateById(id : Int) : ReportTemplateField{
         return reportTemplateDao.getTemplateById(id)
     }
+
+    override suspend fun GetFavouriteReportTemplatesForUser(userId : Int) : List<ReportTemplateField>{
+        return reportTemplateDao.getFavouriteReportTemplateForUser(userId)
+    }
+
+    override suspend fun flipFavouriteReportTemplateField(reportTemplateFieldId : Int){
+        reportTemplateDao.flipFavouriteReportTemplateFieldById(reportTemplateFieldId)
+    }
 }

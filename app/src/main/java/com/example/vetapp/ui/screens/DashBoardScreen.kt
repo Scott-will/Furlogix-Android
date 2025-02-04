@@ -1,10 +1,6 @@
 package com.example.vetapp.ui.screens
 
 import androidx.compose.foundation.Image
-import android.Manifest
-import android.content.pm.PackageManager
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -14,25 +10,25 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.example.vetapp.ui.components.reports.PendingReportsDialog
-import androidx.core.content.ContextCompat
-import com.example.vetapp.VetApplication
 import coil3.compose.rememberAsyncImagePainter
+import com.example.vetapp.ui.components.common.NoDataAvailable
+import com.example.vetapp.ui.components.reports.PendingReportsDialog
+import com.example.vetapp.ui.componets.graphs.GraphsWidget
 import com.example.vetapp.ui.navigation.Screen
 import com.example.vetapp.viewmodels.PetViewModel
+import com.example.vetapp.viewmodels.ReportViewModel
 import com.example.vetapp.viewmodels.UserViewModel
 
+
 @Composable
-fun DashboardScreen(navController: NavController, userViewModel: UserViewModel = hiltViewModel(), petViewModel: PetViewModel = hiltViewModel()) {
+fun DashboardScreen(navController: NavController, userViewModel: UserViewModel = hiltViewModel(), petViewModel : PetViewModel = hiltViewModel(), reportViewModel: ReportViewModel = hiltViewModel()) {
+    reportViewModel.PopulateFavouriteReportTemplates()
+    var favouriteReports = reportViewModel.favouriteReportTemplates.collectAsState()
     userViewModel.populateCurrentUser()
     val photoUri by petViewModel.photoUri.collectAsState()
     val currentUser = userViewModel.currentUser.collectAsState()
@@ -45,9 +41,13 @@ fun DashboardScreen(navController: NavController, userViewModel: UserViewModel =
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(16.dp, Alignment.CenterVertically)
     ) {
-
         Text("Welcome to the Dashboard!")
-
+        if(favouriteReports.value.isEmpty()){
+            NoDataAvailable("Favourite Report Templates", modifier = Modifier.fillMaxWidth())
+        }
+        else {
+            GraphsWidget()
+        }
         photoUri?.let { uriString ->
             Image(
                 painter = rememberAsyncImagePainter(uriString),

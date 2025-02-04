@@ -2,9 +2,9 @@ package com.example.vetapp.repositories
 
 import com.example.vetapp.Database.DAO.PetDao
 import com.example.vetapp.Database.Entities.Pet
+import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 import javax.inject.Singleton
-import kotlinx.coroutines.flow.Flow
 
 @Singleton
 class PetRepository @Inject constructor(

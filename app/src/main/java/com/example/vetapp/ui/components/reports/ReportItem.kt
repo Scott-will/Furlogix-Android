@@ -22,9 +22,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.example.vetapp.Database.Entities.Reports
 import com.example.vetapp.ui.components.common.DeleteButton
-import com.example.vetapp.ui.components.common.EditButton
-import com.example.vetapp.ui.components.reports.AddReportDialog
 import com.example.vetapp.ui.components.common.DeleteWarning
+import com.example.vetapp.ui.components.common.EditButton
 
 @Composable
 fun ReportItem(data: Reports,
