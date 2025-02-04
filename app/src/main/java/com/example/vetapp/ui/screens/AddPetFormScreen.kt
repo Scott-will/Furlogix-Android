@@ -1,5 +1,9 @@
 package com.example.vetapp.ui.screens
 
+import android.content.Context
+import android.net.Uri
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -22,10 +26,14 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import androidx.compose.foundation.Image
+import androidx.compose.ui.platform.LocalContext
+import coil3.compose.rememberAsyncImagePainter
 import com.example.vetapp.Database.Entities.Pet
 import com.example.vetapp.viewmodels.PetViewModel
 import com.example.vetapp.viewmodels.UserViewModel
 import kotlinx.coroutines.launch
+import java.io.File
 
 @Composable
 fun AddPetFormScreen(
@@ -38,6 +46,20 @@ fun AddPetFormScreen(
     var petName by remember { mutableStateOf("") }
     var petType by remember { mutableStateOf("") }
     val desc by remember { mutableStateOf("") }
+
+    var selectedImageUri by remember { mutableStateOf<Uri?>(null) }
+
+    val context = LocalContext.current
+
+    val imagePickerLauncher = rememberLauncherForActivityResult(
+        ActivityResultContracts.GetContent()
+    ) { uri: Uri? ->
+        if (uri != null) {
+            // Copy the picked file to internal storage
+            val localUri = copyUriToInternalStorage(context, uri, "pet_${System.currentTimeMillis()}.jpg")
+            selectedImageUri = localUri
+        }
+    }
 
     val scope = rememberCoroutineScope()
 
@@ -67,14 +89,33 @@ fun AddPetFormScreen(
         Spacer(modifier = Modifier.height(16.dp))
 
         Button(
+            onClick = { imagePickerLauncher.launch("image/*") },
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text("Choose Photo")
+        }
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        selectedImageUri?.let { uri ->
+            Image(
+                painter = rememberAsyncImagePainter(uri),
+                contentDescription = "Selected Pet Photo",
+                modifier = Modifier.fillMaxWidth()
+            )
+        }
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        Button(
             onClick = {
                 scope.launch {
-                    // Create a Pet object (adjust fields as needed for your schema)
                     val pet = Pet(
                         name = petName,
                         type = petType,
                         description = desc,
-                        userId = userId
+                        userId = userId,
+                        photoUri = selectedImageUri?.toString()
                     )
                     petViewModel.addPetObj(pet)
 
@@ -86,5 +127,24 @@ fun AddPetFormScreen(
         ) {
             Text("Submit")
         }
+    }
+}
+
+fun copyUriToInternalStorage(context: Context, sourceUri: Uri, filename: String): Uri? {
+    return try {
+        val inputStream = context.contentResolver.openInputStream(sourceUri) ?: return null
+        val directory = File(context.filesDir, "pet_photos").apply { mkdirs() }
+        val destinationFile = File(directory, filename)
+
+        inputStream.use { input ->
+            destinationFile.outputStream().use { output ->
+                input.copyTo(output)
+            }
+        }
+        // Return a Uri pointing to the newly written file
+        Uri.fromFile(destinationFile)
+    } catch (e: Exception) {
+        e.printStackTrace()
+        null
     }
 }

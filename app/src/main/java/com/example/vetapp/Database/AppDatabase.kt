@@ -22,7 +22,7 @@ import com.example.vetapp.Database.Entities.Reports
     Reports::class,
     ReportEntry::class,
     Reminder::class,
-    Pet::class], version = 8)
+    Pet::class], version = 9)
 abstract class AppDatabase : RoomDatabase() {
 
     abstract fun userDao(): UserDao

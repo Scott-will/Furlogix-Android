@@ -20,5 +20,6 @@ data class Pet(
     val name: String,
     val type: String,
     val description: String,
-    val userId: Long
+    val userId: Long,
+    val photoUri: String? = null
 )

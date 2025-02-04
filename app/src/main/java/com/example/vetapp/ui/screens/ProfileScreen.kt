@@ -1,6 +1,7 @@
 package com.example.vetapp.ui.screens
 
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.content.MediaType.Companion.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -28,10 +29,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import coil3.compose.rememberAsyncImagePainter
 import com.example.vetapp.Database.Entities.Pet
 import com.example.vetapp.ui.navigation.Screen
 import com.example.vetapp.viewmodels.PetViewModel
 import com.example.vetapp.viewmodels.UserViewModel
+import androidx.compose.foundation.Image
+
 
 @Composable
 fun ProfileScreen(
@@ -154,7 +158,19 @@ fun ProfileScreen(
         androidx.compose.material3.AlertDialog(
             onDismissRequest = { selectedPet = null },
             title = { Text(text = "Pet Details") },
-            text = { Text(text = "Type: ${selectedPet?.type}") },
+            text = {
+                Column {
+                    selectedPet?.photoUri?.let { uriString ->
+                        Image(
+                            painter = rememberAsyncImagePainter(uriString),
+                            contentDescription = "Pet Photo",
+                            modifier = Modifier.fillMaxWidth()
+                        )
+                    }
+
+                    Text("Type: ${selectedPet?.type}")
+                }
+            },
             confirmButton = {
                 Button(onClick = { selectedPet = null }) {
                     Text("Close")
