@@ -97,9 +97,7 @@ fun AddPetFormScreen(
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // Optional: Display chosen image
         selectedImageUri?.let { uri ->
-            // For loading images, use Coil or similar library
             Image(
                 painter = rememberAsyncImagePainter(uri),
                 contentDescription = "Selected Pet Photo",
@@ -112,7 +110,6 @@ fun AddPetFormScreen(
         Button(
             onClick = {
                 scope.launch {
-                    // Create a Pet object (adjust fields as needed for your schema)
                     val pet = Pet(
                         name = petName,
                         type = petType,
