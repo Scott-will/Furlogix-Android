@@ -4,8 +4,8 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Button
@@ -19,11 +19,14 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.vetapp.ui.components.common.AddItemButton
 import com.example.vetapp.ui.components.common.ErrorDialog
+import com.example.vetapp.ui.components.common.TitleText
 import com.example.vetapp.ui.components.reports.AddReportDialog
 import com.example.vetapp.ui.components.reports.ReportsList
 import com.example.vetapp.ui.components.reports.TooManyReportsWarning
@@ -43,9 +46,7 @@ fun ManageReportScreen(navController: NavController, viewModel: ReportViewModel 
     // Button to show the dialog
     Column(
         modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
+            .fillMaxWidth()
     ) {
         if(isTooManyReports.value){
             TooManyReportsWarning()
@@ -55,22 +56,21 @@ fun ManageReportScreen(navController: NavController, viewModel: ReportViewModel 
             }
         }
         // Show the list of form items
-        Spacer(modifier = Modifier.height(16.dp))
+        TitleText("My Reports")
         ReportsList(reports.value,
             onDeleteClick = {item -> viewModel.deleteReport(item)},
             onUpdateClick = {item -> viewModel.updateReport(item)},
-            onClick = {data -> navController.navigate(Screen.ReportsTemplate.route.replace("{reportId}", "${data.Id}"))})
+            onClick = {data -> navController.navigate(Screen.ReportsTemplate.route.replace("{reportId}", "${data.Id}").replace("{reportName}", data.name))})
         Spacer(modifier = Modifier.height(16.dp))
         AddItemButton(onClick = {showDialog = true}, localModifier = Modifier
-            .size(56.dp) // Size of the button
+            .size(56.dp)
             .background(
-                color = Color.Gray, // Background color of the button
-                shape = CircleShape // Circular shape
+                color = Color.Gray,
+                shape = CircleShape
             )
             .align(Alignment.Start))
     }
 
-    // Show the Material 3 Dialog for adding new item
     if (showDialog) {
         AddReportDialog(
             onDismiss = { showDialog = false },

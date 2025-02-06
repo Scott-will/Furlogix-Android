@@ -17,10 +17,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.example.vetapp.Database.Entities.Reports
+import com.example.vetapp.ui.components.common.BoxColourTheme
 import com.example.vetapp.ui.components.common.DeleteButton
 import com.example.vetapp.ui.components.common.DeleteWarning
 import com.example.vetapp.ui.components.common.EditButton
@@ -30,7 +30,8 @@ fun ReportItem(data: Reports,
                onClick: (Reports) -> Unit,
                onDeleteClick : (Reports) -> Unit,
                onUpdateClick : (Reports) -> Unit,
-               editable: Boolean = true) {
+               editable: Boolean = true,
+               index : Int = 0) {
     var showDialog by remember { mutableStateOf(false) }
     var showDeleteWarning by remember { mutableStateOf(false) }
     Surface(
@@ -39,13 +40,12 @@ fun ReportItem(data: Reports,
             .padding(vertical = 5.dp)
             .clickable { onClick(data) }, // Box is clickable
         shape = RoundedCornerShape(12.dp), // Rounded corners
-        color = Color.LightGray // Light blue background
+        color = BoxColourTheme.GetColour(index) // Light blue background
     ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(16.dp),
-            verticalAlignment = Alignment.CenterVertically
         ) {
             // Left-aligned text
             Text(
@@ -90,15 +90,12 @@ fun ReportsList(dataList: List<Reports>,
                 onUpdateClick :  (Reports) ->Unit,
                 onClick : (Reports) -> Unit,
                 editable : Boolean = true) {
-
-    Column(modifier = Modifier.padding(16.dp)) {
-        dataList.forEach { data ->
-            ReportItem(data = data,
-                onClick = onClick,
-                onUpdateClick = onUpdateClick,
-                onDeleteClick = onDeleteClick,
-                editable = editable)
-        }
-
+    dataList.forEach { data ->
+        ReportItem(data = data,
+            onClick = onClick,
+            onUpdateClick = onUpdateClick,
+            onDeleteClick = onDeleteClick,
+            editable = editable,
+            index = dataList.indexOf(data))
     }
 }

@@ -4,6 +4,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
@@ -22,6 +23,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.vetapp.Database.Entities.ReportTemplateField
+import com.example.vetapp.ui.components.common.BoxColourTheme
 import com.example.vetapp.ui.components.common.DeleteButton
 import com.example.vetapp.ui.components.common.DeleteWarning
 import com.example.vetapp.ui.components.common.EditButton
@@ -34,7 +36,8 @@ fun ReportTemplateItem(data: ReportTemplateField,
                        onDeleteClick : (ReportTemplateField) -> Unit,
                        onUpdateClick : (ReportTemplateField) -> Unit,
                        onFavouriteClick : (ReportTemplateField) -> Unit,
-                       navController: NavController) {
+                       navController: NavController,
+                       index : Int = 0) {
     var showDialog by remember { mutableStateOf(false) }
     var showDeleteWarning by remember { mutableStateOf(false) }
 
@@ -43,7 +46,7 @@ fun ReportTemplateItem(data: ReportTemplateField,
             .fillMaxWidth()
             .padding(vertical = 5.dp),
         shape = RoundedCornerShape(12.dp), // Rounded corners
-        color = Color.LightGray // Light blue background
+        color = BoxColourTheme.GetColour(index) // Light blue background
     ) {
         Row(
             modifier = Modifier
@@ -90,9 +93,15 @@ fun ReporttemplatesList(dataList: List<ReportTemplateField>,
                         onUpdateClick : (ReportTemplateField) -> Unit,
                         onFavouriteClick : (ReportTemplateField) -> Unit,
                         navController: NavController) {
-    Column(modifier = Modifier.padding(16.dp)) {
+    Column(modifier = Modifier.padding(16.dp).fillMaxSize()) {
         dataList.forEach { data ->
-            ReportTemplateItem(data = data, onUpdateClick = onUpdateClick, onDeleteClick = onDeleteClick, onFavouriteClick = onFavouriteClick, navController = navController)
+            ReportTemplateItem(
+                data = data,
+                onUpdateClick = onUpdateClick,
+                onDeleteClick = onDeleteClick,
+                onFavouriteClick = onFavouriteClick,
+                navController = navController,
+                index = dataList.indexOf(data))
         }
     }
 }

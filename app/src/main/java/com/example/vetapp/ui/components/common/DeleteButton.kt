@@ -18,14 +18,14 @@ fun DeleteButton(onClick: () -> Unit) {
     IconButton(
         onClick = onClick,
         modifier = Modifier
-            .size(56.dp) // Size of the circle
-            .clip(CircleShape) // Apply circular shape
+            .size(56.dp)
+            .clip(CircleShape)
     ) {
         Icon(
-            imageVector = Icons.Default.Delete, // Pencil icon
+            imageVector = Icons.Default.Delete,
             contentDescription = R.string.delete_text.toString(),
-            modifier = Modifier.size(24.dp), // Icon size inside the circle
-            tint = Color.White // Icon color
+            modifier = Modifier.size(24.dp),
+            tint = Color.Gray 
         )
     }
 }

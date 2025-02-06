@@ -134,9 +134,10 @@ fun VetApp(
             composable(Screen.Login.route) { LoginScreen(navController) }
             composable(Screen.CreateAccount.route) { CreateAccountScreen(navController) }
             composable(Screen.Dashboard.route) { DashboardScreen(navController, userViewModel, petViewModel) }
-            composable(Screen.ReportsTemplate.route, listOf(navArgument("reportId"){type = NavType.IntType})) { backStackEntry -> val reportId = backStackEntry.arguments?.getInt("reportId")
-                if (reportId != null) {
-                    ReportTemplateScreen(navController, reportId)
+            composable(Screen.ReportsTemplate.route, listOf(navArgument("reportId"){type = NavType.IntType}, navArgument("reportName"){type = NavType.StringType})) {
+                backStackEntry -> val reportId = backStackEntry.arguments?.getInt("reportId"); val reportName = backStackEntry.arguments?.getString("reportName")
+                if (reportId != null && reportName != null) {
+                    ReportTemplateScreen(navController, reportId,  reportName)
                 }
                 else{
                     ReportTemplateScreen(navController)
