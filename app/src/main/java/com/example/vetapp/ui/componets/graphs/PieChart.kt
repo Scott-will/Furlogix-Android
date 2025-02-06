@@ -43,17 +43,16 @@ fun PieChart(entries : List<ReportEntry>, name : String) {
         Canvas(modifier = Modifier
             .fillMaxSize()) {
             val size = size.minDimension
-            val center = Offset(size / 2f, size / 2f) // Correctly using Offset for center coordinates
-            var startAngle = -90f // Start angle for the first segment (top of the circle)
+            val center = Offset(size / 2f, size / 2f)
+            var startAngle = -90f
 
             pieChartData.forEach { segment ->
-                // Calculate the sweep angle for this segment
                 val sweepAngle = 360f * (segment.percent)
 
                 // Draw the slice
                 drawPieSlice(center, size / 2, startAngle, sweepAngle, segment.color)
                 val middleAngle = startAngle + sweepAngle / 2f
-                val radius = size / 4f  // You can adjust this value to control text positioning
+                val radius = size / 4f
 
                 // Calculate the position of the text
                 val textX = center.x + radius * kotlin.math.cos(Math.toRadians(middleAngle.toDouble())).toFloat()
@@ -63,13 +62,12 @@ fun PieChart(entries : List<ReportEntry>, name : String) {
                 drawIntoCanvas { canvas ->
                     val text = segment.value
                     val paint = Paint().apply {
-                        color = Color.Black.toArgb()  // Set text color
+                        color = Color.Black.toArgb()
                         textAlign = Paint.Align.CENTER
-                        textSize = 30f  // You can adjust text size
+                        textSize = 30f
                     }
                     canvas.nativeCanvas.drawText(text, textX, textY, paint)
                 }
-                // Update the start angle for the next segment
                 startAngle += sweepAngle
             }
         }

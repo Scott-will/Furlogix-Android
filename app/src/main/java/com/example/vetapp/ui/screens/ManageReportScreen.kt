@@ -29,9 +29,10 @@ import com.example.vetapp.ui.components.reports.ReportsList
 import com.example.vetapp.ui.components.reports.TooManyReportsWarning
 import com.example.vetapp.ui.navigation.Screen
 import com.example.vetapp.viewmodels.ReportViewModel
+import com.example.vetapp.viewmodels.UserViewModel
 
 @Composable
-fun ManageReportScreen(navController: NavController, viewModel: ReportViewModel = hiltViewModel()) {
+fun ManageReportScreen(navController: NavController, viewModel: ReportViewModel = hiltViewModel(), userViewModel: UserViewModel = hiltViewModel()) {
 
     var reports = viewModel.reports.collectAsState()
     var showDialog by remember { mutableStateOf(false) }
@@ -39,6 +40,7 @@ fun ManageReportScreen(navController: NavController, viewModel: ReportViewModel 
     val isError = viewModel.isError.collectAsState()
     val errorMsg = viewModel.errorMsg.collectAsState()
     val isTooManyReports = viewModel.isTooManyReports.collectAsState()
+    val userId = userViewModel.userId.collectAsState(1)
 
     // Button to show the dialog
     Column(
@@ -59,7 +61,8 @@ fun ManageReportScreen(navController: NavController, viewModel: ReportViewModel 
         ReportsList(reports.value,
             onDeleteClick = {item -> viewModel.deleteReport(item)},
             onUpdateClick = {item -> viewModel.updateReport(item)},
-            onClick = {data -> navController.navigate(Screen.ReportsTemplate.route.replace("{reportId}", "${data.Id}"))})
+            onClick = {data -> navController.navigate(Screen.ReportsTemplate.route.replace("{reportId}", "${data.Id}"))},
+            userId = userId.value)
         Spacer(modifier = Modifier.height(16.dp))
         AddItemButton(onClick = {showDialog = true}, localModifier = Modifier
             .size(56.dp) // Size of the button
@@ -80,6 +83,7 @@ fun ManageReportScreen(navController: NavController, viewModel: ReportViewModel 
                 showDialog = false
             },
             currentLabel = label,
+            userId = userId.value
         )
     }
     if(isError.value){

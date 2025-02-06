@@ -21,7 +21,7 @@ import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
 class ReportsTemplateDaoTest {
-    /*
+
     private lateinit var db: AppDatabase
     private lateinit var reportTemplateDao: ReportTemplateDao
     private lateinit var reportDao: ReportsDao
@@ -34,7 +34,7 @@ class ReportsTemplateDaoTest {
         reportTemplateDao = db.reportTemplateDao()
         reportDao = db.reportsDao()
         val userDao = db.userDao()
-        userDao.insert(User(name = "abcd", surname = "abcd", email = "abcd", petName = "abcd"))
+        userDao.insert(User(name = "abcd", surname = "abcd", email = "abcd"))
         reportDao.insert(Reports(name = "Test", userId = 1))
     }
 
@@ -75,5 +75,4 @@ class ReportsTemplateDaoTest {
         assert(result.isEmpty())
     }
 
-     */
 }

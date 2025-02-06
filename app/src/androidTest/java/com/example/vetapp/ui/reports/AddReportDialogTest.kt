@@ -25,7 +25,8 @@ class AddReportDialogTest {
             onSave = onSave,
             currentLabel = currentLabel,
             update = update,
-            report = report)
+            report = report,
+            userId = 1)
     }
 
     @get:Rule

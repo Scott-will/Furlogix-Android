@@ -21,6 +21,7 @@ import com.example.vetapp.ui.components.common.ErrorDialog
 import com.example.vetapp.ui.components.reports.TooManyReportsWarning
 import com.example.vetapp.ui.componets.reports.ReportEntryForm
 import com.example.vetapp.viewmodels.ReportViewModel
+import com.example.vetapp.viewmodels.UserViewModel
 
 @Composable
 fun ReportEntryScreen(navController: NavController, reportId : Int = 0, viewModel: ReportViewModel = hiltViewModel()

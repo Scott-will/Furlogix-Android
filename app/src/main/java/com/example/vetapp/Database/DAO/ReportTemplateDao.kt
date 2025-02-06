@@ -39,7 +39,7 @@ interface ReportTemplateDao {
             "JOIN Reports r on  rtf.reportId = r.Id " +
             "JOIN user_table u on r.userId = u.uid" +
             " WHERE u.uid = :userId AND rtf.favourite = 1")
-    fun getFavouriteReportTemplateForUser(userId : Int): List<ReportTemplateField>
+    fun getFavouriteReportTemplateForUser(userId : Long): List<ReportTemplateField>
 
     @Query("Update reporttemplatefield Set favourite = Not favourite Where uid = :id")
     fun flipFavouriteReportTemplateFieldById(id : Int)

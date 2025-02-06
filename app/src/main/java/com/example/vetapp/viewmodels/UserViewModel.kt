@@ -25,7 +25,7 @@ class UserViewModel @Inject constructor(private val userDao: UserDao) : ViewMode
 
     val userName = userDao.getCurrentUserName().asFlow()
     val userEmail = userDao.getCurrentUserEmail().asFlow()
-    val userId: Flow<Long> = userDao.getCurrentUserId()
+    val userId: Flow<Long> = userDao.getCurrentUserIdAsFlow()
 
     private val TAG = "VetApp:" + ReportViewModel::class.qualifiedName
 

@@ -28,7 +28,8 @@ fun AddReportDialog(
     onSave: (Reports) -> Unit,
     currentLabel: String,
     update : Boolean = false,
-    report : Reports? = null){
+    report : Reports? = null,
+    userId : Long){
     var textFieldValue by remember { mutableStateOf(currentLabel) }
     Dialog(onDismissRequest = onDismiss) {
         Surface(
@@ -66,7 +67,7 @@ fun AddReportDialog(
                         else{
                             val newField = Reports(
                                 name = textFieldValue,
-                                userId = 1
+                                userId = userId
                             )
                             onSave(newField)
                         }

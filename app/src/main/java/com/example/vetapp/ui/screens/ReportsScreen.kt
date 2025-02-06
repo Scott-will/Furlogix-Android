@@ -19,14 +19,16 @@ import com.example.vetapp.ui.components.reports.ReportsList
 import com.example.vetapp.ui.components.reports.TooManyReportsWarning
 import com.example.vetapp.ui.navigation.Screen
 import com.example.vetapp.viewmodels.ReportViewModel
+import com.example.vetapp.viewmodels.UserViewModel
 
 @Composable
-fun ReportsScreen(navController: NavController, viewModel: ReportViewModel = hiltViewModel()) {
+fun ReportsScreen(navController: NavController, viewModel: ReportViewModel = hiltViewModel(), userViewModel: UserViewModel = hiltViewModel()) {
 
     val reports = viewModel.reports.collectAsState()
     val isError = viewModel.isError.collectAsState()
     val errorMsg = viewModel.errorMsg.collectAsState()
     val isTooManyReports = viewModel.isTooManyReports.collectAsState()
+    val userId = userViewModel.userId.collectAsState(1)
 
     Column(
         modifier = Modifier
@@ -47,7 +49,8 @@ fun ReportsScreen(navController: NavController, viewModel: ReportViewModel = hil
             onDeleteClick = {item -> viewModel.deleteReport(item)},
             onUpdateClick = {item -> viewModel.updateReport(item)},
             onClick = {data -> navController.navigate(Screen.ReportEntry.route.replace("{reportId}", "${data.Id}"))},
-            editable = false)
+            editable = false,
+            userId = userId.value)
         Spacer(modifier = Modifier.height(16.dp))
     }
     if(isError.value){

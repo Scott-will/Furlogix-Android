@@ -28,7 +28,7 @@ class ReportsDaoTest {
         db = Room.inMemoryDatabaseBuilder(context, AppDatabase::class.java).build()
         reportDao = db.reportsDao()
         val userDao = db.userDao()
-        userDao.insert(User(name = "abcd", surname = "abcd", email = "abcd", petName = "abcd"))
+        userDao.insert(User(name = "abcd", surname = "abcd", email = "abcd"))
     }
 
     @After

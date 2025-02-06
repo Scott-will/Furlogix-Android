@@ -47,7 +47,8 @@ class EmailHandler @Inject constructor(
     override  fun CreateAndSendEmail(email: EmailWrapper){
         val emailIntent = this.CreateEmail(email)
         GlobalScope.launch {
-            userDao.setPendingReportsForUser(1)
+            val userId = userDao.getCurrentUserId()
+            userDao.setPendingReportsForUser(userId)
         }
 
         this.SendEmail(emailIntent)
