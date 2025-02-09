@@ -28,7 +28,10 @@ interface UserDao {
     fun update(user: User)
 
     @Query("SELECT uid FROM user_table LIMIT 1")
-    fun getCurrentUserId(): Flow<Long>
+    fun getCurrentUserIdAsFlow(): Flow<Long>
+
+    @Query("SELECT uid FROM user_table LIMIT 1")
+    fun getCurrentUserId(): Long
 
     @Query("SELECT * FROM user_table WHERE uid = :userId")
     fun getUserById(userId: Int): User?
@@ -55,8 +58,8 @@ interface UserDao {
     suspend fun updateUser(name: String, email: String)
 
     @Query("UPDATE user_table Set pendingSentReports = true WHERE uid = :userId")
-    suspend fun setPendingReportsForUser(userId: Int)
+    suspend fun setPendingReportsForUser(userId: Long)
 
     @Query("UPDATE user_table Set pendingSentReports = false WHERE uid = :userId")
-    suspend fun setNoPendingReportsForUser(userId: Int)
+    suspend fun setNoPendingReportsForUser(userId: Long)
 }

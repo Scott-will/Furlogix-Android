@@ -54,7 +54,7 @@ class ReportTemplateRepository @Inject constructor(
         return reportTemplateDao.getTemplateById(id)
     }
 
-    override suspend fun GetFavouriteReportTemplatesForUser(userId : Int) : List<ReportTemplateField>{
+    override suspend fun GetFavouriteReportTemplatesForUser(userId : Long) : List<ReportTemplateField>{
         return reportTemplateDao.getFavouriteReportTemplateForUser(userId)
     }
 

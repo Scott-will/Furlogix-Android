@@ -58,7 +58,6 @@ class ReportViewModel @Inject constructor(
 
     var isTooManyReports = _isTooManyReports
 
-    //this is called everytime viewModel is created
     init {
         checkTooManyReportEntries()
     }
@@ -186,10 +185,10 @@ class ReportViewModel @Inject constructor(
                     entries,
                     templates
                 )
-                val user = userDao.getUserById(1)
+                val email = userDao.getCurrentUserEmail().value
                 //TODO: Add pet name here
                 val emailWrapper =
-                    EmailWrapper(user?.email!!, "Pet Reports", "${reportName}_${Date()}", fileUri)
+                    EmailWrapper(email!!, "Pet Reports", "${reportName}_${Date()}", fileUri)
                 SendEmail(emailWrapper)
                 entries.forEach() { x ->
                     x.sent = true
@@ -220,14 +219,16 @@ class ReportViewModel @Inject constructor(
             }
         }
     }
+
     fun PopulateFavouriteReportTemplates() {
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
                 _favouriteReportTemplates.value =
-                    reportTemplateRepository.GetFavouriteReportTemplatesForUser(1)
+                    reportTemplateRepository.GetFavouriteReportTemplatesForUser(userDao.getCurrentUserId())
             }
         }
     }
+
     private fun checkTooManyReportEntries() {
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
@@ -254,7 +255,7 @@ class ReportViewModel @Inject constructor(
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
                 for (template in favouriteReportTemplates.value) {
-                    Log.d("ReportViewModel", "Populating fac template data")
+                    Log.d("ReportViewModel", "Populating fav template data")
                     _favouriteReportTemplatesData.value[template.uid] =
                         reportEntryRepository.getAllEntriesForReportTemplate(template.uid)
                     Log.d("ReportViewModel", "populated for ${template.name}")

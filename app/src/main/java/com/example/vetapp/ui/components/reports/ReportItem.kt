@@ -30,7 +30,8 @@ fun ReportItem(data: Reports,
                onClick: (Reports) -> Unit,
                onDeleteClick : (Reports) -> Unit,
                onUpdateClick : (Reports) -> Unit,
-               editable: Boolean = true) {
+               editable: Boolean = true,
+               userId : Long) {
     var showDialog by remember { mutableStateOf(false) }
     var showDeleteWarning by remember { mutableStateOf(false) }
     Surface(
@@ -67,7 +68,8 @@ fun ReportItem(data: Reports,
                         },
                         currentLabel = data.name,
                         report = data,
-                        update = true
+                        update = true,
+                        userId = userId
                     )
                 }
             }
@@ -89,7 +91,8 @@ fun ReportsList(dataList: List<Reports>,
                 onDeleteClick :  (Reports) ->Unit,
                 onUpdateClick :  (Reports) ->Unit,
                 onClick : (Reports) -> Unit,
-                editable : Boolean = true) {
+                editable : Boolean = true,
+                userId: Long) {
 
     Column(modifier = Modifier.padding(16.dp)) {
         dataList.forEach { data ->
@@ -97,7 +100,8 @@ fun ReportsList(dataList: List<Reports>,
                 onClick = onClick,
                 onUpdateClick = onUpdateClick,
                 onDeleteClick = onDeleteClick,
-                editable = editable)
+                editable = editable,
+                userId = userId)
         }
 
     }
