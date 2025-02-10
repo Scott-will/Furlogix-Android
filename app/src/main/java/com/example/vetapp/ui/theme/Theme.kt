@@ -17,7 +17,8 @@ private val DarkColorScheme = darkColorScheme(
 )
 
 private val LightColorScheme = lightColorScheme(
-    primary = Purple40,
+    primary = PrimaryColor,
+    onPrimary = OnPrimaryColor,
     secondary = PurpleGrey40,
     tertiary = Pink40
 
@@ -36,7 +37,7 @@ private val LightColorScheme = lightColorScheme(
 fun VetAppTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     // Dynamic color is available on Android 12+
-    dynamicColor: Boolean = true,
+    dynamicColor: Boolean = false,
     content: @Composable () -> Unit
 ) {
     val colorScheme = when {
