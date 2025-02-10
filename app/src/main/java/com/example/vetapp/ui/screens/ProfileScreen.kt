@@ -33,6 +33,7 @@ import com.example.vetapp.ui.navigation.Screen
 import com.example.vetapp.viewmodels.PetViewModel
 import com.example.vetapp.viewmodels.UserViewModel
 import androidx.compose.foundation.Image
+import androidx.compose.material3.MaterialTheme
 
 
 @Composable
@@ -97,9 +98,9 @@ fun ProfileScreen(
                 onClick = { selectedPet = pet },
                 colors = ButtonDefaults.buttonColors(
                     containerColor = Color.White,
-                    contentColor = Color(0xFF4A148C)
+                    contentColor = MaterialTheme.colorScheme.primary,
                 ),
-                border = BorderStroke(2.dp, Color(0xFF4A148C)),
+                border = BorderStroke(2.dp, MaterialTheme.colorScheme.primary,),
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Text(text = pet.name)
