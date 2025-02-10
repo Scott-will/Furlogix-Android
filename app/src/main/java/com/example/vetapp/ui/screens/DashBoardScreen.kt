@@ -23,6 +23,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import coil3.compose.rememberAsyncImagePainter
@@ -131,14 +132,20 @@ fun DashboardScreen(
                     shape = RoundedCornerShape(20.dp),
                     modifier = buttonModifier,
                 ) {
-                    Text("Manage Reports")
+                    Text(
+                        "Manage Reports",
+                        fontSize = 17.sp
+                    )
                 }
                 Button(
                     onClick = { navController.navigate(Screen.Reports.route) },
                     shape = RoundedCornerShape(20.dp),
                     modifier = buttonModifier
                 ) {
-                    Text("Submit Reports")
+                    Text(
+                        "Submit Reports",
+                        fontSize = 17.sp
+                    )
                 }
             }
             Row(
@@ -150,14 +157,20 @@ fun DashboardScreen(
                     shape = RoundedCornerShape(20.dp),
                     modifier = buttonModifier
                 ) {
-                    Text("Setup Reminders")
+                    Text(
+                        "Setup Reminders",
+                        fontSize = 17.sp
+                    )
                 }
                 Button(
-                    onClick = { navController.navigate(Screen.AddPet.route + "/$userId") },
+                    onClick = { navController.navigate("pets/$userId") },
                     shape = RoundedCornerShape(20.dp),
                     modifier = buttonModifier
                 ) {
-                    Text("Pets")
+                    Text(
+                        "Pets",
+                        fontSize = 17.sp
+                    )
                 }
             }
         }
