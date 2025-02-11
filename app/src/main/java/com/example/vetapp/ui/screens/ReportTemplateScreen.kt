@@ -66,10 +66,10 @@ fun ReportTemplateScreen(navController: NavController, reportId : Int = 0, repor
         }
         Spacer(modifier = Modifier.height(16.dp))
         AddItemButton(onClick = { showDialog = true }, localModifier = Modifier
-            .size(56.dp) // Size of the button
+            .size(56.dp)
             .background(
-                color = Color.Gray, // Background color of the button
-                shape = CircleShape // Circular shape
+                color = Color.Gray,
+                shape = CircleShape
             )
             .align(Alignment.Start))
         if (showDialog) {

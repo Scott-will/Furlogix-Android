@@ -19,8 +19,7 @@ fun EditButton(onClick: () -> Unit) {
         onClick = onClick,
         modifier = Modifier
             .size(56.dp)
-            .clip(CircleShape),
-
+            .clip(CircleShape)
     ) {
         Icon(
             imageVector = Icons.Default.Edit,

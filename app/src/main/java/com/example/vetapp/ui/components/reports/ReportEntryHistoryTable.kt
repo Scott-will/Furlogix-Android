@@ -28,6 +28,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.vetapp.Database.Entities.ReportEntry
 import com.example.vetapp.ui.components.common.BoxColourTheme
 import com.example.vetapp.viewmodels.ReportViewModel
+import java.text.SimpleDateFormat
+import java.util.Locale
 
 @Composable
 fun ReportEntryHistoryTable(reportTemplateId : Int = 0, viewModel: ReportViewModel = hiltViewModel()) {
@@ -42,12 +44,12 @@ fun ReportEntryHistoryTable(reportTemplateId : Int = 0, viewModel: ReportViewMod
                     .padding(16.dp),
                 horizontalArrangement = Arrangement.Absolute.Center
             ){
-                Text("Value", modifier = Modifier.weight(2f),
+                Text("Timestamp", modifier = Modifier.weight(2f),
                     style = TextStyle(
                         fontWeight = FontWeight.Bold,
                     textDecoration = TextDecoration.Underline,
                     fontSize = 18.sp ))
-                Text("Timestamp", modifier = Modifier.weight(2f),
+                Text("Value", modifier = Modifier.weight(2f),
                     style = TextStyle(
                         fontWeight = FontWeight.Bold,
                         textDecoration = TextDecoration.Underline,
@@ -63,21 +65,25 @@ fun ReportEntryHistoryTable(reportTemplateId : Int = 0, viewModel: ReportViewMod
 @Composable
 fun ReportHistoryTableItem(entry : ReportEntry, index : Int){
     Row( modifier = Modifier
-        .fillMaxWidth()
-        .padding(16.dp)
-        .background(BoxColourTheme.GetColour(index))
-        .padding(8.dp),
+        .fillMaxWidth(),
         horizontalArrangement = Arrangement.Absolute.Center) {
+        Text(DisplayFormattedDate(entry.timestamp), modifier = Modifier.weight(2f), fontWeight = FontWeight.Bold)
         Text(entry.value, modifier = Modifier.weight(2f), fontWeight = FontWeight.Bold)
-        Text(entry.timestamp, modifier = Modifier.weight(2f), fontWeight = FontWeight.Bold)
     }
+}
+
+fun DisplayFormattedDate(entryTimestamp: String) : String {
+    val originalFormat = SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.US)
+    val targetFormat = SimpleDateFormat("EEEE MMM d yyyy", Locale.US)
+    val date = originalFormat.parse(entryTimestamp)
+    return targetFormat.format(date)
 }
 
 @Composable
 @Preview(showBackground = true)
 fun ReportEntryHistoryItemPreview(){
     val index = 1
-    val entry = ReportEntry(0, "abcd", 1, 1, "time")
+    val entry = ReportEntry(0, "time", 1, 1, "Tue Feb 04 21:17:31 EST 2025")
     ReportHistoryTableItem(entry, index);
 }
 
