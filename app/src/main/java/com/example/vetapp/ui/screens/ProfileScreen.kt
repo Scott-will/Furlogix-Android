@@ -33,6 +33,11 @@ import com.example.vetapp.ui.navigation.Screen
 import com.example.vetapp.viewmodels.PetViewModel
 import com.example.vetapp.viewmodels.UserViewModel
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material3.MaterialTheme
+import com.example.vetapp.ui.components.pets.ConfirmDeleteDialog
+import com.example.vetapp.ui.components.pets.PetDetailsDialog
+import com.example.vetapp.ui.components.pets.PetList
 
 
 @Composable
@@ -92,17 +97,14 @@ fun ProfileScreen(
 
         Text(text = "Pets", fontSize = 20.sp, modifier = Modifier.padding(top = 16.dp))
 
-        pets.forEach { pet ->
-            Button(
-                onClick = { selectedPet = pet },
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = Color.White,
-                    contentColor = Color(0xFF4A148C)
-                ),
-                border = BorderStroke(2.dp, Color(0xFF4A148C)),
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Text(text = pet.name)
+        LazyColumn(
+            modifier = Modifier
+                .padding(16.dp)
+        ) {
+            item {
+                PetList(pets = pets, onPetSelected = { pet ->
+                    selectedPet = pet
+                })
             }
         }
 
@@ -153,66 +155,22 @@ fun ProfileScreen(
     }
 
     if (selectedPet != null && !showConfirmDelete) {
-        androidx.compose.material3.AlertDialog(
-            onDismissRequest = { selectedPet = null },
-            title = { Text(text = "Pet Details") },
-            text = {
-                Column {
-                    selectedPet?.photoUri?.let { uriString ->
-                        Image(
-                            painter = rememberAsyncImagePainter(uriString),
-                            contentDescription = "Pet Photo",
-                            modifier = Modifier.fillMaxWidth()
-                        )
-                    }
-
-                    Text("Type: ${selectedPet?.type}")
-                }
-            },
-            confirmButton = {
-                Button(onClick = { selectedPet = null }) {
-                    Text("Close")
-                }
-            },
-            dismissButton = {
-                Button(onClick = { showConfirmDelete = true  },
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = Color.Red,
-                        contentColor = Color.White
-                    )
-                ){
-                    Text("Delete")
-                }
-            }
+        PetDetailsDialog(
+            pet = selectedPet!!,
+            onDismiss = { selectedPet = null },
+            onDelete = { showConfirmDelete = true }
         )
     }
 
     if (showConfirmDelete && selectedPet != null) {
-        AlertDialog(
-            onDismissRequest = { showConfirmDelete = false },
-            title = { Text("Confirm Deletion") },
-            text = { Text("Are you sure you want to delete ${selectedPet?.name}?") },
-            confirmButton = {
-                Button(
-                    onClick = {
-                        petViewModel.deletePet(selectedPet!!)
-                        // Reset UI state
-                        showConfirmDelete = false
-                        selectedPet = null
-                    },
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = Color.Red,
-                        contentColor = Color.White
-                    )
-                ) {
-                    Text("Yes, Delete")
-                }
+        ConfirmDeleteDialog(
+            pet = selectedPet!!,
+            onConfirm = {
+                petViewModel.deletePet(selectedPet!!)
+                showConfirmDelete = false
+                selectedPet = null
             },
-            dismissButton = {
-                Button(onClick = { showConfirmDelete = false }) {
-                    Text("Cancel")
-                }
-            }
+            onDismiss = { showConfirmDelete = false }
         )
     }
 }
