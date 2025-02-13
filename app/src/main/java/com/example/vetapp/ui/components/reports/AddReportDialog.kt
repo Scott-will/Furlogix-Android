@@ -66,7 +66,8 @@ fun AddReportDialog(
                         else{
                             val newField = Reports(
                                 name = textFieldValue,
-                                userId = 1
+                                //TODO: CHANGE TO USE ACTUAL PET ID
+                                petId = 1
                             )
                             onSave(newField)
                         }

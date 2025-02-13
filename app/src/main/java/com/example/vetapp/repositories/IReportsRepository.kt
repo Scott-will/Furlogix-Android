@@ -5,7 +5,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface IReportsRepository {
 
-    fun reportsObservable() : Flow<List<Reports>>
+    fun reportsForPetObservable(petId : Int) : List<Reports>
 
     suspend fun getAllReports() : List<Reports>
 

@@ -1,7 +1,7 @@
 package com.example.vetapp.ui.screens
 
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.content.MediaType.Companion.Image
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -32,7 +32,6 @@ import com.example.vetapp.Database.Entities.Pet
 import com.example.vetapp.ui.navigation.Screen
 import com.example.vetapp.viewmodels.PetViewModel
 import com.example.vetapp.viewmodels.UserViewModel
-import androidx.compose.foundation.Image
 
 
 @Composable

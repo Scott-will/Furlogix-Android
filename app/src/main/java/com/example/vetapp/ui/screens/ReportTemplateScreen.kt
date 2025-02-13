@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -29,7 +28,6 @@ import com.example.vetapp.ui.components.common.TitleText
 import com.example.vetapp.ui.components.reports.AddReportTemplateDialog
 import com.example.vetapp.ui.components.reports.ReporttemplatesList
 import com.example.vetapp.viewmodels.ReportViewModel
-import java.util.Locale
 
 @Composable
 fun ReportTemplateScreen(navController: NavController, reportId : Int = 0, reportName : String = "Report Template", viewModel: ReportViewModel = hiltViewModel()

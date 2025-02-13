@@ -26,7 +26,7 @@ import com.example.vetapp.viewmodels.UserViewModel
 
 
 @Composable
-fun DashboardScreen(navController: NavController, userViewModel: UserViewModel = hiltViewModel(), petViewModel : PetViewModel = hiltViewModel(), reportViewModel: ReportViewModel = hiltViewModel()) {
+fun PetDashboardScreen(navController: NavController, petId : Int, userViewModel: UserViewModel = hiltViewModel(), petViewModel : PetViewModel = hiltViewModel(), reportViewModel: ReportViewModel = hiltViewModel()) {
     reportViewModel.PopulateFavouriteReportTemplates()
     var favouriteReports = reportViewModel.favouriteReportTemplates.collectAsState()
     userViewModel.populateCurrentUser()
@@ -58,7 +58,7 @@ fun DashboardScreen(navController: NavController, userViewModel: UserViewModel =
 
         Button(
             onClick = {
-                navController.navigate(Screen.ManageReports.route)
+                navController.navigate(Screen.ManageReports.route.replace("{petId}", petId.toString()))
             },
             modifier = Modifier.fillMaxWidth()
         ) {
@@ -66,7 +66,7 @@ fun DashboardScreen(navController: NavController, userViewModel: UserViewModel =
         }
         Button(
             onClick = {
-                navController.navigate(Screen.Reports.route)
+                navController.navigate(Screen.Reports.route.replace("{petId}", petId.toString()))
             },
             modifier = Modifier.fillMaxWidth()
         ) {

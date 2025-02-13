@@ -8,7 +8,6 @@ import com.example.vetapp.Database.DAO.ReportEntryDao
 import com.example.vetapp.R
 import org.junit.After
 import org.junit.Before
-import org.junit.Test
 
 class ReportEntryDaoTest {
 

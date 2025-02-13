@@ -10,8 +10,8 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface ReportsDao {
-    @Query("SELECT * FROM Reports")
-    fun getAllFlow(): Flow<List<Reports>>
+    @Query("SELECT * FROM Reports Where petId = :petId")
+    fun getAllForPetFlow(petId : Int): List<Reports>
 
     @Query("SELECT * FROM Reports")
     fun getAllReports() : List<Reports>

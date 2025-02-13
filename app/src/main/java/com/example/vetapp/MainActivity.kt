@@ -39,6 +39,7 @@ import com.example.vetapp.ui.screens.CreateAccountScreen
 import com.example.vetapp.ui.screens.DashboardScreen
 import com.example.vetapp.ui.screens.LoginScreen
 import com.example.vetapp.ui.screens.ManageReportScreen
+import com.example.vetapp.ui.screens.PetDashboardScreen
 import com.example.vetapp.ui.screens.ProfileScreen
 import com.example.vetapp.ui.screens.RemindersScreen
 import com.example.vetapp.ui.screens.ReportEntryHistoryScreen
@@ -53,10 +54,10 @@ import dagger.hilt.android.AndroidEntryPoint
 import java.util.concurrent.TimeUnit
 
 @AndroidEntryPoint
-class MainActivity : ComponentActivity()  {
+class MainActivity : ComponentActivity() {
 
-    private val intentFilter : IntentFilter = IntentFilter()
-    private val emailReceiver : EmailBroadcastReceiver = EmailBroadcastReceiver()
+    private val intentFilter: IntentFilter = IntentFilter()
+    private val emailReceiver: EmailBroadcastReceiver = EmailBroadcastReceiver()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -87,7 +88,7 @@ class MainActivity : ComponentActivity()  {
     }
 
     @SuppressLint("NewApi")
-    fun scheduleReportCleaner(){
+    fun scheduleReportCleaner() {
         val reportCleanerWorkRequest = PeriodicWorkRequest.Builder(
             ReportCleanerWorker::class.java,
             14,
@@ -133,29 +134,52 @@ fun VetApp(
         ) {
             composable(Screen.Login.route) { LoginScreen(navController) }
             composable(Screen.CreateAccount.route) { CreateAccountScreen(navController) }
-            composable(Screen.Dashboard.route) { DashboardScreen(navController, userViewModel, petViewModel) }
-            composable(Screen.ReportsTemplate.route, listOf(navArgument("reportId"){type = NavType.IntType}, navArgument("reportName"){type = NavType.StringType})) {
-                backStackEntry -> val reportId = backStackEntry.arguments?.getInt("reportId"); val reportName = backStackEntry.arguments?.getString("reportName")
-                if (reportId != null && reportName != null) {
-                    ReportTemplateScreen(navController, reportId,  reportName)
+            composable(
+                Screen.Dashboard.route,
+                arguments = listOf(navArgument("userId") { type = NavType.LongType })
+            ) {
+                DashboardScreen(navController, userId, userViewModel, petViewModel)
+            }
+            composable(Screen.PetDashboard.route,
+                listOf(navArgument("petId") { type = NavType.IntType })
+            ) { backStackEntry ->
+                val petId = backStackEntry.arguments?.getInt("petId");
+                if (petId != null) {
+                    PetDashboardScreen(navController, petId, userViewModel, petViewModel)
                 }
-                else{
+            }
+            composable(
+                Screen.ReportsTemplate.route,
+                listOf(navArgument("reportId") { type = NavType.IntType },
+                    navArgument("reportName") { type = NavType.StringType })
+            ) { backStackEntry ->
+                val reportId = backStackEntry.arguments?.getInt("reportId");
+                val reportName = backStackEntry.arguments?.getString("reportName")
+                if (reportId != null && reportName != null) {
+                    ReportTemplateScreen(navController, reportId, reportName)
+                } else {
                     ReportTemplateScreen(navController)
                 }
             }
-            composable(Screen.ReportEntryHistory.route, listOf(navArgument("reportTemplateId"){type = NavType.IntType})) { backStackEntry -> val reportTemplateId = backStackEntry.arguments?.getInt("reportTemplateId")
+            composable(
+                Screen.ReportEntryHistory.route,
+                listOf(navArgument("reportTemplateId") { type = NavType.IntType })
+            ) { backStackEntry ->
+                val reportTemplateId = backStackEntry.arguments?.getInt("reportTemplateId")
                 if (reportTemplateId != null) {
                     ReportEntryHistoryScreen(navController, reportTemplateId)
-                }
-                else{
+                } else {
                     ReportEntryHistoryScreen(navController)
                 }
             }
-            composable(Screen.ReportEntry.route, listOf(navArgument("reportId"){type = NavType.IntType})) { backStackEntry -> val reportId = backStackEntry.arguments?.getInt("reportId")
+            composable(
+                Screen.ReportEntry.route,
+                listOf(navArgument("reportId") { type = NavType.IntType })
+            ) { backStackEntry ->
+                val reportId = backStackEntry.arguments?.getInt("reportId")
                 if (reportId != null) {
                     ReportEntryScreen(navController, reportId)
-                }
-                else{
+                } else {
                     ReportEntryScreen(navController)
                 }
             }
@@ -165,8 +189,24 @@ fun VetApp(
             ) { backStackEntry ->
                 ProfileScreen(userId = userId, navController = navController)
             }
-            composable(Screen.ManageReports.route) { ManageReportScreen(navController) }
-            composable(Screen.Reports.route) { ReportsScreen(navController) }
+            composable(
+                Screen.ManageReports.route,
+                listOf(navArgument("petId") { type = NavType.IntType })
+            ) { backStackEntry ->
+                val petId = backStackEntry.arguments?.getInt("petId")
+                if (petId != null) {
+                    ManageReportScreen(navController, petId)
+                }
+            }
+            composable(
+                Screen.Reports.route,
+                listOf(navArgument("petId") { type = NavType.IntType })
+            ) { backStackEntry ->
+                val petId = backStackEntry.arguments?.getInt("petId")
+                if (petId != null) {
+                    ReportsScreen(navController, petId)
+                }
+            }
             composable(Screen.Reminders.route) { RemindersScreen(navController) }
             composable(
                 Screen.AddPet.route,
@@ -184,14 +224,16 @@ fun VetApp(
                 onDismiss = { showDialog = false },
                 onAddPet = {
                     showDialog = false
-                    navController.navigate("add_pet/$userId") },
+                    navController.navigate("add_pet/$userId")
+                },
                 onViewPets = {
                     showDialog = false
                     navController.navigate("profile/$userId")
                 },
                 onAddPetPhoto = {
                     showDialog = false
-                    navController.navigate("upload_pet_photo") },
+                    navController.navigate("upload_pet_photo")
+                },
                 onManageReports = { }
             )
         }

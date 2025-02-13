@@ -2,6 +2,7 @@ package com.example.vetapp.ui.screens
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -12,25 +13,26 @@ import com.example.vetapp.viewmodels.UserViewModel
 
 @Composable
 fun LoginScreen(navController: NavController) {
-    // State variables to hold the username and password values
-    var username by remember { mutableStateOf("") }
 
     var viewModel: UserViewModel = hiltViewModel()
 
     // State for handling user existence check
     var userExists by remember { mutableStateOf<Boolean?>(null) }
+    val userId by viewModel.currentUser.collectAsState()
 
     LaunchedEffect(Unit) {
         viewModel.doesUserExist { exists ->
             userExists = exists
         }
+        viewModel.populateCurrentUser()
+
     }
 
     // Automatically redirect if user existence is determined
     LaunchedEffect(userExists) {
         userExists?.let { exists ->
             if (exists) {
-                navController.navigate("dashboard")
+                navController.navigate("dashboard/${userId?.uid}")
             } else {
                 navController.navigate("create_account")
             }

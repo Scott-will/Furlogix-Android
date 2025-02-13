@@ -13,7 +13,7 @@ interface IReportTemplateRepository {
     
     suspend fun GetReportByIdFlow(id : Int) : Flow<List<ReportTemplateField>>
 
-    suspend fun GetFavouriteReportTemplatesForUser(userId : Int) : List<ReportTemplateField>
+    suspend fun GetFavouriteReportTemplatesForPet(petId : Int) : List<ReportTemplateField>
 
     suspend fun GetTemplateById(id : Int) : ReportTemplateField
 

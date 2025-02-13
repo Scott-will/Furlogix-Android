@@ -1,11 +1,11 @@
 package com.example.vetapp.ui.reminders
 
+import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.junit4.createComposeRule
+import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
-import androidx.compose.ui.test.hasText
-import androidx.compose.ui.test.assertIsDisplayed
-import androidx.compose.ui.test.onNodeWithContentDescription
 import com.example.vetapp.Database.Entities.Reminder
 import com.example.vetapp.R
 import com.example.vetapp.ui.components.reminders.ReminderItem
