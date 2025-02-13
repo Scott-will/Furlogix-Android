@@ -93,22 +93,6 @@ fun PetDashboardScreen(navController: NavController, petId : Int, userViewModel:
                 }
             }
         }
-
-        Button(
-            onClick = {
-                navController.navigate(Screen.ManageReports.route.replace("{petId}", petId.toString()))
-            },
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Text("Manage Reports")
-        }
-        Button(
-            onClick = {
-                navController.navigate(Screen.Reports.route.replace("{petId}", petId.toString()))
-            },
-            modifier = Modifier.fillMaxWidth()){
-            Text("Submit Reports")
-        }
         photoUri?.let { uriString ->
             androidx.compose.material3.Card(
                 modifier = Modifier.fillMaxWidth(),
@@ -140,7 +124,7 @@ fun PetDashboardScreen(navController: NavController, petId : Int, userViewModel:
                 horizontalArrangement = Arrangement.spacedBy(16.dp)
             ) {
                 Button(
-                    onClick = { navController.navigate(Screen.ManageReports.route) },
+                    onClick = { navController.navigate(Screen.ManageReports.route.replace("{petId}", petId.toString())) },
                     shape = RoundedCornerShape(20.dp),
                     modifier = buttonModifier,
                 ) {
@@ -150,7 +134,7 @@ fun PetDashboardScreen(navController: NavController, petId : Int, userViewModel:
                     )
                 }
                 Button(
-                    onClick = { navController.navigate(Screen.Reports.route) },
+                    onClick = { navController.navigate(Screen.Reports.route.replace("{petId}", petId.toString())) },
                     shape = RoundedCornerShape(20.dp),
                     modifier = buttonModifier
                 ) {

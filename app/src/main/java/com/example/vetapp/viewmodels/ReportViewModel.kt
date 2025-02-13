@@ -14,6 +14,7 @@ import com.example.vetapp.email.CsvBuilder
 import com.example.vetapp.email.EmailHandler
 import com.example.vetapp.email.EmailWrapper
 import com.example.vetapp.email.IEmailHandler
+import com.example.vetapp.reports.FieldType
 import com.example.vetapp.repositories.IReportEntryRepository
 import com.example.vetapp.repositories.IReportTemplateRepository
 import com.example.vetapp.repositories.IReportsRepository
@@ -35,30 +36,38 @@ class ReportViewModel @Inject constructor(
     private val reportRepository : IReportsRepository,
     private val userDao: UserDao,
     private val reportEntryRepository : IReportEntryRepository) : ViewModel() {
-        private var _reportsForPet = MutableStateFlow<List<Reports>>(emptyList())
-        val reportsForPet : MutableStateFlow<List<Reports>> = _reportsForPet
-        val currentReportTemplate : MutableStateFlow<ReportTemplateField> = _currentReportTemplate
-        private var _currentReportTemplate = MutableStateFlow<ReportTemplateField?>(null)
-        private var _reportEntries = MutableStateFlow<List<ReportEntry>>(emptyList())
-        val reportEntries: StateFlow<List<ReportEntry>> = _reportEntries
-        private var _isError = MutableStateFlow<Boolean>(false)
-        private var _errorMsg = MutableStateFlow<String>("")
-        private var _isTooManyReports = MutableStateFlow(false)
 
-        private var _favouriteReportTemplates = MutableStateFlow<List<ReportTemplateField>>(emptyList())
-        val favouriteReportTemplates : StateFlow<List<ReportTemplateField>> = _favouriteReportTemplates
+    private var _reportsForPet = MutableStateFlow<List<Reports>>(emptyList())
+    val reportsForPet : MutableStateFlow<List<Reports>> = _reportsForPet
 
-        private var _favouriteReportTemplatesData = MutableStateFlow<MutableMap<Int, List<ReportEntry>>>(mutableMapOf())
-        val favouriteReportTemplatesData : StateFlow<Map<Int, List<ReportEntry>>> = _favouriteReportTemplatesData
+    private var _currentReportTemplate = MutableStateFlow(ReportTemplateField(0, 0, FieldType.TEXT, ""))
+    val currentReportTemplate : MutableStateFlow<ReportTemplateField> = _currentReportTemplate
 
-        var isError : StateFlow<Boolean> = _isError
-        var errorMsg : StateFlow<String> = _errorMsg
+    private var _reportTemplatesForCurrentReport = MutableStateFlow<List<ReportTemplateField>>(
+        emptyList()
+    )
+    val reportTemplatesForCurrentReport : MutableStateFlow<List<ReportTemplateField>> = _reportTemplatesForCurrentReport
 
-        private val TAG = "VetApp:" + ReportViewModel::class.qualifiedName
+    private var _reportEntries = MutableStateFlow<List<ReportEntry>>(emptyList())
+    val reportEntries: StateFlow<List<ReportEntry>> = _reportEntries
+    private var _isError = MutableStateFlow<Boolean>(false)
+    private var _errorMsg = MutableStateFlow<String>("")
+    private var _isTooManyReports = MutableStateFlow(false)
 
-        var isTooManyReports = _isTooManyReports
+    private var _favouriteReportTemplates = MutableStateFlow<List<ReportTemplateField>>(emptyList())
+    val favouriteReportTemplates : StateFlow<List<ReportTemplateField>> = _favouriteReportTemplates
 
-        //this is called everytime viewModel is created
+    private var _favouriteReportTemplatesData = MutableStateFlow<MutableMap<Int, List<ReportEntry>>>(mutableMapOf())
+    val favouriteReportTemplatesData : StateFlow<Map<Int, List<ReportEntry>>> = _favouriteReportTemplatesData
+
+    var isError : StateFlow<Boolean> = _isError
+    var errorMsg : StateFlow<String> = _errorMsg
+
+    private val TAG = "VetApp:" + ReportViewModel::class.qualifiedName
+
+    var isTooManyReports = _isTooManyReports
+
+    //this is called everytime viewModel is created
     init {
         checkTooManyReportEntries()
     }
@@ -69,14 +78,14 @@ class ReportViewModel @Inject constructor(
         }
     }
 
-        fun populateReportForPet(petId : Int) {
-            viewModelScope.launch {
-                withContext(Dispatchers.IO) {
-                    _reportsForPet.value =
-                        reportRepository.reportsForPetObservable(petId)
-                }
+    fun populateReportForPet(petId : Int) {
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                _reportsForPet.value =
+                    reportRepository.reportsForPetObservable(petId)
             }
         }
+    }
 
     fun populateCurrentReportTemplate(reportTemplateId : Int) {
         viewModelScope.launch {
@@ -86,6 +95,16 @@ class ReportViewModel @Inject constructor(
             }
         }
     }
+
+    fun populateReportTemplatesForCurrentReport(reportId : Int) {
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                _reportTemplatesForCurrentReport.value =
+                    reportTemplateRepository.GetReportById(reportId)
+            }
+        }
+    }
+
     fun insertReport(name: String, petId : Int) {
         //insert report
         val report = Reports(name = name, petId = petId)
