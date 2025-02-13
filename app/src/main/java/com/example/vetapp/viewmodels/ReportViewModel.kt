@@ -37,7 +37,8 @@ class ReportViewModel @Inject constructor(
     private val reportEntryRepository : IReportEntryRepository) : ViewModel() {
         private var _reportsForPet = MutableStateFlow<List<Reports>>(emptyList())
         val reportsForPet : MutableStateFlow<List<Reports>> = _reportsForPet
-        private var reportTemplatesForPet = MutableStateFlow<List<ReportTemplateField>>(emptyList())
+        val currentReportTemplate : MutableStateFlow<ReportTemplateField> = _currentReportTemplate
+        private var _currentReportTemplate = MutableStateFlow<ReportTemplateField?>(null)
         private var _reportEntries = MutableStateFlow<List<ReportEntry>>(emptyList())
         val reportEntries: StateFlow<List<ReportEntry>> = _reportEntries
         private var _isError = MutableStateFlow<Boolean>(false)
@@ -58,11 +59,17 @@ class ReportViewModel @Inject constructor(
         var isTooManyReports = _isTooManyReports
 
         //this is called everytime viewModel is created
-        init {
-            checkTooManyReportEntries()
-        }
+    init {
+        checkTooManyReportEntries()
+    }
 
-        fun populateReportForPet(petId : Int){
+    fun getReportNameById(id: Int) = flow {
+        reportRepository.getReportByIdFlow(id).collect { result ->
+            emit(result.name)
+        }
+    }
+
+        fun populateReportForPet(petId : Int) {
             viewModelScope.launch {
                 withContext(Dispatchers.IO) {
                     _reportsForPet.value =
@@ -71,220 +78,218 @@ class ReportViewModel @Inject constructor(
             }
         }
 
-        fun populateReportTemplatesForPet(petId : Int){
-
-        }
-
-        fun getReportNameById(id: Int) = flow {
-            reportRepository.getReportByIdFlow(id).collect { result ->
-                emit(result.name)
+    fun populateCurrentReportTemplate(reportTemplateId : Int) {
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                _currentReportTemplate.value =
+                    reportTemplateRepository.GetTemplateById(reportTemplateId)
             }
         }
-
-        fun insertReport(name: String, petId : Int) {
-            //insert report
-            val report = Reports(name = name, petId = petId)
-            viewModelScope.launch {
-                withContext(Dispatchers.IO) {
-                    Log.d(TAG, "Inserting report ${report.Id}, ${report.name}")
-                    val result = reportRepository.insertReport(report)
-                    UpdateErrorState(!result.result, result.msg)
-                    Log.d(
-                        TAG,
-                        "Result of inserting report ${report.Id}, ${report.name} : ${result.result}"
-                    )
-                }
-
-            }
-        }
-
-        fun deleteReport(report: Reports) {
-            viewModelScope.launch {
-                withContext(Dispatchers.IO) {
-                    Log.d(TAG, "Deleting report ${report.Id}, ${report.name}")
-                    reportRepository.deleteReport(report)
-                }
-
-            }
-        }
-
-        fun updateReport(report: Reports) {
-            viewModelScope.launch {
-                withContext(Dispatchers.IO) {
-                    Log.d(TAG, "Updating report ${report.Id}, ${report.name}")
-                    val result = reportRepository.updateReport(report)
-                    UpdateErrorState(!result.result, result.msg)
-                    Log.d(
-                        TAG,
-                        "Result of updating report ${report.Id}, ${report.name} : ${result.result}"
-                    )
-                }
-
-            }
-        }
-
-        fun insertReportTemplateField(field: ReportTemplateField) {
-            viewModelScope.launch {
-                withContext(Dispatchers.IO) {
-                    Log.d(TAG, "Inserting report template field ${field.uid}, ${field.name}")
-                    val result = reportTemplateRepository.insertReportTemplateField(field)
-                    UpdateErrorState(!result.result, result.msg)
-                    Log.d(
-                        TAG,
-                        "Result of inserting report template field ${field.uid}, ${field.name} : ${result.result}"
-                    )
-                }
-            }
-        }
-
-        fun deleteReportTemplateField(field: ReportTemplateField) {
-            viewModelScope.launch {
-                withContext(Dispatchers.IO) {
-                    Log.d(TAG, "Deleting report template field ${field.uid}, ${field.name}")
-                    reportTemplateRepository.deleteReportTemplateField(field)
-                }
-            }
-        }
-
-        fun updateReportTemplateField(field: ReportTemplateField) {
-            viewModelScope.launch {
-                withContext(Dispatchers.IO) {
-                    Log.d(TAG, "Updating report template field ${field.uid}, ${field.name}")
-                    val result = reportTemplateRepository.updateReportTemplateField(field)
-                    UpdateErrorState(!result.result, result.msg)
-                    Log.d(
-                        TAG,
-                        "Result of updating report template field ${field.uid}, ${field.name} : ${result.result}"
-                    )
-                }
-            }
-        }
-
-        fun insertReportEntry(valueMap: Map<Int, MutableState<String>>, reportId: Int) {
-            var entries = mutableListOf<ReportEntry>()
-            val time = Date()
-            valueMap.forEach() { kvp ->
-                val entry = ReportEntry(
-                    value = kvp.value.value,
-                    reportId = reportId,
-                    templateId = kvp.key,
-                    timestamp = time.toString()
+    }
+    fun insertReport(name: String, petId : Int) {
+        //insert report
+        val report = Reports(name = name, petId = petId)
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                Log.d(TAG, "Inserting report ${report.Id}, ${report.name}")
+                val result = reportRepository.insertReport(report)
+                UpdateErrorState(!result.result, result.msg)
+                Log.d(
+                    TAG,
+                    "Result of inserting report ${report.Id}, ${report.name} : ${result.result}"
                 )
-                entries.add(entry)
             }
-            viewModelScope.launch {
-                withContext(Dispatchers.IO) {
-                    Log.d(TAG, "Inserting ${entries.count()} report entries")
-                    var result = reportEntryRepository.insertEntries(entries)
-                    Log.d(
-                        TAG,
-                        "Result of inserting ${entries.count()} report entries : ${result.result}"
-                    )
-                    UpdateErrorState(!result.result, result.msg)
+
+        }
+    }
+
+    fun deleteReport(report: Reports) {
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                Log.d(TAG, "Deleting report ${report.Id}, ${report.name}")
+                reportRepository.deleteReport(report)
+            }
+
+        }
+    }
+
+    fun updateReport(report: Reports) {
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                Log.d(TAG, "Updating report ${report.Id}, ${report.name}")
+                val result = reportRepository.updateReport(report)
+                UpdateErrorState(!result.result, result.msg)
+                Log.d(
+                    TAG,
+                    "Result of updating report ${report.Id}, ${report.name} : ${result.result}"
+                )
+            }
+
+        }
+    }
+
+    fun insertReportTemplateField(field: ReportTemplateField) {
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                Log.d(TAG, "Inserting report template field ${field.uid}, ${field.name}")
+                val result = reportTemplateRepository.insertReportTemplateField(field)
+                UpdateErrorState(!result.result, result.msg)
+                Log.d(
+                    TAG,
+                    "Result of inserting report template field ${field.uid}, ${field.name} : ${result.result}"
+                )
+            }
+        }
+    }
+
+    fun deleteReportTemplateField(field: ReportTemplateField) {
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                Log.d(TAG, "Deleting report template field ${field.uid}, ${field.name}")
+                reportTemplateRepository.deleteReportTemplateField(field)
+            }
+        }
+    }
+
+    fun updateReportTemplateField(field: ReportTemplateField) {
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                Log.d(TAG, "Updating report template field ${field.uid}, ${field.name}")
+                val result = reportTemplateRepository.updateReportTemplateField(field)
+                UpdateErrorState(!result.result, result.msg)
+                Log.d(
+                    TAG,
+                    "Result of updating report template field ${field.uid}, ${field.name} : ${result.result}"
+                )
+            }
+        }
+    }
+
+    fun insertReportEntry(valueMap: Map<Int, MutableState<String>>, reportId: Int) {
+        var entries = mutableListOf<ReportEntry>()
+        val time = Date()
+        valueMap.forEach() { kvp ->
+            val entry = ReportEntry(
+                value = kvp.value.value,
+                reportId = reportId,
+                templateId = kvp.key,
+                timestamp = time.toString()
+            )
+            entries.add(entry)
+        }
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                Log.d(TAG, "Inserting ${entries.count()} report entries")
+                var result = reportEntryRepository.insertEntries(entries)
+                Log.d(
+                    TAG,
+                    "Result of inserting ${entries.count()} report entries : ${result.result}"
+                )
+                UpdateErrorState(!result.result, result.msg)
+            }
+        }
+    }
+
+    fun gatherReportData(reportId: Int) {
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                Log.d(TAG, "Gathering report data to send in email")
+                val reportName = reportRepository.getReportById(reportId).name
+                val templates = reportTemplateRepository.GetReportById(reportId)
+                val entries = reportEntryRepository.getAllReportEntriesById(reportId)
+                var fileUri = CsvBuilder().buildAndWriteCsv(
+                    VetApplication.applicationContext(),
+                    reportName,
+                    entries,
+                    templates
+                )
+                val email = userDao.getCurrentUserEmail().value
+                //TODO: Add pet name here
+                val emailWrapper =
+                    EmailWrapper(email!!, "Pet Reports", "${reportName}_${Date()}", fileUri)
+                SendEmail(emailWrapper)
+                entries.forEach() { x ->
+                    x.sent = true
+                }
+                reportEntryRepository.updateReportEntries(entries)
+            }
+
+        }
+    }
+
+    fun SendEmail(wrapper: EmailWrapper) {
+        val emailHandler: IEmailHandler = EmailHandler(VetApplication.applicationContext(), userDao)
+        Log.d(TAG, "Starting process of sending email")
+        emailHandler.CreateAndSendEmail(wrapper)
+        Log.d(TAG, "finished process of sending email")
+    }
+
+    fun UpdateErrorState(isError: Boolean, errorMsg: String) {
+        this._isError.value = isError
+        this._errorMsg.value = errorMsg
+
+    }
+
+    fun updateFavouriteReportTemplateItem(reportTemplateId : Int){
+        viewModelScope.launch {
+            withContext(Dispatchers.IO){
+                reportTemplateRepository.flipFavouriteReportTemplateField(reportTemplateId)
+            }
+        }
+    }
+
+    fun PopulateFavouriteReportTemplates() {
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                _favouriteReportTemplates.value =
+                    reportTemplateRepository.GetFavouriteReportTemplatesForPet(1)
+            }
+        }
+    }
+
+    private fun checkTooManyReportEntries() {
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                _isTooManyReports.value = isTooManyReportEntries()
+            }
+
+        }
+    }
+
+    private suspend fun isTooManyReportEntries(): Boolean {
+        val size = reportEntryRepository.getSizeOfReportEntryTableKB() // suspend function
+        return size > 100
+    }
+
+    fun DeleteSentReports() {
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                reportEntryRepository.deleteSentReportEntries()
+            }
+        }
+    }
+
+    fun PopulateFavouriteReportTemplateData() {
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                for (template in favouriteReportTemplates.value) {
+                    Log.d("ReportViewModel", "Populating fav template data")
+                    _favouriteReportTemplatesData.value[template.uid] =
+                        reportEntryRepository.getAllEntriesForReportTemplate(template.uid)
+                    Log.d("ReportViewModel", "populated for ${template.name}")
                 }
             }
         }
+    }
 
-        fun gatherReportData(reportId: Int) {
-            viewModelScope.launch {
-                withContext(Dispatchers.IO) {
-                    Log.d(TAG, "Gathering report data to send in email")
-                    val reportName = reportRepository.getReportById(reportId).name
-                    val templates = reportTemplateRepository.GetReportById(reportId)
-                    val entries = reportEntryRepository.getAllReportEntriesById(reportId)
-                    var fileUri = CsvBuilder().buildAndWriteCsv(
-                        VetApplication.applicationContext(),
-                        reportName,
-                        entries,
-                        templates
-                    )
-                    val user = userDao.getUserById(1)
-                    //TODO: Add pet name here
-                    val emailWrapper =
-                        EmailWrapper(user?.email!!, "Pet Reports", "${reportName}_${Date()}", fileUri)
-                    SendEmail(emailWrapper)
-                    entries.forEach() { x ->
-                        x.sent = true
+    fun PopulateReportEntriesProperty(reportTemplateId: Int) {
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                reportEntryRepository.getAllReportEntriesForTemplate(reportTemplateId)
+                    .collect { entries ->
+                        _reportEntries.value = entries
                     }
-                    reportEntryRepository.updateReportEntries(entries)
-                }
-
             }
         }
-
-        fun SendEmail(wrapper: EmailWrapper) {
-            val emailHandler: IEmailHandler = EmailHandler(VetApplication.applicationContext(), userDao)
-            Log.d(TAG, "Starting process of sending email")
-            emailHandler.CreateAndSendEmail(wrapper)
-            Log.d(TAG, "finished process of sending email")
-        }
-
-        fun UpdateErrorState(isError: Boolean, errorMsg: String) {
-            this._isError.value = isError
-            this._errorMsg.value = errorMsg
-
-        }
-
-        fun updateFavouriteReportTemplateItem(reportTemplateId : Int){
-            viewModelScope.launch {
-                withContext(Dispatchers.IO){
-                    reportTemplateRepository.flipFavouriteReportTemplateField(reportTemplateId)
-                }
-            }
-        }
-
-        fun PopulateFavouriteReportTemplates() {
-            viewModelScope.launch {
-                withContext(Dispatchers.IO) {
-                    _favouriteReportTemplates.value =
-                        reportTemplateRepository.GetFavouriteReportTemplatesForPet(1)
-                }
-            }
-        }
-
-        private fun checkTooManyReportEntries() {
-            viewModelScope.launch {
-                withContext(Dispatchers.IO) {
-                    _isTooManyReports.value = isTooManyReportEntries()
-                }
-
-            }
-        }
-
-        private suspend fun isTooManyReportEntries(): Boolean {
-            val size = reportEntryRepository.getSizeOfReportEntryTableKB() // suspend function
-            return size > 100
-        }
-
-        fun DeleteSentReports() {
-            viewModelScope.launch {
-                withContext(Dispatchers.IO) {
-                    reportEntryRepository.deleteSentReportEntries()
-                }
-            }
-        }
-
-        fun PopulateFavouriteReportTemplateData() {
-            viewModelScope.launch {
-                withContext(Dispatchers.IO) {
-                    for (template in favouriteReportTemplates.value) {
-                        Log.d("ReportViewModel", "Populating fac template data")
-                        _favouriteReportTemplatesData.value[template.uid] =
-                            reportEntryRepository.getAllEntriesForReportTemplate(template.uid)
-                        Log.d("ReportViewModel", "populated for ${template.name}")
-                    }
-                }
-            }
-        }
-
-        fun PopulateReportEntriesProperty(reportTemplateId: Int) {
-            viewModelScope.launch {
-                withContext(Dispatchers.IO) {
-                    reportEntryRepository.getAllReportEntriesForTemplate(reportTemplateId)
-                        .collect { entries ->
-                            _reportEntries.value = entries
-                        }
-                }
-            }
-        }
+    }
 }

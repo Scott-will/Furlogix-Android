@@ -68,9 +68,10 @@ fun ReportItem(data: Reports,
                             },
                             currentLabel = data.name,
                             report = data,
-                            update = true
+                            update = true,
                         )
                     }
+
                 }
             }
             if (showDeleteWarning) {

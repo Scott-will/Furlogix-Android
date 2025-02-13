@@ -26,7 +26,8 @@ class ReportItemTest {
             data = data,
             onClick = onClick,
             onDeleteClick = onDeleteClick,
-            onUpdateClick = onUpdateClick
+            onUpdateClick = onUpdateClick,
+            userId = 1
         )
     }
 

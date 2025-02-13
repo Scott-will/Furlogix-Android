@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -19,9 +20,15 @@ import com.example.vetapp.viewmodels.ReportViewModel
 @Composable
 fun ReportEntryHistoryScreen(navController: NavController, reportTemplateId : Int = 0, viewModel: ReportViewModel = hiltViewModel()
 ) {
-    val template = viewModel.reportTemplateFields.collectAsState().value.filter { it.uid == reportTemplateId }
+    val template = viewModel.currentReportTemplate.collectAsState()
+
+    LaunchedEffect(reportTemplateId) {
+        if (reportTemplateId != 0) {
+            viewModel.populateCurrentReportTemplate(reportTemplateId)
+        }
+    }
     Column {
-        template.firstOrNull() ?.let { Text(it.name, modifier = Modifier.align(Alignment.CenterHorizontally).padding(16.dp), style = TextStyle(fontSize = 30.sp, fontWeight = FontWeight.Bold)) }
+        template.value ?.let { Text(it.name, modifier = Modifier.align(Alignment.CenterHorizontally).padding(16.dp), style = TextStyle(fontSize = 30.sp, fontWeight = FontWeight.Bold)) }
         ReportEntryHistoryTable(reportTemplateId)
     }
 }

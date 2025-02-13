@@ -21,6 +21,7 @@ import com.example.vetapp.ui.components.reports.ReportsList
 import com.example.vetapp.ui.components.reports.TooManyReportsWarning
 import com.example.vetapp.ui.navigation.Screen
 import com.example.vetapp.viewmodels.ReportViewModel
+import com.example.vetapp.viewmodels.UserViewModel
 
 @Composable
 fun ReportsScreen(navController: NavController, petId : Int, viewModel: ReportViewModel = hiltViewModel()) {

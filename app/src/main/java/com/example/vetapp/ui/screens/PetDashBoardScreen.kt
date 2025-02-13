@@ -2,17 +2,28 @@ package com.example.vetapp.ui.screens
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import coil3.compose.rememberAsyncImagePainter
@@ -30,30 +41,57 @@ fun PetDashboardScreen(navController: NavController, petId : Int, userViewModel:
     reportViewModel.PopulateFavouriteReportTemplates()
     var favouriteReports = reportViewModel.favouriteReportTemplates.collectAsState()
     userViewModel.populateCurrentUser()
+    LaunchedEffect(Unit) {
+        reportViewModel.PopulateFavouriteReportTemplates()
+        userViewModel.populateCurrentUser()
+    }
+
     val photoUri by petViewModel.photoUri.collectAsState()
-    val currentUser = userViewModel.currentUser.collectAsState()
-    if(currentUser.value != null && currentUser.value?.pendingSentReports!!){
-        PendingReportsDialog(onConfirm = {userViewModel.setNoPendingReportsForUser() }, onDismiss = {navController.navigate(Screen.Reports.route)})
+    val currentUser by userViewModel.currentUser.collectAsState()
+    val userId by userViewModel.userId.collectAsState(initial = 0L)
+
+    if (currentUser != null && currentUser!!.pendingSentReports) {
+        PendingReportsDialog(
+            onConfirm = { userViewModel.setNoPendingReportsForUser() },
+            onDismiss = { navController.navigate(Screen.Reports.route) }
+        )
     }
 
     Column(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(horizontal = 16.dp, vertical = 16.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(16.dp, Alignment.CenterVertically)
+        verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        Text("Welcome to the Dashboard!")
-        if(favouriteReports.value.isEmpty()){
-            NoDataAvailable("Favourite Report Templates", modifier = Modifier.fillMaxWidth())
-        }
-        else {
-            GraphsWidget()
-        }
-        photoUri?.let { uriString ->
-            Image(
-                painter = rememberAsyncImagePainter(uriString),
-                contentDescription = "Pet Photo",
-                modifier = Modifier.fillMaxWidth()
-            )
+        Text(
+            text = "Dashboard ",
+            style = MaterialTheme.typography.headlineMedium
+        )
+
+        if (favouriteReports.value.isEmpty()) {
+            androidx.compose.material3.Card(
+                modifier = Modifier.fillMaxWidth(),
+                shape = MaterialTheme.shapes.medium,
+                elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+            ) {
+                NoDataAvailable("Favourite Report Templates", Modifier.padding(16.dp))
+            }
+        } else {
+            androidx.compose.material3.Card(
+                modifier = Modifier.fillMaxWidth(),
+                shape = MaterialTheme.shapes.medium,
+                elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+            ) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(bottom = 35.dp),
+                    contentAlignment = Alignment.Center
+                ) {
+                    GraphsWidget()
+                }
+            }
         }
 
         Button(
@@ -68,17 +106,85 @@ fun PetDashboardScreen(navController: NavController, petId : Int, userViewModel:
             onClick = {
                 navController.navigate(Screen.Reports.route.replace("{petId}", petId.toString()))
             },
-            modifier = Modifier.fillMaxWidth()
-        ) {
+            modifier = Modifier.fillMaxWidth()){
             Text("Submit Reports")
         }
-        Button(
-            onClick = {
-                navController.navigate(Screen.Reminders.route)
-            },
-            modifier = Modifier.fillMaxWidth()
+        photoUri?.let { uriString ->
+            androidx.compose.material3.Card(
+                modifier = Modifier.fillMaxWidth(),
+                shape = MaterialTheme.shapes.medium,
+                elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+            ) {
+                Image(
+                    painter = rememberAsyncImagePainter(uriString),
+                    contentDescription = "Pet Photo",
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(200.dp)
+                )
+            }
+        }
+
+        val buttonModifier = Modifier
+            .weight(1f)
+            .height(56.dp)
+
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 20.dp),
+            verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            Text("Setup a Reminder")
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(16.dp)
+            ) {
+                Button(
+                    onClick = { navController.navigate(Screen.ManageReports.route) },
+                    shape = RoundedCornerShape(20.dp),
+                    modifier = buttonModifier,
+                ) {
+                    Text(
+                        "Manage Reports",
+                        fontSize = 17.sp
+                    )
+                }
+                Button(
+                    onClick = { navController.navigate(Screen.Reports.route) },
+                    shape = RoundedCornerShape(20.dp),
+                    modifier = buttonModifier
+                ) {
+                    Text(
+                        "Submit Reports",
+                        fontSize = 17.sp
+                    )
+                }
+            }
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(16.dp)
+            ) {
+                Button(
+                    onClick = { navController.navigate(Screen.Reminders.route) },
+                    shape = RoundedCornerShape(20.dp),
+                    modifier = buttonModifier
+                ) {
+                    Text(
+                        "Setup Reminders",
+                        fontSize = 17.sp
+                    )
+                }
+                Button(
+                    onClick = { navController.navigate("pets/$userId") },
+                    shape = RoundedCornerShape(20.dp),
+                    modifier = buttonModifier
+                ) {
+                    Text(
+                        "Pets",
+                        fontSize = 17.sp
+                    )
+                }
+            }
         }
     }
 }

@@ -8,13 +8,10 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material3.FloatingActionButton
-import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.currentComposer
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -32,7 +29,6 @@ import androidx.work.WorkManager
 import com.example.vetapp.Database.AppDatabase
 import com.example.vetapp.broadcastreceivers.EmailBroadcastReceiver
 import com.example.vetapp.ui.AppHeader
-import com.example.vetapp.ui.components.ActionDialog
 import com.example.vetapp.ui.navigation.Screen
 import com.example.vetapp.ui.screens.AddPetFormScreen
 import com.example.vetapp.ui.screens.CreateAccountScreen
@@ -40,6 +36,7 @@ import com.example.vetapp.ui.screens.DashboardScreen
 import com.example.vetapp.ui.screens.LoginScreen
 import com.example.vetapp.ui.screens.ManageReportScreen
 import com.example.vetapp.ui.screens.PetDashboardScreen
+import com.example.vetapp.ui.screens.PetsScreen
 import com.example.vetapp.ui.screens.ProfileScreen
 import com.example.vetapp.ui.screens.RemindersScreen
 import com.example.vetapp.ui.screens.ReportEntryHistoryScreen
@@ -121,11 +118,6 @@ fun VetApp(
                 AppHeader(navController = navController)
             }
         },
-        floatingActionButton = {
-            FloatingActionButton(onClick = { showDialog = true }) {
-                Icon(Icons.Default.Add, contentDescription = "Add")
-            }
-        }
     ) { innerPadding ->
         NavHost(
             navController = navController,
@@ -217,25 +209,13 @@ fun VetApp(
             composable(Screen.UploadPetPhoto.route) {
                 UploadPetPhotoScreen(navController, petViewModel)
             }
-        }
-
-        if (showDialog) {
-            ActionDialog(
-                onDismiss = { showDialog = false },
-                onAddPet = {
-                    showDialog = false
-                    navController.navigate("add_pet/$userId")
-                },
-                onViewPets = {
-                    showDialog = false
-                    navController.navigate("profile/$userId")
-                },
-                onAddPetPhoto = {
-                    showDialog = false
-                    navController.navigate("upload_pet_photo")
-                },
-                onManageReports = { }
-            )
+            composable(
+                Screen.Pets.route,
+                arguments = listOf(navArgument("userId") { type = NavType.LongType })
+            ) { backStackEntry ->
+                val usrId = backStackEntry.arguments?.getLong("userId") ?: 0L
+                PetsScreen(navController = navController, userId = usrId)
+            }
         }
     }
 }

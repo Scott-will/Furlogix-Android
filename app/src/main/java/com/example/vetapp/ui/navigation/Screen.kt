@@ -14,4 +14,5 @@ sealed class Screen(val route: String) {
     object UploadPetPhoto : Screen("upload_pet_photo")
     object Reminders : Screen("reminders")
     object ReportEntryHistory : Screen("report_entry/history/{reportTemplateId}")
+    object Pets : Screen("pets/{userId}")
 }

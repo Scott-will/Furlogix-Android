@@ -41,6 +41,7 @@ interface ReportTemplateDao {
             " WHERE u.uid = :petId AND rtf.favourite = 1")
     fun getFavouriteReportTemplateForPet(petId : Int): List<ReportTemplateField>
 
+
     @Query("Update reporttemplatefield Set favourite = Not favourite Where uid = :id")
     fun flipFavouriteReportTemplateFieldById(id : Int)
 
