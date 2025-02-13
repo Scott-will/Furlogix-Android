@@ -55,7 +55,7 @@ fun ReportsScreen(navController: NavController, petId : Int, viewModel: ReportVi
         ReportsList(reports.value,
             onDeleteClick = {item -> viewModel.deleteReport(item)},
             onUpdateClick = {item -> viewModel.updateReport(item)},
-            onClick = {data -> navController.navigate(Screen.ReportsTemplate.route.replace("{reportId}", "${data.Id}").replace("{reportName}", data.name))},
+            onClick = {data -> navController.navigate(Screen.ReportEntry.route.replace("{reportId}", "${data.Id}"))},
             editable = false)
         Spacer(modifier = Modifier.height(16.dp))
     }

@@ -17,6 +17,10 @@ class ReportsRepository @Inject constructor(
         return reportDao.getAllForPetFlow(petId)
     }
 
+    override fun reportsObservable(): Flow<List<Reports>> {
+        return reportDao.getAllFlow()
+    }
+
     override suspend fun getAllReports(): List<Reports> {
         return reportDao.getAllReports()
     }

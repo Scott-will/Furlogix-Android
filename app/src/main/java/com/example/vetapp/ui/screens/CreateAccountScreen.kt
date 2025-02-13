@@ -109,7 +109,7 @@ fun CreateAccountScreen(
 
                 userViewModel.addUser(user) { userId ->
                     petViewModel.addPet(userId = userId)
-                    navController.navigate(Screen.Dashboard.route)
+                    navController.navigate(Screen.Dashboard.route.replace("{userId}", "1"))
                 }
 
             }

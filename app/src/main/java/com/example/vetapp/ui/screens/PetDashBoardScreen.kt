@@ -38,11 +38,9 @@ import com.example.vetapp.viewmodels.UserViewModel
 
 @Composable
 fun PetDashboardScreen(navController: NavController, petId : Int, userViewModel: UserViewModel = hiltViewModel(), petViewModel : PetViewModel = hiltViewModel(), reportViewModel: ReportViewModel = hiltViewModel()) {
-    reportViewModel.PopulateFavouriteReportTemplates()
     var favouriteReports = reportViewModel.favouriteReportTemplates.collectAsState()
-    userViewModel.populateCurrentUser()
     LaunchedEffect(Unit) {
-        reportViewModel.PopulateFavouriteReportTemplates()
+        reportViewModel.PopulateFavouriteReportTemplates(petId)
         userViewModel.populateCurrentUser()
     }
 
@@ -89,7 +87,7 @@ fun PetDashboardScreen(navController: NavController, petId : Int, userViewModel:
                         .padding(bottom = 35.dp),
                     contentAlignment = Alignment.Center
                 ) {
-                    GraphsWidget()
+                    GraphsWidget(petId)
                 }
             }
         }

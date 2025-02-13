@@ -14,6 +14,9 @@ interface ReportsDao {
     fun getAllForPetFlow(petId : Int): List<Reports>
 
     @Query("SELECT * FROM Reports")
+    fun getAllFlow(): Flow<List<Reports>>
+
+    @Query("SELECT * FROM Reports")
     fun getAllReports() : List<Reports>
 
     @Query("SELECT * FROM Reports Where Id = :id Limit 1")

@@ -37,6 +37,11 @@ class ReportViewModel @Inject constructor(
     private val userDao: UserDao,
     private val reportEntryRepository : IReportEntryRepository) : ViewModel() {
 
+    val reportTemplateFields = reportTemplateRepository.ReportTemplateObservable()
+        .stateIn(viewModelScope, SharingStarted.Lazily, emptyList())
+    val reports = reportRepository.reportsObservable()
+        .stateIn(viewModelScope, SharingStarted.Lazily, emptyList())
+
     private var _reportsForPet = MutableStateFlow<List<Reports>>(emptyList())
     val reportsForPet : MutableStateFlow<List<Reports>> = _reportsForPet
 
@@ -257,11 +262,11 @@ class ReportViewModel @Inject constructor(
         }
     }
 
-    fun PopulateFavouriteReportTemplates() {
+    fun PopulateFavouriteReportTemplates(petId : Int) {
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
                 _favouriteReportTemplates.value =
-                    reportTemplateRepository.GetFavouriteReportTemplatesForPet(1)
+                    reportTemplateRepository.GetFavouriteReportTemplatesForPet(petId)
             }
         }
     }

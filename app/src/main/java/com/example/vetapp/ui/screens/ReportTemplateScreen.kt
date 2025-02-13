@@ -34,7 +34,7 @@ import com.example.vetapp.viewmodels.ReportViewModel
 fun ReportTemplateScreen(navController: NavController, reportId : Int = 0, reportName : String = "Report Template", viewModel: ReportViewModel = hiltViewModel()
 ) {
 
-    val reportTemplateState = viewModel.reportTemplatesForCurrentReport.collectAsState()
+    val reportTemplateState = viewModel.reportTemplateFields.collectAsState().value.filter { it.reportId == reportId }
     var showDialog by remember { mutableStateOf(false) }
     val label by remember { mutableStateOf("") }
     val selectedType by remember { mutableStateOf(FieldType.entries.first().toString()) }
@@ -57,7 +57,7 @@ fun ReportTemplateScreen(navController: NavController, reportId : Int = 0, repor
         TitleText(reportName.uppercase())
         Spacer(modifier = Modifier.height(16.dp))
         // Show the Material 3 Dialog for adding new item
-        val reportsTemplates = reportTemplateState.value.filter { it.reportId == reportId }
+        val reportsTemplates = reportTemplateState
         if(reportsTemplates.size == 0 ){
             NoDataAvailable("Report Fields", Modifier.fillMaxSize())
         }

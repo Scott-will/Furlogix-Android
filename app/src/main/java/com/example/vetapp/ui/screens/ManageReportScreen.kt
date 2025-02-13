@@ -35,18 +35,12 @@ import com.example.vetapp.viewmodels.UserViewModel
 @Composable
 fun ManageReportScreen(navController: NavController, petId : Int, viewModel: ReportViewModel = hiltViewModel()) {
 
-    var reports = viewModel.reportsForPet.collectAsState()
+    var reports = viewModel.reports.collectAsState().value.filter { it.petId == petId }
     var showDialog by remember { mutableStateOf(false) }
     var label by remember { mutableStateOf("") }
     val isError = viewModel.isError.collectAsState()
     val errorMsg = viewModel.errorMsg.collectAsState()
     val isTooManyReports = viewModel.isTooManyReports.collectAsState()
-
-    LaunchedEffect(petId) {
-        if (petId != 0) {
-            viewModel.populateReportForPet(petId)
-        }
-    }
 
     // Button to show the dialog
     Column(
@@ -62,7 +56,7 @@ fun ManageReportScreen(navController: NavController, petId : Int, viewModel: Rep
         }
         // Show the list of form items
         TitleText("My Reports")
-        ReportsList(reports.value,
+        ReportsList(reports,
             onDeleteClick = {item -> viewModel.deleteReport(item)},
             onUpdateClick = {item -> viewModel.updateReport(item)},
             onClick = {data -> navController.navigate(Screen.ReportsTemplate.route.replace("{reportId}", "${data.Id}").replace("{reportName}", data.name))})
@@ -80,8 +74,7 @@ fun ManageReportScreen(navController: NavController, petId : Int, viewModel: Rep
         AddReportDialog(
             onDismiss = { showDialog = false },
             onSave = { newItem ->
-                //TODO: CHANGE THIS
-                viewModel.insertReport(newItem.name, petId = 1)
+                viewModel.insertReport(newItem.name, petId = petId)
                 label = ""
                 showDialog = false
             },
