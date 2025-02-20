@@ -1,12 +1,14 @@
 package com.example.vetapp.ui.components.reports
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -17,11 +19,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.vetapp.Database.Entities.ReportTemplateField
+import com.example.vetapp.ui.components.common.BoxColourTheme
 import com.example.vetapp.ui.components.common.DeleteButton
 import com.example.vetapp.ui.components.common.DeleteWarning
 import com.example.vetapp.ui.components.common.EditButton
@@ -34,36 +37,35 @@ fun ReportTemplateItem(data: ReportTemplateField,
                        onDeleteClick : (ReportTemplateField) -> Unit,
                        onUpdateClick : (ReportTemplateField) -> Unit,
                        onFavouriteClick : (ReportTemplateField) -> Unit,
-                       navController: NavController) {
+                       navController: NavController,
+                       index : Int = 0) {
     var showDialog by remember { mutableStateOf(false) }
     var showDeleteWarning by remember { mutableStateOf(false) }
 
     Surface(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(vertical = 5.dp),
-        shape = RoundedCornerShape(12.dp), // Rounded corners
-        color = Color.LightGray // Light blue background
+        modifier = Modifier.size(140.dp),
+        shape = RoundedCornerShape(12.dp),
+        color = BoxColourTheme.GetColour(index)
     ) {
-        Row(
+        Column(
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp)
-                .clickable{navController.navigate(Screen.ReportEntryHistory.route.replace("{reportTemplateId}", "${data.uid}"))}, //go to page to see all previous entries in table format
-            verticalAlignment = Alignment.CenterVertically
+                .fillMaxSize()
+                .clickable{navController.navigate(Screen.ReportEntryHistory.route.replace("{reportTemplateId}", "${data.uid}"))},
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
         ) {
-            // Left-aligned text
             Text(
                 text = data.name,
-                modifier = Modifier.weight(1f), // Ensures text is left-aligned
-                fontWeight = FontWeight.Bold // Optional: Makes the text bold
+                modifier = Modifier.fillMaxWidth(),
+                fontWeight = FontWeight.Bold,
+                textAlign = TextAlign.Center
             )
-            Spacer(modifier = Modifier.width(8.dp))
-            EditButton { showDialog = true }
-            Spacer(modifier = Modifier.width(8.dp))
-            DeleteButton {showDeleteWarning = true  }
-            Spacer(modifier = Modifier.width(8.dp))
-            FavouriteButton(onClick = { onFavouriteClick(data) }, isFavourite = data.favourite)
+            //ReportTemplateIconGenerator("test")
+            Row(){
+                EditButton { showDialog = true }
+                DeleteButton {showDeleteWarning = true  }
+                FavouriteButton(onClick = { onFavouriteClick(data) }, isFavourite = data.favourite)
+            }
         }
         if (showDialog) {
             AddReportTemplateDialog(
@@ -90,12 +92,28 @@ fun ReporttemplatesList(dataList: List<ReportTemplateField>,
                         onUpdateClick : (ReportTemplateField) -> Unit,
                         onFavouriteClick : (ReportTemplateField) -> Unit,
                         navController: NavController) {
-    Column(modifier = Modifier.padding(16.dp)) {
-        dataList.forEach { data ->
-            ReportTemplateItem(data = data, onUpdateClick = onUpdateClick, onDeleteClick = onDeleteClick, onFavouriteClick = onFavouriteClick, navController = navController)
+    Column(modifier = Modifier.padding(16.dp).fillMaxSize()) {
+        dataList.chunked(2).forEach { pair ->
+            Row(
+                modifier = Modifier.fillMaxWidth()
+                    .padding(bottom = 16.dp),
+                horizontalArrangement = Arrangement.spacedBy(16.dp)
+            ) {
+                pair.forEachIndexed { index, data ->
+                    Box(modifier = Modifier.weight(1f)){
+                        ReportTemplateItem(
+                            data = data,
+                            onUpdateClick = onUpdateClick,
+                            onDeleteClick = onDeleteClick,
+                            onFavouriteClick = onFavouriteClick,
+                            navController = navController,
+                            index = dataList.indexOf(data)
+                        )
+                    }
+
+                }
+
+            }
         }
     }
 }
-
-//TODO: feature:
-//tests for favourite button

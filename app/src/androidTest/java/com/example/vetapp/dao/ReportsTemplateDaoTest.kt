@@ -7,6 +7,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.example.vetapp.Database.AppDatabase
 import com.example.vetapp.Database.DAO.ReportTemplateDao
 import com.example.vetapp.Database.DAO.ReportsDao
+import com.example.vetapp.Database.Entities.Pet
 import com.example.vetapp.Database.Entities.ReportTemplateField
 import com.example.vetapp.Database.Entities.Reports
 import com.example.vetapp.Database.Entities.User
@@ -34,8 +35,10 @@ class ReportsTemplateDaoTest {
         reportTemplateDao = db.reportTemplateDao()
         reportDao = db.reportsDao()
         val userDao = db.userDao()
+        val petDao = db.petDao()
         userDao.insert(User(name = "abcd", surname = "abcd", email = "abcd"))
-        reportDao.insert(Reports(name = "Test", userId = 1))
+        petDao.insert(Pet(name = "test", type = "cat", description = "", userId = 1))
+        reportDao.insert(Reports(name = "Test", petId = 1))
     }
 
     @After

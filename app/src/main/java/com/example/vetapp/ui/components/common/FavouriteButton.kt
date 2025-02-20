@@ -18,13 +18,13 @@ fun FavouriteButton(onClick: () -> Unit, isFavourite : Boolean) {
     IconButton(
         onClick = onClick,
         modifier = Modifier
-            .size(56.dp) // Size of the circle
-            .clip(CircleShape) // Apply circular shape
+            .size(56.dp)
+            .clip(CircleShape)
     ) {
         Icon(
-            imageVector = Icons.Default.Favorite, // Pencil icon
+            imageVector = Icons.Default.Favorite,
             contentDescription = R.string.favourite_text.toString(),
-            modifier = Modifier.size(24.dp), // Icon size inside the circle
+            modifier = Modifier.size(24.dp),
             tint = if (isFavourite) Color.Red else Color.Gray
         )
     }

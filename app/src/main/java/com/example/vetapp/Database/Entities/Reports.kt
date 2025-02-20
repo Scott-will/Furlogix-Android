@@ -6,15 +6,15 @@ import androidx.room.PrimaryKey
 
 @Entity(foreignKeys = [
     ForeignKey(
-    entity = User::class,
+    entity = Pet::class,
     parentColumns = arrayOf("uid"),
-    childColumns = arrayOf("userId"),
+    childColumns = arrayOf("petId"),
     onUpdate = ForeignKey.CASCADE,
     onDelete = ForeignKey.CASCADE
 )])
 data class Reports (
     @PrimaryKey (autoGenerate = true) val Id : Int = 0,
     var name : String,
-    var userId : Long
+    var petId : Int
 )
 

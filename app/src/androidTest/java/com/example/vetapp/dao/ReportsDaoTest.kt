@@ -5,6 +5,7 @@ import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import com.example.vetapp.Database.AppDatabase
 import com.example.vetapp.Database.DAO.ReportsDao
+import com.example.vetapp.Database.Entities.Pet
 import com.example.vetapp.Database.Entities.Reports
 import com.example.vetapp.Database.Entities.User
 import com.example.vetapp.R
@@ -28,7 +29,9 @@ class ReportsDaoTest {
         db = Room.inMemoryDatabaseBuilder(context, AppDatabase::class.java).build()
         reportDao = db.reportsDao()
         val userDao = db.userDao()
+        val petDao = db.petDao()
         userDao.insert(User(name = "abcd", surname = "abcd", email = "abcd"))
+        petDao.insert(Pet(name = "test", type = "cat", description = "", userId = 1))
     }
 
     @After
@@ -38,18 +41,18 @@ class ReportsDaoTest {
 
     @Test
     fun insertAndRetrieveReports() = runBlocking {
-        val report = Reports(name = "Test", userId = 1)
+        val report = Reports(name = "Test", petId = 1)
         reportDao.insert(report)
-        val reports = reportDao.getAllFlow().first()
+        val reports = reportDao.getAllReports()
         assertEquals(reports.count(), 1)
         assertEquals(reports.first().name, "Test")
     }
 
     @Test
     fun updateReports() = runBlocking {
-        val report = Reports(name = "Reports to Update", userId = 1)
+        val report = Reports(name = "Reports to Update", petId = 1)
         reportDao.insert(report)
-        val insertedReports = reportDao.getAllFlow().first().first()
+        val insertedReports = reportDao.getAllReports().first()
         val updatedReports = insertedReports.copy(name = "Updated Name")
         reportDao.update(updatedReports)
 
@@ -59,9 +62,9 @@ class ReportsDaoTest {
 
     @Test
     fun deleteReports() = runBlocking {
-        val report = Reports(name = "Reports to Delete", userId = 1)
+        val report = Reports(name = "Reports to Delete", petId = 1)
         reportDao.insert(report)
-        val insertedReports = reportDao.getAllFlow().first().first()
+        val insertedReports = reportDao.getAllReports().first()
         assertNotNull(insertedReports)
         reportDao.delete(insertedReports)
 

@@ -2,6 +2,7 @@ package com.example.vetapp.viewmodels
 
 import android.util.Log
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.collectAsState
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.vetapp.Database.DAO.UserDao
@@ -13,6 +14,7 @@ import com.example.vetapp.email.CsvBuilder
 import com.example.vetapp.email.EmailHandler
 import com.example.vetapp.email.EmailWrapper
 import com.example.vetapp.email.IEmailHandler
+import com.example.vetapp.reports.FieldType
 import com.example.vetapp.repositories.IReportEntryRepository
 import com.example.vetapp.repositories.IReportTemplateRepository
 import com.example.vetapp.repositories.IReportsRepository
@@ -34,10 +36,22 @@ class ReportViewModel @Inject constructor(
     private val reportRepository : IReportsRepository,
     private val userDao: UserDao,
     private val reportEntryRepository : IReportEntryRepository) : ViewModel() {
+
     val reportTemplateFields = reportTemplateRepository.ReportTemplateObservable()
         .stateIn(viewModelScope, SharingStarted.Lazily, emptyList())
     val reports = reportRepository.reportsObservable()
         .stateIn(viewModelScope, SharingStarted.Lazily, emptyList())
+
+    private var _reportsForPet = MutableStateFlow<List<Reports>>(emptyList())
+    val reportsForPet : MutableStateFlow<List<Reports>> = _reportsForPet
+
+    private var _currentReportTemplate = MutableStateFlow(ReportTemplateField(0, 0, FieldType.TEXT, ""))
+    val currentReportTemplate : MutableStateFlow<ReportTemplateField> = _currentReportTemplate
+
+    private var _reportTemplatesForCurrentReport = MutableStateFlow<List<ReportTemplateField>>(
+        emptyList()
+    )
+    val reportTemplatesForCurrentReport : MutableStateFlow<List<ReportTemplateField>> = _reportTemplatesForCurrentReport
 
     private var _reportEntries = MutableStateFlow<List<ReportEntry>>(emptyList())
     val reportEntries: StateFlow<List<ReportEntry>> = _reportEntries
@@ -58,6 +72,7 @@ class ReportViewModel @Inject constructor(
 
     var isTooManyReports = _isTooManyReports
 
+    //this is called everytime viewModel is created
     init {
         checkTooManyReportEntries()
     }
@@ -68,9 +83,36 @@ class ReportViewModel @Inject constructor(
         }
     }
 
-    fun insertReport(name: String) {
+    fun populateReportForPet(petId : Int) {
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                _reportsForPet.value =
+                    reportRepository.reportsForPetObservable(petId)
+            }
+        }
+    }
+
+    fun populateCurrentReportTemplate(reportTemplateId : Int) {
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                _currentReportTemplate.value =
+                    reportTemplateRepository.GetTemplateById(reportTemplateId)
+            }
+        }
+    }
+
+    fun populateReportTemplatesForCurrentReport(reportId : Int) {
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                _reportTemplatesForCurrentReport.value =
+                    reportTemplateRepository.GetReportById(reportId)
+            }
+        }
+    }
+
+    fun insertReport(name: String, petId : Int) {
         //insert report
-        val report = Reports(name = name, userId = 1)
+        val report = Reports(name = name, petId = petId)
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
                 Log.d(TAG, "Inserting report ${report.Id}, ${report.name}")
@@ -220,11 +262,11 @@ class ReportViewModel @Inject constructor(
         }
     }
 
-    fun PopulateFavouriteReportTemplates() {
+    fun PopulateFavouriteReportTemplates(petId : Int) {
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
                 _favouriteReportTemplates.value =
-                    reportTemplateRepository.GetFavouriteReportTemplatesForUser(userDao.getCurrentUserId())
+                    reportTemplateRepository.GetFavouriteReportTemplatesForPet(petId)
             }
         }
     }

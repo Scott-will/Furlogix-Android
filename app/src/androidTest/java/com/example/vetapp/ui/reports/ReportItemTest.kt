@@ -26,8 +26,7 @@ class ReportItemTest {
             data = data,
             onClick = onClick,
             onDeleteClick = onDeleteClick,
-            onUpdateClick = onUpdateClick,
-            userId = 1
+            onUpdateClick = onUpdateClick
         )
     }
 
@@ -37,7 +36,7 @@ class ReportItemTest {
     @Test
     fun reportItem_displaysCorrectName() {
         // Given
-        val report = Reports(name = "Test", userId = 1)
+        val report = Reports(name = "Test", petId = 1)
 
         composeTestRule.setContent {
             ReportItemTestContent(data = report)
@@ -50,7 +49,7 @@ class ReportItemTest {
     @Test
     fun reportItem_triggersOnClick() {
         // Given
-        val report = Reports(name = "Sample Report", userId = 1)
+        val report = Reports(name = "Sample Report", petId = 1)
         var clickedReport: Reports? = null
         val onClick: (Reports) -> Unit = { clickedReport = it }
 
@@ -69,7 +68,7 @@ class ReportItemTest {
     @Test
     fun reportItem_showsDialogOnEditClick() {
         // Given
-        val report = Reports(name = "Sample Report", userId = 1)
+        val report = Reports(name = "Sample Report", petId = 1)
 
         composeTestRule.setContent {
             ReportItemTestContent(
@@ -90,7 +89,7 @@ class ReportItemTest {
     @Test
     fun reportItem_triggersOnDeleteClick() {
         // Given
-        val report = Reports(name = "Sample Report", userId = 1)
+        val report = Reports(name = "Sample Report", petId = 1)
         var deletedReport: Reports? = null
         val onDeleteClick: (Reports) -> Unit = { deletedReport = it }
 
@@ -111,7 +110,7 @@ class ReportItemTest {
     @Test
     fun reportItem_triggersOnSaveFromDialog() {
         // Given
-        val report = Reports(name = "Sample Report", userId = 1)
+        val report = Reports(name = "Sample Report", petId = 1)
         var updatedReport: Reports? = null
         val onUpdateClick: (Reports) -> Unit = { updatedReport = it }
 
@@ -137,7 +136,7 @@ class ReportItemTest {
     @Test
     fun reportItem_dialogClosesOnDismiss() {
         // Given
-        val report = Reports(name = "Sample Report", userId = 1)
+        val report = Reports(name = "Sample Report", petId = 1)
 
         composeTestRule.setContent {
             ReportItemTestContent(data = report)
@@ -154,7 +153,7 @@ class ReportItemTest {
     @Test
     fun reportItem_togglesDialogVisibility() {
         // Given
-        val report = Reports(name = "Sample Report", userId = 1)
+        val report = Reports(name = "Sample Report", petId = 1)
 
         composeTestRule.setContent {
             ReportItemTestContent(

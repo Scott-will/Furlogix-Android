@@ -27,9 +27,9 @@ import com.example.vetapp.reports.FieldType
 import com.example.vetapp.viewmodels.ReportViewModel
 
 @Composable
-fun GraphsWidget(reportViewModel: ReportViewModel = hiltViewModel()) {
+fun GraphsWidget(petId : Int, reportViewModel: ReportViewModel = hiltViewModel()) {
     //favourite
-    reportViewModel.PopulateFavouriteReportTemplates()
+    reportViewModel.PopulateFavouriteReportTemplates(petId)
     reportViewModel.PopulateFavouriteReportTemplateData()
     var favouriteReportTemplates = reportViewModel.favouriteReportTemplates.collectAsState()
     var favouriteReportTemplateData = reportViewModel.favouriteReportTemplatesData.collectAsState()

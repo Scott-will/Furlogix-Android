@@ -13,6 +13,10 @@ class ReportsRepository @Inject constructor(
     private val reportValidator: ReportValidator,
     private val reportDao : ReportsDao) : IReportsRepository  {
 
+    override fun reportsForPetObservable(petId : Int): List<Reports> {
+        return reportDao.getAllForPetFlow(petId)
+    }
+
     override fun reportsObservable(): Flow<List<Reports>> {
         return reportDao.getAllFlow()
     }

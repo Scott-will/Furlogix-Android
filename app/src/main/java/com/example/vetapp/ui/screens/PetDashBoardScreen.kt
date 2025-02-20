@@ -37,18 +37,13 @@ import com.example.vetapp.viewmodels.UserViewModel
 
 
 @Composable
-fun DashboardScreen(
-    navController: NavController,
-    userViewModel: UserViewModel = hiltViewModel(),
-    petViewModel: PetViewModel = hiltViewModel(),
-    reportViewModel: ReportViewModel = hiltViewModel()
-) {
+fun PetDashboardScreen(navController: NavController, petId : Int, userViewModel: UserViewModel = hiltViewModel(), petViewModel : PetViewModel = hiltViewModel(), reportViewModel: ReportViewModel = hiltViewModel()) {
+    var favouriteReports = reportViewModel.favouriteReportTemplates.collectAsState()
     LaunchedEffect(Unit) {
-        reportViewModel.PopulateFavouriteReportTemplates()
+        reportViewModel.PopulateFavouriteReportTemplates(petId)
         userViewModel.populateCurrentUser()
     }
 
-    val favouriteReports by reportViewModel.favouriteReportTemplates.collectAsState()
     val photoUri by petViewModel.photoUri.collectAsState()
     val currentUser by userViewModel.currentUser.collectAsState()
     val userId by userViewModel.userId.collectAsState(initial = 0L)
@@ -72,7 +67,7 @@ fun DashboardScreen(
             style = MaterialTheme.typography.headlineMedium
         )
 
-        if (favouriteReports.isEmpty()) {
+        if (favouriteReports.value.isEmpty()) {
             androidx.compose.material3.Card(
                 modifier = Modifier.fillMaxWidth(),
                 shape = MaterialTheme.shapes.medium,
@@ -92,11 +87,10 @@ fun DashboardScreen(
                         .padding(bottom = 35.dp),
                     contentAlignment = Alignment.Center
                 ) {
-                    GraphsWidget()
+                    GraphsWidget(petId)
                 }
             }
         }
-
         photoUri?.let { uriString ->
             androidx.compose.material3.Card(
                 modifier = Modifier.fillMaxWidth(),
@@ -128,7 +122,7 @@ fun DashboardScreen(
                 horizontalArrangement = Arrangement.spacedBy(16.dp)
             ) {
                 Button(
-                    onClick = { navController.navigate(Screen.ManageReports.route) },
+                    onClick = { navController.navigate(Screen.ManageReports.route.replace("{petId}", petId.toString())) },
                     shape = RoundedCornerShape(20.dp),
                     modifier = buttonModifier,
                 ) {
@@ -138,7 +132,7 @@ fun DashboardScreen(
                     )
                 }
                 Button(
-                    onClick = { navController.navigate(Screen.Reports.route) },
+                    onClick = { navController.navigate(Screen.Reports.route.replace("{petId}", petId.toString())) },
                     shape = RoundedCornerShape(20.dp),
                     modifier = buttonModifier
                 ) {

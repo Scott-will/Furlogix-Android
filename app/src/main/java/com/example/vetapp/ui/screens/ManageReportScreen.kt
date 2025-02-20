@@ -3,14 +3,14 @@ package com.example.vetapp.ui.screens
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -24,6 +24,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.vetapp.ui.components.common.AddItemButton
 import com.example.vetapp.ui.components.common.ErrorDialog
+import com.example.vetapp.ui.components.common.TitleText
 import com.example.vetapp.ui.components.reports.AddReportDialog
 import com.example.vetapp.ui.components.reports.ReportsList
 import com.example.vetapp.ui.components.reports.TooManyReportsWarning
@@ -32,22 +33,19 @@ import com.example.vetapp.viewmodels.ReportViewModel
 import com.example.vetapp.viewmodels.UserViewModel
 
 @Composable
-fun ManageReportScreen(navController: NavController, viewModel: ReportViewModel = hiltViewModel(), userViewModel: UserViewModel = hiltViewModel()) {
+fun ManageReportScreen(navController: NavController, petId : Int, viewModel: ReportViewModel = hiltViewModel()) {
 
-    var reports = viewModel.reports.collectAsState()
+    var reports = viewModel.reports.collectAsState().value.filter { it.petId == petId }
     var showDialog by remember { mutableStateOf(false) }
     var label by remember { mutableStateOf("") }
     val isError = viewModel.isError.collectAsState()
     val errorMsg = viewModel.errorMsg.collectAsState()
     val isTooManyReports = viewModel.isTooManyReports.collectAsState()
-    val userId = userViewModel.userId.collectAsState(1)
 
     // Button to show the dialog
     Column(
         modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
+            .fillMaxWidth()
     ) {
         if(isTooManyReports.value){
             TooManyReportsWarning()
@@ -57,33 +55,30 @@ fun ManageReportScreen(navController: NavController, viewModel: ReportViewModel 
             }
         }
         // Show the list of form items
-        Spacer(modifier = Modifier.height(16.dp))
-        ReportsList(reports.value,
+        TitleText("My Reports")
+        ReportsList(reports,
             onDeleteClick = {item -> viewModel.deleteReport(item)},
             onUpdateClick = {item -> viewModel.updateReport(item)},
-            onClick = {data -> navController.navigate(Screen.ReportsTemplate.route.replace("{reportId}", "${data.Id}"))},
-            userId = userId.value)
+            onClick = {data -> navController.navigate(Screen.ReportsTemplate.route.replace("{reportId}", "${data.Id}").replace("{reportName}", data.name))})
         Spacer(modifier = Modifier.height(16.dp))
         AddItemButton(onClick = {showDialog = true}, localModifier = Modifier
-            .size(56.dp) // Size of the button
+            .size(56.dp)
             .background(
-                color = Color.Gray, // Background color of the button
-                shape = CircleShape // Circular shape
+                color = Color.Gray,
+                shape = CircleShape
             )
             .align(Alignment.Start))
     }
 
-    // Show the Material 3 Dialog for adding new item
     if (showDialog) {
         AddReportDialog(
             onDismiss = { showDialog = false },
             onSave = { newItem ->
-                viewModel.insertReport(newItem.name)
+                viewModel.insertReport(newItem.name, petId = petId)
                 label = ""
                 showDialog = false
             },
             currentLabel = label,
-            userId = userId.value
         )
     }
     if(isError.value){

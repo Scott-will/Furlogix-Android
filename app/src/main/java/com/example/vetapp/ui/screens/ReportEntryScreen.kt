@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
@@ -28,10 +29,17 @@ fun ReportEntryScreen(navController: NavController, reportId : Int = 0, viewMode
 ) {
     val reportName = viewModel.getReportNameById(reportId).collectAsState("")//reportName.value.filter { it.Id == reportId }.first().name
     val templateValueMap = remember { mutableMapOf<Int, MutableState<String>>() }
-    val templates = viewModel.reportTemplateFields.collectAsState().value.filter { it.reportId == reportId }
+    val templates = viewModel.reportTemplatesForCurrentReport.collectAsState().value
     val isError = viewModel.isError.collectAsState()
     val errorMsg = viewModel.errorMsg.collectAsState()
     val isTooManyReports = viewModel.isTooManyReports.collectAsState()
+
+    LaunchedEffect(reportId) {
+        if (reportId != 0) {
+            viewModel.populateReportTemplatesForCurrentReport(reportId)
+        }
+    }
+
     templates.forEach { template ->
         templateValueMap[template.uid] = mutableStateOf("")
     }
