@@ -2,7 +2,9 @@ package com.example.vetapp.ui.screens
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -33,8 +35,32 @@ fun EditReportScreen(reportId : Int, viewModel: ReportViewModel = hiltViewModel(
         viewModel.populateReportTemplatesForCurrentReport(reportId)
     }
     val reportsTemplates = existingTemplateList.value + newTemplateList
-    Column() {
-        Box{
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+    ) {
+        Row(modifier = Modifier
+            .fillMaxWidth()){
+            Button(onClick = {showDialog = true}) {
+                Text("Add report template")
+            }
+
+            Button(onClick = {
+                newTemplateList.forEach(){
+                        item ->
+                    viewModel.insertReportTemplateField(item)
+                    //show saved successfully
+                }
+                existingTemplateList.value.forEach(){
+                        item ->
+                    //update
+                }
+                viewModel.populateReportTemplatesForCurrentReport(reportId)}) {
+                Text("Save")
+            }
+        }
+        Box(modifier = Modifier
+            .fillMaxSize()){
             if(reportsTemplates.size == 0 ){
                 NoDataAvailable("Report Fields", Modifier.fillMaxSize())
             }
@@ -46,35 +72,19 @@ fun EditReportScreen(reportId : Int, viewModel: ReportViewModel = hiltViewModel(
             }
         }
 
-        Button(onClick = {showDialog = true}) {
-            Text("Add report template")
-        }
-        if(showDialog){
-            AddReportTemplateDialog(
-                onDismiss = { showDialog = false },
-                onSave = { newItem ->
-                    newTemplateList.add(newItem)
-                    label = ""
-                    selectedType = FieldType.entries.first().toString()
-                },
-                currentLabel = label,
-                selectedType = selectedType,
-                reportId = reportId
-            )
-        }
-        Button(onClick = {
-            newTemplateList.forEach(){
-            item ->
-            viewModel.insertReportTemplateField(item)
-            //show saved successfully
-            }
-            existingTemplateList.value.forEach(){
-                item ->
-                //update
-            }
-            viewModel.populateReportTemplatesForCurrentReport(reportId)}) {
-            Text("Save")
-        }
 
+    }
+    if(showDialog){
+        AddReportTemplateDialog(
+            onDismiss = { showDialog = false },
+            onSave = { newItem ->
+                newTemplateList.add(newItem)
+                label = ""
+                selectedType = FieldType.entries.first().toString()
+            },
+            currentLabel = label,
+            selectedType = selectedType,
+            reportId = reportId
+        )
     }
 }

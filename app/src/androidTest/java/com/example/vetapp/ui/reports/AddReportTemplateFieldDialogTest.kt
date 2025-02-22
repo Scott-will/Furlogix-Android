@@ -65,7 +65,7 @@ class AddReportTemplateFieldDialogTest {
 
     @Test
     fun AddReportTemplateFieldDialog_DisplaysRightEnum() {
-        val reportTemplate = ReportTemplateField(name = "Test", reportId = 1, fieldType = FieldType.BOOLEAN)
+        val reportTemplate = ReportTemplateField(name = "Test", reportId = 1, fieldType = FieldType.CHECKBOX)
 
         composeTestRule.setContent {
             AddReportTemplateFieldDialogTestContent(

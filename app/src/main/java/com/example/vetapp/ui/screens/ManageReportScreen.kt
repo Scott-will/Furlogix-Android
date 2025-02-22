@@ -10,7 +10,6 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -30,7 +29,6 @@ import com.example.vetapp.ui.components.reports.ReportsList
 import com.example.vetapp.ui.components.reports.TooManyReportsWarning
 import com.example.vetapp.ui.navigation.Screen
 import com.example.vetapp.viewmodels.ReportViewModel
-import com.example.vetapp.viewmodels.UserViewModel
 
 @Composable
 fun ManageReportScreen(navController: NavController, petId : Int, viewModel: ReportViewModel = hiltViewModel()) {
@@ -59,8 +57,8 @@ fun ManageReportScreen(navController: NavController, petId : Int, viewModel: Rep
         ReportsList(reports,
             onDeleteClick = {item -> viewModel.deleteReport(item)},
             onEditClick = {item -> navController.navigate(Screen.EditReport.route.replace("{reportId}", item.Id.toString()))},
-            onSendClick = {},
-            onClick = {data -> navController.navigate(Screen.ReportsTemplate.route.replace("{reportId}", "${data.Id}").replace("{reportName}", data.name))})
+            onSendClick = {item -> viewModel.gatherReportData(item.Id)},
+            onClick = {data -> navController.navigate(Screen.ReportEntryHistory.route.replace("{reportId}", "${data.Id}"))})
         Spacer(modifier = Modifier.height(16.dp))
         AddItemButton(onClick = {showDialog = true}, localModifier = Modifier
             .size(56.dp)

@@ -1,12 +1,11 @@
 package com.example.vetapp.ui.screens
 
-import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -27,17 +26,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import coil3.compose.rememberAsyncImagePainter
 import com.example.vetapp.Database.Entities.Pet
-import com.example.vetapp.ui.navigation.Screen
-import com.example.vetapp.viewmodels.PetViewModel
-import com.example.vetapp.viewmodels.UserViewModel
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material3.MaterialTheme
 import com.example.vetapp.ui.components.pets.ConfirmDeleteDialog
 import com.example.vetapp.ui.components.pets.PetDetailsDialog
 import com.example.vetapp.ui.components.pets.PetList
+import com.example.vetapp.ui.navigation.Screen
+import com.example.vetapp.viewmodels.PetViewModel
+import com.example.vetapp.viewmodels.UserViewModel
 
 
 @Composable

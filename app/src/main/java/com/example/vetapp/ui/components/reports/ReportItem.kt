@@ -35,9 +35,7 @@ import androidx.compose.ui.unit.dp
 import com.example.vetapp.Database.Entities.Reports
 import com.example.vetapp.R
 import com.example.vetapp.ui.components.common.BoxColourTheme
-import com.example.vetapp.ui.components.common.DeleteButton
 import com.example.vetapp.ui.components.common.DeleteWarning
-import com.example.vetapp.ui.components.common.EditButton
 
 @Composable
 fun ReportItem(data: Reports,
@@ -94,8 +92,7 @@ fun ReportItem(data: Reports,
                             tint = Color.Gray
                         )
                     })
-                DropdownMenuItem(onClick = {
-                    // Handle second action
+                DropdownMenuItem(onClick = {onSendClick(data)
                     expanded = false
                 }, text = {Text("Send")},
                     leadingIcon = {

@@ -7,9 +7,11 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -23,41 +25,63 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.vetapp.Database.Entities.ReportEntry
+import com.example.vetapp.Database.Entities.ReportTemplateField
 import com.example.vetapp.viewmodels.ReportViewModel
 import java.text.SimpleDateFormat
 import java.util.Locale
 
 @Composable
-fun ReportEntryHistoryTable(reportTemplateId : Int = 0, viewModel: ReportViewModel = hiltViewModel()) {
-    viewModel.PopulateReportEntriesProperty(reportTemplateId)
+fun ReportEntryHistoryTable(reportTemplates : List<ReportTemplateField> = emptyList(), viewModel: ReportViewModel = hiltViewModel()) {
     val entries by viewModel.reportEntries.collectAsState()
-    LazyColumn(
-        modifier = Modifier.fillMaxSize()
-    ) {
-        item{
-            Row(
-                modifier = Modifier.fillMaxWidth()
-                    .padding(16.dp),
-                horizontalArrangement = Arrangement.Center
-            ){
-                Text("Timestamp", modifier = Modifier.weight(2f).fillMaxWidth(),
-                    style = TextStyle(
-                        fontWeight = FontWeight.Bold,
-                    textDecoration = TextDecoration.Underline,
-                    fontSize = 18.sp ),
-                    textAlign = TextAlign.Center)
-                Text("Value", modifier = Modifier.weight(2f).fillMaxWidth(),
-                    style = TextStyle(
-                        fontWeight = FontWeight.Bold,
-                        textDecoration = TextDecoration.Underline,
-                        fontSize = 18.sp ),
-                    textAlign = TextAlign.Center)
+    LaunchedEffect(reportTemplates) {
+        reportTemplates.forEach { item ->
+            viewModel.PopulateReportEntriesProperty(item.uid)
+        }
+
+    }
+    if(entries.count() != 0){
+        LazyColumn(
+            modifier = Modifier.fillMaxSize()
+        ) {
+            item {
+                LazyRow(
+                    modifier = Modifier.fillMaxWidth()
+                        .padding(16.dp),
+                    horizontalArrangement = Arrangement.Center
+                ) {
+                    item{
+                        Text(
+                            "Timestamp",
+                            style = TextStyle(
+                                fontWeight = FontWeight.Bold,
+                                textDecoration = TextDecoration.Underline,
+                                fontSize = 18.sp
+                            ),
+                            textAlign = TextAlign.Center
+                        )
+                        reportTemplates.forEach { item ->
+                            Text(
+                                item.name,
+                                style = TextStyle(
+                                    fontWeight = FontWeight.Bold,
+                                    textDecoration = TextDecoration.Underline,
+                                    fontSize = 18.sp
+                                ),
+                                textAlign = TextAlign.Center
+                            )
+                        }
+                    }
+                    reportTemplates.forEach { item ->
+                        items(entries[item.uid]!!) { entry ->
+                            ReportHistoryTableItem(entry)
+                        }
+                    }
+
+                }
             }
         }
-        items(entries){ entry ->
-            ReportHistoryTableItem(entry)
         }
-    }
+
 }
 
 @Composable

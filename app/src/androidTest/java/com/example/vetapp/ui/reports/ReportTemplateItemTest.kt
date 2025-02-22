@@ -31,7 +31,6 @@ class ReportTemplateItemTest {
             data = data,
             onDeleteClick = onDeleteClick,
             onUpdateClick = onUpdateClick,
-            navController = navController,
             onFavouriteClick = onFavouriteClick
         )
     }
@@ -41,7 +40,7 @@ class ReportTemplateItemTest {
 
     @Test
     fun reportTemplateItem_displaysCorrectName(){
-        val template = ReportTemplateField(reportId = 1, name = "Test", fieldType = FieldType.BOOLEAN)
+        val template = ReportTemplateField(reportId = 1, name = "Test", fieldType = FieldType.CHECKBOX)
         composeTestRule.setContent {
             ReportTemplateItemTestContent(data = template)
         }
@@ -51,7 +50,7 @@ class ReportTemplateItemTest {
 
     @Test
     fun reportTemplateItem_showsDialogOnEditClick(){
-        val template = ReportTemplateField(reportId = 1, name = "Test", fieldType = FieldType.BOOLEAN)
+        val template = ReportTemplateField(reportId = 1, name = "Test", fieldType = FieldType.CHECKBOX)
         composeTestRule.setContent {
             ReportTemplateItemTestContent(
                 data = template,
@@ -67,7 +66,7 @@ class ReportTemplateItemTest {
 
     @Test
     fun reportTemplateItem_triggersOnDeleteClick(){
-        val template = ReportTemplateField(reportId = 1, name = "Test", fieldType = FieldType.BOOLEAN)
+        val template = ReportTemplateField(reportId = 1, name = "Test", fieldType = FieldType.CHECKBOX)
         var deletedTemplate: ReportTemplateField? = null
         val onDeleteClick: (ReportTemplateField) -> Unit = { deletedTemplate = it }
 
@@ -88,7 +87,7 @@ class ReportTemplateItemTest {
     @Test
     fun reportTemplateItem_triggersOnSaveFromDialog() {
         // Given
-        val template = ReportTemplateField(reportId = 1, name = "Test", fieldType = FieldType.BOOLEAN)
+        val template = ReportTemplateField(reportId = 1, name = "Test", fieldType = FieldType.CHECKBOX)
         var updatedTemplate: ReportTemplateField? = null
         val onUpdateClick: (ReportTemplateField) -> Unit = { updatedTemplate = it }
 
@@ -113,7 +112,7 @@ class ReportTemplateItemTest {
     @Test
     fun reportTemplateItem_dialogClosesOnDismiss() {
         // Given
-        val template = ReportTemplateField(reportId = 1, name = "Test", fieldType = FieldType.BOOLEAN)
+        val template = ReportTemplateField(reportId = 1, name = "Test", fieldType = FieldType.CHECKBOX)
 
         composeTestRule.setContent {
             ReportTemplateItemTestContent(data = template)
@@ -130,7 +129,7 @@ class ReportTemplateItemTest {
     @Test
     fun reportTemplateItem_togglesDialogVisibility() {
         // Given
-        val template = ReportTemplateField(reportId = 1, name = "Test", fieldType = FieldType.BOOLEAN)
+        val template = ReportTemplateField(reportId = 1, name = "Test", fieldType = FieldType.CHECKBOX)
 
         composeTestRule.setContent {
             ReportTemplateItemTestContent(

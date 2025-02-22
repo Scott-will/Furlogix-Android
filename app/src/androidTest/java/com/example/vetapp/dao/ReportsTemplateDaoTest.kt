@@ -69,7 +69,7 @@ class ReportsTemplateDaoTest {
 
     @Test
     fun deleteTemplate() = runBlocking {
-        val template = ReportTemplateField(name = "Test", fieldType = FieldType.BOOLEAN, reportId = 1)
+        val template = ReportTemplateField(name = "Test", fieldType = FieldType.CHECKBOX, reportId = 1)
         reportTemplateDao.insert(template)
         val insertedUser = reportTemplateDao.getAll().first()
         reportTemplateDao.delete(insertedUser)

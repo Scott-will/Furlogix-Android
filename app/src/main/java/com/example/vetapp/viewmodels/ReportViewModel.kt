@@ -2,7 +2,6 @@ package com.example.vetapp.viewmodels
 
 import android.util.Log
 import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.collectAsState
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.vetapp.Database.DAO.UserDao
@@ -53,8 +52,8 @@ class ReportViewModel @Inject constructor(
     )
     val reportTemplatesForCurrentReport : MutableStateFlow<List<ReportTemplateField>> = _reportTemplatesForCurrentReport
 
-    private var _reportEntries = MutableStateFlow<List<ReportEntry>>(emptyList())
-    val reportEntries: StateFlow<List<ReportEntry>> = _reportEntries
+    private var _reportEntries = MutableStateFlow<MutableMap<Int, List<ReportEntry>>>(mutableMapOf())
+    val reportEntries: StateFlow<MutableMap<Int, List<ReportEntry>>> = _reportEntries
     private var _isError = MutableStateFlow<Boolean>(false)
     private var _errorMsg = MutableStateFlow<String>("")
     private var _isTooManyReports = MutableStateFlow(false)
@@ -311,7 +310,7 @@ class ReportViewModel @Inject constructor(
             withContext(Dispatchers.IO) {
                 reportEntryRepository.getAllReportEntriesForTemplate(reportTemplateId)
                     .collect { entries ->
-                        _reportEntries.value = entries
+                        _reportEntries.value[reportTemplateId] = entries
                     }
             }
         }
