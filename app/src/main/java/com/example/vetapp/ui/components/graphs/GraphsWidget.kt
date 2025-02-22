@@ -1,4 +1,4 @@
-package com.example.vetapp.ui.componets.graphs
+package com.example.vetapp.ui.components.graphs
 
 import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
@@ -78,7 +78,7 @@ fun GraphsWidget(petId : Int, reportViewModel: ReportViewModel = hiltViewModel()
                 if(template.fieldType == FieldType.NUMBER){
                     LineGraph(data, template.name)
                 }
-                if(template.fieldType == FieldType.BOOLEAN){
+                if(template.fieldType == FieldType.CHECKBOX){
                     BarGraph(data, template.name)
                 }
             }

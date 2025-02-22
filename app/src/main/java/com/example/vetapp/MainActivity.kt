@@ -7,17 +7,20 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.*
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.currentComposer
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -33,6 +36,7 @@ import com.example.vetapp.ui.navigation.Screen
 import com.example.vetapp.ui.screens.AddPetFormScreen
 import com.example.vetapp.ui.screens.CreateAccountScreen
 import com.example.vetapp.ui.screens.DashboardScreen
+import com.example.vetapp.ui.screens.EditReportScreen
 import com.example.vetapp.ui.screens.LoginScreen
 import com.example.vetapp.ui.screens.ManageReportScreen
 import com.example.vetapp.ui.screens.PetDashboardScreen
@@ -44,6 +48,8 @@ import com.example.vetapp.ui.screens.ReportEntryScreen
 import com.example.vetapp.ui.screens.ReportTemplateScreen
 import com.example.vetapp.ui.screens.ReportsScreen
 import com.example.vetapp.ui.screens.UploadPetPhotoScreen
+import com.example.vetapp.ui.theme.BottomNavigationBar
+import com.example.vetapp.ui.theme.FabWithVerticalMenu
 import com.example.vetapp.ui.theme.VetAppTheme
 import com.example.vetapp.viewmodels.PetViewModel
 import com.example.vetapp.viewmodels.UserViewModel
@@ -118,6 +124,11 @@ fun VetApp(
                 AppHeader(navController = navController)
             }
         },
+        bottomBar = { BottomAppBar {
+            BottomNavigationBar(navController)
+            //FabWithVerticalMenu()
+        }}
+        //floatingActionButton = {FabWithVerticalMenu()}
     ) { innerPadding ->
         NavHost(
             navController = navController,
@@ -141,16 +152,12 @@ fun VetApp(
                 }
             }
             composable(
-                Screen.ReportsTemplate.route,
-                listOf(navArgument("reportId") { type = NavType.IntType },
-                    navArgument("reportName") { type = NavType.StringType })
+                Screen.EditReport.route,
+                listOf(navArgument("reportId") { type = NavType.IntType })
             ) { backStackEntry ->
                 val reportId = backStackEntry.arguments?.getInt("reportId");
-                val reportName = backStackEntry.arguments?.getString("reportName")
-                if (reportId != null && reportName != null) {
-                    ReportTemplateScreen(navController, reportId, reportName)
-                } else {
-                    ReportTemplateScreen(navController)
+                if (reportId != null ) {
+                    EditReportScreen(reportId)
                 }
             }
             composable(
@@ -219,4 +226,6 @@ fun VetApp(
         }
     }
 }
+
+
 

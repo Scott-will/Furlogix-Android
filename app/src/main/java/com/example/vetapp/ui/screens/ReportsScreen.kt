@@ -52,11 +52,11 @@ fun ReportsScreen(navController: NavController, petId : Int, viewModel: ReportVi
         }
         // Show the list of form items
         TitleText("My Reports")
-        ReportsList(reports.value,
-            onDeleteClick = {item -> viewModel.deleteReport(item)},
-            onUpdateClick = {item -> viewModel.updateReport(item)},
-            onClick = {data -> navController.navigate(Screen.ReportEntry.route.replace("{reportId}", "${data.Id}"))},
-            editable = false)
+//        ReportsList(reports.value,
+//            onDeleteClick = {item -> viewModel.deleteReport(item)},
+//            onUpdateClick = {item -> viewModel.updateReport(item)},
+//            onClick = {data -> navController.navigate(Screen.ReportEntry.route.replace("{reportId}", "${data.Id}"))},
+//            editable = false)
         Spacer(modifier = Modifier.height(16.dp))
     }
     if(isError.value){

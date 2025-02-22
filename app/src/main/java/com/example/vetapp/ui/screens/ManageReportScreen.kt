@@ -58,7 +58,8 @@ fun ManageReportScreen(navController: NavController, petId : Int, viewModel: Rep
         TitleText("My Reports")
         ReportsList(reports,
             onDeleteClick = {item -> viewModel.deleteReport(item)},
-            onUpdateClick = {item -> viewModel.updateReport(item)},
+            onEditClick = {item -> navController.navigate(Screen.EditReport.route.replace("{reportId}", item.Id.toString()))},
+            onSendClick = {},
             onClick = {data -> navController.navigate(Screen.ReportsTemplate.route.replace("{reportId}", "${data.Id}").replace("{reportName}", data.name))})
         Spacer(modifier = Modifier.height(16.dp))
         AddItemButton(onClick = {showDialog = true}, localModifier = Modifier
@@ -74,6 +75,7 @@ fun ManageReportScreen(navController: NavController, petId : Int, viewModel: Rep
         AddReportDialog(
             onDismiss = { showDialog = false },
             onSave = { newItem ->
+                //navigate
                 viewModel.insertReport(newItem.name, petId = petId)
                 label = ""
                 showDialog = false

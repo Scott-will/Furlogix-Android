@@ -18,17 +18,16 @@ import com.example.vetapp.ui.components.reports.ReportEntryHistoryTable
 import com.example.vetapp.viewmodels.ReportViewModel
 
 @Composable
-fun ReportEntryHistoryScreen(navController: NavController, reportTemplateId : Int = 0, viewModel: ReportViewModel = hiltViewModel()
+fun ReportEntryHistoryScreen(navController: NavController, reportId : Int = 0, viewModel: ReportViewModel = hiltViewModel()
 ) {
-    val template = viewModel.currentReportTemplate.collectAsState()
+    val template = viewModel.reportTemplatesForCurrentReport.collectAsState()
 
-    LaunchedEffect(reportTemplateId) {
-        if (reportTemplateId != 0) {
-            viewModel.populateCurrentReportTemplate(reportTemplateId)
+    LaunchedEffect(reportId) {
+        if (reportId != 0) {
+            viewModel.populateReportTemplatesForCurrentReport(reportId)
         }
     }
     Column {
-        template.value ?.let { Text(it.name, modifier = Modifier.align(Alignment.CenterHorizontally).padding(16.dp), style = TextStyle(fontSize = 30.sp, fontWeight = FontWeight.Bold)) }
-        ReportEntryHistoryTable(reportTemplateId)
+        ReportEntryHistoryTable(reportId)
     }
 }

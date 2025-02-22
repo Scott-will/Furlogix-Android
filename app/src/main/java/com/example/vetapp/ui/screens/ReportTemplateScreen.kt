@@ -65,8 +65,7 @@ fun ReportTemplateScreen(navController: NavController, reportId : Int = 0, repor
             ReporttemplatesList(reportsTemplates,
                 onDeleteClick = {item -> viewModel.deleteReportTemplateField(item)},
                 onUpdateClick = {item -> viewModel.updateReportTemplateField(item)},
-                onFavouriteClick = {item -> viewModel.updateFavouriteReportTemplateItem(item.uid)},
-                navController)
+                onFavouriteClick = {item -> viewModel.updateFavouriteReportTemplateItem(item.uid)})
         }
         Spacer(modifier = Modifier.height(16.dp))
         AddItemButton(onClick = { showDialog = true }, localModifier = Modifier

@@ -37,7 +37,6 @@ fun ReportTemplateItem(data: ReportTemplateField,
                        onDeleteClick : (ReportTemplateField) -> Unit,
                        onUpdateClick : (ReportTemplateField) -> Unit,
                        onFavouriteClick : (ReportTemplateField) -> Unit,
-                       navController: NavController,
                        index : Int = 0) {
     var showDialog by remember { mutableStateOf(false) }
     var showDeleteWarning by remember { mutableStateOf(false) }
@@ -49,8 +48,8 @@ fun ReportTemplateItem(data: ReportTemplateField,
     ) {
         Column(
             modifier = Modifier
-                .fillMaxSize()
-                .clickable{navController.navigate(Screen.ReportEntryHistory.route.replace("{reportTemplateId}", "${data.uid}"))},
+                .fillMaxSize(),
+                //.clickable{navController.navigate(Screen.ReportEntryHistory.route.replace("{reportTemplateId}", "${data.uid}"))},
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
@@ -60,7 +59,6 @@ fun ReportTemplateItem(data: ReportTemplateField,
                 fontWeight = FontWeight.Bold,
                 textAlign = TextAlign.Center
             )
-            //ReportTemplateIconGenerator("test")
             Row(){
                 EditButton { showDialog = true }
                 DeleteButton {showDeleteWarning = true  }
@@ -90,8 +88,7 @@ fun ReportTemplateItem(data: ReportTemplateField,
 fun ReporttemplatesList(dataList: List<ReportTemplateField>,
                         onDeleteClick : (ReportTemplateField) -> Unit,
                         onUpdateClick : (ReportTemplateField) -> Unit,
-                        onFavouriteClick : (ReportTemplateField) -> Unit,
-                        navController: NavController) {
+                        onFavouriteClick : (ReportTemplateField) -> Unit) {
     Column(modifier = Modifier.padding(16.dp).fillMaxSize()) {
         dataList.chunked(2).forEach { pair ->
             Row(
@@ -106,7 +103,6 @@ fun ReporttemplatesList(dataList: List<ReportTemplateField>,
                             onUpdateClick = onUpdateClick,
                             onDeleteClick = onDeleteClick,
                             onFavouriteClick = onFavouriteClick,
-                            navController = navController,
                             index = dataList.indexOf(data)
                         )
                     }

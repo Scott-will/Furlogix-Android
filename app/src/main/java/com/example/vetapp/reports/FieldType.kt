@@ -3,7 +3,7 @@ package com.example.vetapp.reports
 enum class FieldType {
     TEXT,
     NUMBER,
-    BOOLEAN
+    CHECKBOX
 }
 
 class FieldTypeValidator{
@@ -11,7 +11,7 @@ class FieldTypeValidator{
         fun validateFieldTypeWithValue(type : FieldType, value : String) : Boolean{
             when(type){
                 FieldType.TEXT -> return true
-                FieldType.BOOLEAN -> return tryParseBoolean(value)
+                FieldType.CHECKBOX -> return tryParseBoolean(value)
                 FieldType.NUMBER -> return parseNumber(value)
             }
         }
