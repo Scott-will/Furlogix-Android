@@ -92,7 +92,8 @@ fun ReportItem(data: Reports,
                             tint = Color.Gray
                         )
                     })
-                DropdownMenuItem(onClick = {onSendClick(data)
+                DropdownMenuItem(onClick = {
+                    onSendClick(data)
                     expanded = false
                 }, text = {Text("Send")},
                     leadingIcon = {

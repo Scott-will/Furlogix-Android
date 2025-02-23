@@ -49,7 +49,7 @@ fun PetDashboardScreen(navController: NavController, petId : Int, userViewModel:
     if (currentUser != null && currentUser!!.pendingSentReports) {
         PendingReportsDialog(
             onConfirm = { userViewModel.setNoPendingReportsForUser() },
-            onDismiss = { navController.navigate(Screen.Reports.route) }
+            onDismiss = { navController.navigate(Screen.Reports.route.replace("{petId}", petId.toString())) }
         )
     }
 

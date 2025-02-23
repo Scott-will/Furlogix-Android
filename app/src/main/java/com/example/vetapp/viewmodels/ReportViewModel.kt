@@ -2,6 +2,7 @@ package com.example.vetapp.viewmodels
 
 import android.util.Log
 import androidx.compose.runtime.MutableState
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.vetapp.Database.DAO.UserDao
@@ -226,10 +227,10 @@ class ReportViewModel @Inject constructor(
                     entries,
                     templates
                 )
-                val email = userDao.getCurrentUserEmail().value
+                val email = userDao.getCurrentUserEmailInLine()
                 //TODO: Add pet name here
                 val emailWrapper =
-                    EmailWrapper(email!!, "Pet Reports", "${reportName}_${Date()}", fileUri)
+                    EmailWrapper(email, "Pet Reports", "${reportName}_${Date()}", fileUri)
                 SendEmail(emailWrapper)
                 entries.forEach() { x ->
                     x.sent = true
