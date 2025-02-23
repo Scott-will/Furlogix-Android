@@ -43,15 +43,15 @@ fun ReportItem(data: Reports,
                onEditClick: (Reports) -> Unit,
                onDeleteClick : (Reports) -> Unit,
                onSendClick : (Reports) -> Unit,
-               editable: Boolean = true,
                index : Int = 0) {
-    var showDialog by remember { mutableStateOf(false) }
     var showDeleteWarning by remember { mutableStateOf(false) }
     var expanded by remember { mutableStateOf(false) }
     Surface(
         modifier = Modifier.size(140.dp).clickable(onClick = {onClick(data)}),
         shape = RoundedCornerShape(12.dp),
-        color = BoxColourTheme.GetColour(index)
+        color = BoxColourTheme.GetColour(index),
+        shadowElevation = 12.dp,
+
     ) {
         Box{
             IconButton(
@@ -117,26 +117,6 @@ fun ReportItem(data: Reports,
                 fontWeight = FontWeight.Bold ,
                 textAlign = TextAlign.Center
             )
-            //Put pet photo here
-//            if (editable) {
-//                Row(){
-//
-//
-//                    if (showDialog) {
-//                        AddReportDialog(
-//                            onDismiss = { showDialog = false },
-//                            onSave = { newItem ->
-//                                onUpdateClick(newItem)
-//                                showDialog = false
-//                            },
-//                            currentLabel = data.name,
-//                            report = data,
-//                            update = true,
-//                        )
-//                    }
-//
-//                }
-//            }
             if (showDeleteWarning) {
                 DeleteWarning(
                     { showDeleteWarning = false },
@@ -154,8 +134,7 @@ fun ReportsList(dataList: List<Reports>,
                 onSendClick :  (Reports) ->Unit,
                 onDeleteClick :  (Reports) ->Unit,
                 onEditClick :  (Reports) ->Unit,
-                onClick : (Reports) -> Unit,
-                editable : Boolean = true) {
+                onClick : (Reports) -> Unit) {
     Column(modifier = Modifier.padding(16.dp).fillMaxSize()) {
         dataList.chunked(2).forEach { pair ->
             Row(
@@ -171,7 +150,6 @@ fun ReportsList(dataList: List<Reports>,
                             onSendClick = onSendClick,
                             onDeleteClick = onDeleteClick,
                             onEditClick = onEditClick,
-                            editable = editable,
                             index = dataList.indexOf(data)
                         )
                     }

@@ -22,6 +22,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.count
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
@@ -308,9 +309,14 @@ class ReportViewModel @Inject constructor(
     fun PopulateReportEntriesProperty(reportTemplateId: Int) {
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
+                Log.d("ReportViewModel", "getting entries for ${reportTemplateId}")
                 reportEntryRepository.getAllReportEntriesForTemplate(reportTemplateId)
                     .collect { entries ->
-                        _reportEntries.value[reportTemplateId] = entries
+                        Log.d("ReportViewModel", "got an entry for ${reportTemplateId}")
+                        val updatedMap = _reportEntries.value.toMutableMap()
+                        updatedMap[reportTemplateId] = entries
+                        _reportEntries.value = updatedMap.toMutableMap()
+                        Log.d("ReportViewModel", reportEntries.value.size.toString() )
                     }
             }
         }
