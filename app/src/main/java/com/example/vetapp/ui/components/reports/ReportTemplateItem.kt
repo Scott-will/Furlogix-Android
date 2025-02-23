@@ -26,7 +26,6 @@ import com.example.vetapp.ui.components.common.BoxColourTheme
 import com.example.vetapp.ui.components.common.DeleteButton
 import com.example.vetapp.ui.components.common.DeleteWarning
 import com.example.vetapp.ui.components.common.EditButton
-import com.example.vetapp.ui.componets.common.FavouriteButton
 
 
 @Composable
@@ -59,7 +58,6 @@ fun ReportTemplateItem(data: ReportTemplateField,
             Row(){
                 EditButton { showDialog = true }
                 DeleteButton {showDeleteWarning = true  }
-                FavouriteButton(onClick = { onFavouriteClick(data) }, isFavourite = data.favourite)
             }
         }
         if (showDialog) {
