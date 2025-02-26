@@ -54,6 +54,9 @@ interface UserDao {
     @Query("SELECT email FROM user_table LIMIT 1")
     fun getCurrentUserEmail(): LiveData<String>
 
+    @Query("SELECT email FROM user_table LIMIT 1")
+    fun getCurrentUserEmailInLine(): String
+
     @Query("UPDATE user_table SET name = :name, email = :email")
     suspend fun updateUser(name: String, email: String)
 

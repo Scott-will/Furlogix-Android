@@ -23,12 +23,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.example.vetapp.ui.components.pets.PetDetailsDialog
-import com.example.vetapp.ui.components.pets.PetList
-import com.example.vetapp.ui.navigation.Screen
-import com.example.vetapp.viewmodels.PetViewModel
 import com.example.vetapp.Database.Entities.Pet
 import com.example.vetapp.ui.components.pets.ConfirmDeleteDialog
+import com.example.vetapp.ui.components.pets.PetDetailsDialog
+import com.example.vetapp.ui.components.pets.PetList
+import com.example.vetapp.viewmodels.PetViewModel
 
 @Composable
 fun PetsScreen(

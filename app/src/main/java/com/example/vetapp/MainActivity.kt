@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.currentComposer
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -33,6 +32,7 @@ import com.example.vetapp.ui.navigation.Screen
 import com.example.vetapp.ui.screens.AddPetFormScreen
 import com.example.vetapp.ui.screens.CreateAccountScreen
 import com.example.vetapp.ui.screens.DashboardScreen
+import com.example.vetapp.ui.screens.EditReportScreen
 import com.example.vetapp.ui.screens.LoginScreen
 import com.example.vetapp.ui.screens.ManageReportScreen
 import com.example.vetapp.ui.screens.PetDashboardScreen
@@ -41,8 +41,6 @@ import com.example.vetapp.ui.screens.ProfileScreen
 import com.example.vetapp.ui.screens.RemindersScreen
 import com.example.vetapp.ui.screens.ReportEntryHistoryScreen
 import com.example.vetapp.ui.screens.ReportEntryScreen
-import com.example.vetapp.ui.screens.ReportTemplateScreen
-import com.example.vetapp.ui.screens.ReportsScreen
 import com.example.vetapp.ui.screens.UploadPetPhotoScreen
 import com.example.vetapp.ui.theme.VetAppTheme
 import com.example.vetapp.viewmodels.PetViewModel
@@ -118,6 +116,11 @@ fun VetApp(
                 AppHeader(navController = navController)
             }
         },
+//        bottomBar = { BottomAppBar {
+//            BottomNavigationBar(navController)
+//            //FabWithVerticalMenu()
+//        }}
+        //floatingActionButton = {FabWithVerticalMenu()}
     ) { innerPadding ->
         NavHost(
             navController = navController,
@@ -141,25 +144,21 @@ fun VetApp(
                 }
             }
             composable(
-                Screen.ReportsTemplate.route,
-                listOf(navArgument("reportId") { type = NavType.IntType },
-                    navArgument("reportName") { type = NavType.StringType })
+                Screen.EditReport.route,
+                listOf(navArgument("reportId") { type = NavType.IntType })
             ) { backStackEntry ->
                 val reportId = backStackEntry.arguments?.getInt("reportId");
-                val reportName = backStackEntry.arguments?.getString("reportName")
-                if (reportId != null && reportName != null) {
-                    ReportTemplateScreen(navController, reportId, reportName)
-                } else {
-                    ReportTemplateScreen(navController)
+                if (reportId != null ) {
+                    EditReportScreen(reportId)
                 }
             }
             composable(
                 Screen.ReportEntryHistory.route,
-                listOf(navArgument("reportTemplateId") { type = NavType.IntType })
+                listOf(navArgument("reportId") { type = NavType.IntType })
             ) { backStackEntry ->
-                val reportTemplateId = backStackEntry.arguments?.getInt("reportTemplateId")
-                if (reportTemplateId != null) {
-                    ReportEntryHistoryScreen(navController, reportTemplateId)
+                val reportId = backStackEntry.arguments?.getInt("reportId")
+                if (reportId != null) {
+                    ReportEntryHistoryScreen(navController, reportId)
                 } else {
                     ReportEntryHistoryScreen(navController)
                 }
@@ -190,15 +189,6 @@ fun VetApp(
                     ManageReportScreen(navController, petId)
                 }
             }
-            composable(
-                Screen.Reports.route,
-                listOf(navArgument("petId") { type = NavType.IntType })
-            ) { backStackEntry ->
-                val petId = backStackEntry.arguments?.getInt("petId")
-                if (petId != null) {
-                    ReportsScreen(navController, petId)
-                }
-            }
             composable(Screen.Reminders.route) { RemindersScreen(navController) }
             composable(
                 Screen.AddPet.route,
@@ -219,4 +209,6 @@ fun VetApp(
         }
     }
 }
+
+
 

@@ -1,4 +1,4 @@
-package com.example.vetapp.ui.componets.graphs
+package com.example.vetapp.ui.components.graphs
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.Arrangement

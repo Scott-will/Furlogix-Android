@@ -31,6 +31,6 @@ interface ReportEntryDao {
     @Query("Select * From ReportEntry")
     fun getAllReportEntries() : List<ReportEntry>
 
-    @Query("SELECT * FROM REPORTENTRY WHERE templateId = :reportTemplateId")
+    @Query("SELECT * FROM REPORTENTRY WHERE templateId = :reportTemplateId ORDER BY Id DESC")
     fun getAllReportEntriesForTemplateAsFlow(reportTemplateId : Int) : Flow<List<ReportEntry>>
 }

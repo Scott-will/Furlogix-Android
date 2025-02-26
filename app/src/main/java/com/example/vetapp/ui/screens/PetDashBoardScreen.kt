@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -21,15 +20,14 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import coil3.compose.rememberAsyncImagePainter
 import com.example.vetapp.ui.components.common.NoDataAvailable
+import com.example.vetapp.ui.components.graphs.GraphsWidget
 import com.example.vetapp.ui.components.reports.PendingReportsDialog
-import com.example.vetapp.ui.componets.graphs.GraphsWidget
 import com.example.vetapp.ui.navigation.Screen
 import com.example.vetapp.viewmodels.PetViewModel
 import com.example.vetapp.viewmodels.ReportViewModel
@@ -51,7 +49,7 @@ fun PetDashboardScreen(navController: NavController, petId : Int, userViewModel:
     if (currentUser != null && currentUser!!.pendingSentReports) {
         PendingReportsDialog(
             onConfirm = { userViewModel.setNoPendingReportsForUser() },
-            onDismiss = { navController.navigate(Screen.Reports.route) }
+            onDismiss = { navController.navigate(Screen.Reports.route.replace("{petId}", petId.toString())) }
         )
     }
 
@@ -127,17 +125,7 @@ fun PetDashboardScreen(navController: NavController, petId : Int, userViewModel:
                     modifier = buttonModifier,
                 ) {
                     Text(
-                        "Manage Reports",
-                        fontSize = 17.sp
-                    )
-                }
-                Button(
-                    onClick = { navController.navigate(Screen.Reports.route.replace("{petId}", petId.toString())) },
-                    shape = RoundedCornerShape(20.dp),
-                    modifier = buttonModifier
-                ) {
-                    Text(
-                        "Submit Reports",
+                        "Reports",
                         fontSize = 17.sp
                     )
                 }

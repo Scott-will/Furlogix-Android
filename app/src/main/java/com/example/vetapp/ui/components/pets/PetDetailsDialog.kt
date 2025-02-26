@@ -1,17 +1,16 @@
 package com.example.vetapp.ui.components.pets
 
-import androidx.compose.foundation.content.MediaType.Companion.Image
-import androidx.compose.foundation.layout.Column
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import coil3.compose.rememberAsyncImagePainter
-import com.example.vetapp.Database.Entities.Pet
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import coil3.compose.rememberAsyncImagePainter
+import com.example.vetapp.Database.Entities.Pet
 
 @Composable
 fun PetDetailsDialog(

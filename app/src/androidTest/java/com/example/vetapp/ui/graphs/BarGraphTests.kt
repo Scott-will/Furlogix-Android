@@ -4,7 +4,7 @@ import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithText
 import com.example.vetapp.Database.Entities.ReportEntry
-import com.example.vetapp.ui.componets.graphs.BarGraph
+import com.example.vetapp.ui.components.graphs.BarGraph
 import org.junit.Rule
 import org.junit.Test
 

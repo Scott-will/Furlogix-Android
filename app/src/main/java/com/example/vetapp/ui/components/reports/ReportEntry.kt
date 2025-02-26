@@ -58,14 +58,14 @@ fun ReportEntry(reportTemplateField: ReportTemplateField, text : MutableState<St
                             .padding(8.dp)
                     )
                 }
-                FieldType.BOOLEAN -> {
+                FieldType.CHECKBOX -> {
                     // Checkbox for boolean input (true/false)
                     val isChecked = remember { mutableStateOf(text.value.toBoolean()) }
                     Checkbox(
                         checked = isChecked.value,
                         onCheckedChange = {
                             isChecked.value = it
-                            text.value = it.toString()  // Store true/false as a string
+                            text.value = isChecked.value.toString()  // Store true/false as a string
                         },
                         modifier = Modifier
                             .fillMaxWidth()
@@ -84,7 +84,7 @@ fun ReportEntry(reportTemplateField: ReportTemplateField, text : MutableState<St
                             .fillMaxWidth()
                             .padding(8.dp),
                         keyboardOptions = KeyboardOptions.Default.copy(
-                            keyboardType = KeyboardType.Number
+                            keyboardType = KeyboardType.Text
                         ),
                     )
                 }
