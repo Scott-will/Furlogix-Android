@@ -10,8 +10,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.vetapp.Database.Entities.Reminder
 import com.example.vetapp.VetApplication
-import com.example.vetapp.broadcastreceivers.FillOutReportsNotificationReceiver
-import com.example.vetapp.broadcastreceivers.SendReportsNotificationReceiver
+import com.example.vetapp.broadcastreceivers.NotificationReceiver
 import com.example.vetapp.repositories.IRemindersRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -40,15 +39,13 @@ class RemindersViewModel @Inject constructor(
     var isError : StateFlow<Boolean> = _isError
     var errorMsg : StateFlow<String> = _errorMsg
 
-    public fun scheduleReminder(date : String, time : String, recurrence : String, type : String){
+    public fun scheduleReminder(date : String, time : String, recurrence : String, title: String, message : String){
         val context = VetApplication.applicationContext()
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        var intent : Intent
-        when(type){
-            "Send" -> intent = Intent(context, SendReportsNotificationReceiver::class.java)
-            "Fill" -> intent = Intent(context, FillOutReportsNotificationReceiver::class.java)
-            else -> return
-        }
+        var intent = Intent(context, NotificationReceiver::class.java)
+        intent.putExtra("notification_title", "Hello from Notification!")
+        intent.putExtra("notification_message", "Hello from Notification!")
+
         val pendingIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
         val dateTimeFormat = SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault())
         val calendar = Calendar.getInstance()
@@ -93,8 +90,8 @@ class RemindersViewModel @Inject constructor(
             // Add more recurrence types as needed
             else -> return
         }
-        Log.d(TAG, "Set a reminder for ${type}")
-        val reminder = Reminder(type = type, frequency = recurrence, startTime = time)
+        Log.d(TAG, "Set a reminder for ${title}")
+        val reminder = Reminder(type = title, frequency = recurrence, startTime = time)
         insertReminder(reminder)
         Log.d(TAG, "Saved reminder to database")
     }

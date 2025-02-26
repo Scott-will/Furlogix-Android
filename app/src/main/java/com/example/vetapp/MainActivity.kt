@@ -53,9 +53,6 @@ import java.util.concurrent.TimeUnit
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
-    private val intentFilter: IntentFilter = IntentFilter()
-    private val emailReceiver: EmailBroadcastReceiver = EmailBroadcastReceiver()
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         //init database
@@ -64,7 +61,6 @@ class MainActivity : ComponentActivity() {
             AppDatabase::class.java, R.string.database_name.toString()
         ).build()
         //schedule report cleaner
-        //TODO: should have handling to warn user it will be deleted if not sent....
         this.scheduleReportCleaner()
 
         enableEdgeToEdge()
@@ -73,14 +69,6 @@ class MainActivity : ComponentActivity() {
                 VetApp()
             }
         }
-
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-    }
-
-    private fun initBroadcastReceivers() {
 
     }
 

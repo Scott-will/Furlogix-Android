@@ -32,8 +32,8 @@ class ReportsNotificationFactory {
         val pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_IMMUTABLE)
         var builder = NotificationCompat.Builder(context, context.getString(R.string.notification_channel_id))
             .setSmallIcon(R.drawable.ic_launcher_foreground)
-            .setContentTitle("Send your Report")
-            .setContentText("Remember to send your report for your pet")
+            .setContentTitle(intent.getStringExtra("notification_title"))
+            .setContentText(intent.getStringExtra("notification_message"))
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
             //open app when notification is tapped
             .setContentIntent(pendingIntent)
