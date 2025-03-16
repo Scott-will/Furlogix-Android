@@ -64,7 +64,7 @@ class CsvBuilderTests {
         }
         val templates = mutableListOf<ReportTemplateField>()
         templates.add(ReportTemplateField(1, 1, FieldType.TEXT, "test Template"))
-        templates.add(ReportTemplateField(2, 1, FieldType.BOOLEAN, "test Template2"))
+        templates.add(ReportTemplateField(2, 1, FieldType.CHECKBOX, "test Template2"))
         val csvBuilder = CsvBuilder()
         csvBuilder.buildCsv(writer, entries, templates)
         writer.flush()

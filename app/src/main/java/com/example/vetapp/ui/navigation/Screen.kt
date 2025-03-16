@@ -13,6 +13,7 @@ sealed class Screen(val route: String) {
     object AddPet : Screen("add_pet/{userId}")
     object UploadPetPhoto : Screen("upload_pet_photo")
     object Reminders : Screen("reminders")
-    object ReportEntryHistory : Screen("report_entry/history/{reportTemplateId}")
+    object ReportEntryHistory : Screen("report_entry/history/{reportId}")
     object Pets : Screen("pets/{userId}")
+    object EditReport : Screen("reports/{reportId}/create")
 }

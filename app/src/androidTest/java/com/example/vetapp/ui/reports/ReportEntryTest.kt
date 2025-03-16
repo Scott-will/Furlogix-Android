@@ -94,7 +94,7 @@ class ReportEntryTest {
     fun ReportEntry_DisplaysCheckBox(){
         val reportTemplateField = ReportTemplateField(
             name = "Template Field Test",
-            fieldType = FieldType.BOOLEAN,
+            fieldType = FieldType.CHECKBOX,
             reportId = 0,
         )
 

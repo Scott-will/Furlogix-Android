@@ -24,7 +24,7 @@ class FieldTypeValidatorTests {
     @Test
     fun `should return true for BOOLEAN type with valid boolean value`() {
         // Given
-        val type = FieldType.BOOLEAN
+        val type = FieldType.CHECKBOX
 
         // When
         val resultTrue = FieldTypeValidator.validateFieldTypeWithValue(type, "true")
@@ -38,7 +38,7 @@ class FieldTypeValidatorTests {
     @Test
     fun `should return false for BOOLEAN type with invalid boolean value`() {
         // Given
-        val type = FieldType.BOOLEAN
+        val type = FieldType.CHECKBOX
 
         // When
         val result = FieldTypeValidator.validateFieldTypeWithValue(type, "invalidBoolean")
