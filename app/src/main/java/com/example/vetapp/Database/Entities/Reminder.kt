@@ -8,5 +8,8 @@ data class Reminder (
     @PrimaryKey(autoGenerate = true) val Id : Int = 0,
     var frequency : String,
     var type : String,
-    var startTime : String
+    var startTime : String,
+    var requestCode : Int,
+    var title : String,
+    var message : String
 )

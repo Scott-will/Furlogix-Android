@@ -12,13 +12,13 @@ class NotificationReceiver : BroadcastReceiver() {
 
     override fun onReceive(context: Context, intent: Intent) {
         Log.d(TAG, "Recieved notification")
-        showNotification(context)
+        showNotification(context, intent)
     }
 
-    private fun showNotification(context: Context){
+    private fun showNotification(context: Context, intent: Intent){
         val notificationManager = VetApplication.getNotificationManager()
         val notifFactory = ReportsNotificationFactory()
-        val notif = notifFactory.buildNotificationToSendReports()
+        val notif = notifFactory.buildNotificationToSendReports(intent)
         notificationManager.notify(1, notif)
     }
 }
