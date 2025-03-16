@@ -44,7 +44,6 @@ import com.example.vetapp.ui.screens.PetDashboardScreen
 import com.example.vetapp.ui.screens.PetsScreen
 import com.example.vetapp.ui.screens.ProfileScreen
 import com.example.vetapp.ui.screens.RemindersScreen
-import com.example.vetapp.ui.screens.ReportsScreen
 import com.example.vetapp.ui.screens.ReportEntryHistoryScreen
 import com.example.vetapp.ui.screens.ReportEntryScreen
 import com.example.vetapp.ui.screens.UploadPetPhotoScreen

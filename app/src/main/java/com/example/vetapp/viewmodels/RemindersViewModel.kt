@@ -47,16 +47,12 @@ class RemindersViewModel @Inject constructor(
 
     public fun scheduleReminder(date : String, time : String, recurrence : String, title: String, message : String){
         Log.d(TAG, "Scheduling reminder")
-        val context = VetApplication.applicationContext()
-        val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        var intent = Intent(context, NotificationReceiver::class.java)
-        intent.putExtra("notification_title", title)
-        intent.putExtra("notification_message", message)
-
-        val requestCode = RequestCodeFactory.GetRequestCode()
-        val pendingIntent = PendingIntent.getBroadcast(context, requestCode, intent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
         val dateTimeFormat = SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault())
         val calendar = Calendar.getInstance()
+        val context = VetApplication.applicationContext()
+        val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        val requestCode = RequestCodeFactory.GetRequestCode()
+        val pendingIntent = BuildReminderPendingIntent(context, title, message, requestCode)
         try {
             // Combine the date and time into a single string for parsing
             val dateTimeString = "$date $time"
@@ -64,7 +60,6 @@ class RemindersViewModel @Inject constructor(
             calendar.time = dateTime
         } catch (e: Exception) {
             Log.e(TAG, "Exception scheduling reminder: ${e.printStackTrace()}")
-
             return
         }
         when (recurrence) {
@@ -109,6 +104,14 @@ class RemindersViewModel @Inject constructor(
         Log.d(TAG, "Saved reminder to database")
     }
 
+    fun BuildReminderPendingIntent(context: Context, title : String, message : String, requestCode : Int) : PendingIntent{
+        var intent = Intent(context, NotificationReceiver::class.java)
+        intent.putExtra("notification_title", title)
+        intent.putExtra("notification_message", message)
+        val pendingIntent = PendingIntent.getBroadcast(context, requestCode, intent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
+        return pendingIntent
+    }
+
     fun checkAndRequestExactAlarmPermission() : Boolean{
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             val alarmManager = VetApplication.applicationContext().getSystemService(Context.ALARM_SERVICE) as AlarmManager
@@ -132,29 +135,35 @@ class RemindersViewModel @Inject constructor(
     fun deleteReminder(reminder: Reminder){
         viewModelScope.launch {
             withContext(Dispatchers.IO){
-                try{
-                    val context = VetApplication.applicationContext()
-                    val intent = Intent(context, NotificationReceiver::class.java)
-                    intent.putExtra("notification_title", reminder.title)
-                    intent.putExtra("notification_message", reminder.message)
-                    val pendingIntent = PendingIntent.getBroadcast(context, reminder.requestCode, intent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
-                    val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-                    alarmManager.cancel(pendingIntent)
-                }
-                catch(e : Exception){
-                    Log.e(TAG, "Failed to delete alarm for notification ${e.message}")
+                var result = cancelAlarmForReminder(reminder)
+                if(!result){
                     return@withContext
-
                 }
                 try{
-                    val result = remindersRepository.deleteReminder(reminder)
+                    remindersRepository.deleteReminder(reminder)
                 }
                 catch(e : Exception){
                     Log.e(TAG, "Failed to delete notification from database ${e.message}")
                 }
-
             }
         }
+    }
+
+    fun cancelAlarmForReminder(reminder: Reminder) : Boolean{
+        try{
+            val context = VetApplication.applicationContext()
+            val intent = Intent(context, NotificationReceiver::class.java)
+            intent.putExtra("notification_title", reminder.title)
+            intent.putExtra("notification_message", reminder.message)
+            val pendingIntent = PendingIntent.getBroadcast(context, reminder.requestCode, intent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
+            val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+            alarmManager.cancel(pendingIntent)
+        }
+        catch(e : Exception){
+            Log.e(TAG, "Failed to delete alarm for notification ${e.message}")
+            return false
+        }
+        return true
     }
 
     fun UpdateErrorState(isError : Boolean, errorMsg : String){

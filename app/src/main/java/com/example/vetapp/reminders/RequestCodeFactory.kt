@@ -12,6 +12,9 @@ public class RequestCodeFactory {
         private var latestRequestCode = 0;
 
         fun GetRequestCode() : Int{
+            if (latestRequestCode >= Int.MAX_VALUE) {
+                latestRequestCode = 0
+            }
             latestRequestCode += 1
             return latestRequestCode
         }
