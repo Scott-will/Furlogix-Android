@@ -20,7 +20,7 @@ class ReminderItemTest {
 
     @Test
     fun testReminderItemDisplaysCorrectly() {
-        val reminder = Reminder(type = "Send", startTime = "10:00 AM", frequency = "Daily")
+        val reminder = Reminder(type = "Send", startTime = "10:00 AM", frequency = "Daily", requestCode = 1, title = "test", message = "test")
 
         composeTestRule.setContent {
             ReminderItem(data = reminder, onDeleteClick = {})
@@ -38,7 +38,7 @@ class ReminderItemTest {
 
     @Test
     fun testDeleteButtonTriggersOnDeleteClick() {
-        val reminder = Reminder(type = "Send", startTime = "10:00 AM", frequency = "Daily")
+        val reminder = Reminder(type = "Send", startTime = "10:00 AM", frequency = "Daily", requestCode = 1, title = "test", message = "test")
         var deleteCalled = false
 
         composeTestRule.setContent {
@@ -56,7 +56,7 @@ class ReminderItemTest {
 
     @Test
     fun testReminderItemLayout() {
-        val reminder = Reminder(type = "Send", startTime = "10:00 AM", frequency = "Daily")
+        val reminder = Reminder(type = "Send", startTime = "10:00 AM", frequency = "Daily", requestCode = 1, title = "test", message = "test")
 
         composeTestRule.setContent {
             ReminderItem(data = reminder, onDeleteClick = {})
@@ -73,7 +73,7 @@ class ReminderItemTest {
 
     @Test
     fun testReminderItemHasCorrectPadding() {
-        val reminder = Reminder(type = "Send", startTime = "10:00 AM", frequency = "Daily")
+        val reminder = Reminder(type = "Send", startTime = "10:00 AM", frequency = "Daily", requestCode = 1, title = "test", message = "test")
 
         composeTestRule.setContent {
             ReminderItem(data = reminder, onDeleteClick = {})

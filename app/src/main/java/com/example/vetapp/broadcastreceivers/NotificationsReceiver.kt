@@ -7,34 +7,18 @@ import android.util.Log
 import com.example.vetapp.VetApplication
 import com.example.vetapp.reminders.ReportsNotificationFactory
 
-class SendReportsNotificationReceiver : BroadcastReceiver() {
-    private val TAG = "VetApp:" + SendReportsNotificationReceiver::class.qualifiedName
+class NotificationReceiver : BroadcastReceiver() {
+    private val TAG = "VetApp:" + NotificationReceiver::class.qualifiedName
 
     override fun onReceive(context: Context, intent: Intent) {
         Log.d(TAG, "Recieved notification")
-        showNotification(context)
+        showNotification(context, intent)
     }
 
-    private fun showNotification(context: Context){
+    private fun showNotification(context: Context, intent: Intent){
         val notificationManager = VetApplication.getNotificationManager()
         val notifFactory = ReportsNotificationFactory()
-        val notif = notifFactory.buildNotificationToSendReports()
+        val notif = notifFactory.buildNotificationToSendReports(intent)
         notificationManager.notify(1, notif)
     }
 }
-
-class FillOutReportsNotificationReceiver : BroadcastReceiver() {
-    private val TAG = "VetApp:" + FillOutReportsNotificationReceiver::class.qualifiedName
-    override fun onReceive(context: Context, intent: Intent) {
-        Log.d(TAG, "Recieved notification")
-        showNotification(context)
-    }
-
-    private fun showNotification(context: Context){
-        val notificationManager = VetApplication.getNotificationManager()
-        val notifFactory = ReportsNotificationFactory()
-        val notif = notifFactory.buildNotificationToFillOutReports()
-        notificationManager.notify(1, notif)
-    }
-}
-

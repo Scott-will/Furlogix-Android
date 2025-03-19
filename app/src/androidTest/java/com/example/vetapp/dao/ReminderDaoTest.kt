@@ -35,7 +35,7 @@ class ReminderDaoTest {
 
     @Test
     fun insertAndRetrieveReports() = runBlocking {
-        val reminder = Reminder(frequency = "Once", type = "Send", startTime = "abcd")
+        val reminder = Reminder(frequency = "Once", type = "Send", startTime = "abcd", requestCode = 1, title = "test", message = "test")
         reminderDao.insert(reminder)
         val reminders = reminderDao.getAllRemindersFlow().first()
         assertEquals(reminders.count(), 1)
@@ -44,7 +44,7 @@ class ReminderDaoTest {
 
     @Test
     fun deleteReports() = runBlocking {
-        val reminder = Reminder(frequency = "Once", type = "Send", startTime = "abcd")
+        val reminder = Reminder(frequency = "Once", type = "Send", startTime = "abcd", requestCode = 1, title = "test", message = "test")
         reminderDao.insert(reminder)
         val insertedReports = reminderDao.getAllRemindersFlow().first().first()
         assertNotNull(insertedReports)
