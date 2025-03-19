@@ -2,7 +2,6 @@ package com.example.vetapp.reminders;
 
 import com.example.vetapp.Database.AppDatabase
 import com.example.vetapp.Database.DAO.RemindersDao
-import com.example.vetapp.VetApp
 import com.example.vetapp.VetApplication
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.last

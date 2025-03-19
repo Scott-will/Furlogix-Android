@@ -33,6 +33,7 @@ import androidx.work.WorkManager
 import com.example.vetapp.Database.AppDatabase
 import com.example.vetapp.reminders.RequestCodeFactory
 import com.example.vetapp.ui.AppHeader
+import com.example.vetapp.ui.navigation.ComposeNavGraph
 import com.example.vetapp.ui.navigation.Screen
 import com.example.vetapp.ui.screens.AddPetFormScreen
 import com.example.vetapp.ui.screens.CreateAccountScreen
@@ -76,7 +77,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             VetAppTheme {
-                VetApp()
+                ComposeNavGraph()
             }
         }
 
@@ -103,121 +104,4 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
-
-@Composable
-fun VetApp(
-    userViewModel: UserViewModel = hiltViewModel(),
-    petViewModel: PetViewModel = hiltViewModel()
-) {
-    val userId by userViewModel.userId.collectAsState(initial = 0L)
-    val navController = rememberNavController()
-    val currentBackStackEntry by navController.currentBackStackEntryFlow.collectAsState(null)
-    val currentRoute = currentBackStackEntry?.destination?.route
-
-    println("Current route: $currentRoute")
-    println("Dashboard route: ${Screen.Dashboard.route}")
-
-    var showDialog by remember { mutableStateOf(false) }
-
-    Scaffold(
-        topBar = {
-            if (currentRoute != null && currentRoute != Screen.Login.route && currentRoute != Screen.CreateAccount.route) {
-                AppHeader(navController = navController)
-            }
-        },
-//        bottomBar = { BottomAppBar {
-//            BottomNavigationBar(navController)
-//            //FabWithVerticalMenu()
-//        }}
-        //floatingActionButton = {FabWithVerticalMenu()}
-    ) { innerPadding ->
-        NavHost(
-            navController = navController,
-            startDestination = Screen.Login.route,
-            modifier = Modifier.padding(innerPadding)
-        ) {
-            composable(Screen.Login.route) { LoginScreen(navController) }
-            composable(Screen.CreateAccount.route) { CreateAccountScreen(navController) }
-            composable(
-                Screen.Dashboard.route,
-                arguments = listOf(navArgument("userId") { type = NavType.LongType })
-            ) {
-                DashboardScreen(navController, userId, userViewModel, petViewModel)
-            }
-            composable(Screen.PetDashboard.route,
-                listOf(navArgument("petId") { type = NavType.IntType })
-            ) { backStackEntry ->
-                val petId = backStackEntry.arguments?.getInt("petId");
-                if (petId != null) {
-                    PetDashboardScreen(navController, petId, userViewModel, petViewModel)
-                }
-            }
-            composable(
-                Screen.EditReport.route,
-                listOf(navArgument("reportId") { type = NavType.IntType })
-            ) { backStackEntry ->
-                val reportId = backStackEntry.arguments?.getInt("reportId");
-                if (reportId != null ) {
-                    EditReportScreen(reportId)
-                }
-            }
-            composable(
-                Screen.ReportEntryHistory.route,
-                listOf(navArgument("reportId") { type = NavType.IntType })
-            ) { backStackEntry ->
-                val reportId = backStackEntry.arguments?.getInt("reportId")
-                if (reportId != null) {
-                    ReportEntryHistoryScreen(navController, reportId)
-                } else {
-                    ReportEntryHistoryScreen(navController)
-                }
-            }
-            composable(
-                Screen.ReportEntry.route,
-                listOf(navArgument("reportId") { type = NavType.IntType })
-            ) { backStackEntry ->
-                val reportId = backStackEntry.arguments?.getInt("reportId")
-                if (reportId != null) {
-                    ReportEntryScreen(navController, reportId)
-                } else {
-                    ReportEntryScreen(navController)
-                }
-            }
-            composable(
-                Screen.Profile.route,
-                arguments = listOf(navArgument("userId") { type = NavType.LongType })
-            ) { backStackEntry ->
-                ProfileScreen(userId = userId, navController = navController)
-            }
-            composable(
-                Screen.ManageReports.route,
-                listOf(navArgument("petId") { type = NavType.IntType })
-            ) { backStackEntry ->
-                val petId = backStackEntry.arguments?.getInt("petId")
-                if (petId != null) {
-                    ManageReportScreen(navController, petId)
-                }
-            }
-            composable(Screen.Reminders.route) { RemindersScreen(navController) }
-            composable(
-                Screen.AddPet.route,
-                arguments = listOf(navArgument("userId") { type = NavType.LongType })
-            ) { backStackEntry ->
-                AddPetFormScreen(navController = navController, userId = userId)
-            }
-            composable(Screen.UploadPetPhoto.route) {
-                UploadPetPhotoScreen(navController, petViewModel)
-            }
-            composable(
-                Screen.Pets.route,
-                arguments = listOf(navArgument("userId") { type = NavType.LongType })
-            ) { backStackEntry ->
-                val usrId = backStackEntry.arguments?.getLong("userId") ?: 0L
-                PetsScreen(navController = navController, userId = usrId)
-            }
-        }
-    }
-}
-
-
 

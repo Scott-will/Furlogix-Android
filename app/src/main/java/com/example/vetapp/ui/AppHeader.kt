@@ -52,7 +52,7 @@ fun AppHeader(navController: NavController, userViewModel: UserViewModel = hiltV
                 }
             } else {
                 IconButton(onClick = {
-                    navController.navigate(Screen.Dashboard.route) {
+                    navController.navigate(Screen.Dashboard.createRoute(userId)) {
                         popUpTo(Screen.Dashboard.route) { inclusive = true }
                     }
                 }) {

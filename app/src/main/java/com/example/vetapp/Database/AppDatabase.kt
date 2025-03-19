@@ -22,7 +22,7 @@ import com.example.vetapp.Database.Entities.User
     Reports::class,
     ReportEntry::class,
     Reminder::class,
-    Pet::class], version = 9)
+    Pet::class], version = 13)
 abstract class AppDatabase : RoomDatabase() {
 
     abstract fun userDao(): UserDao
@@ -47,7 +47,9 @@ abstract class AppDatabase : RoomDatabase() {
                     context.applicationContext,
                     AppDatabase::class.java,
                     "vetapp_database"
-                ).build()
+                )
+                    .fallbackToDestructiveMigration()
+                    .build()
                 INSTANCE = instance
                 instance
             }
