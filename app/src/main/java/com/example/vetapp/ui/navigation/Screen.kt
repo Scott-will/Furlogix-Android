@@ -3,7 +3,9 @@ package com.example.vetapp.ui.navigation
 sealed class Screen(val route: String) {
     object Login : Screen("login")
     object CreateAccount : Screen("create_account")
-    object Dashboard : Screen("dashboard/{userId}")
+    object Dashboard : Screen("dashboard/{userId}") {
+        fun createRoute(userId: Long): String = "dashboard/$userId"
+    }
     object PetDashboard : Screen("pet_dashboard/{petId}")
     object Profile : Screen("profile/{userId}")
     object ReportsTemplate : Screen("reports_template/{reportId}/{reportName}")

@@ -1,21 +1,42 @@
 package com.example.vetapp.ui.screens
 
+import android.net.Uri
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import coil3.compose.AsyncImage
+import com.example.vetapp.Database.Entities.Pet
 import com.example.vetapp.Database.Entities.User
 import com.example.vetapp.ui.navigation.Screen
 import com.example.vetapp.viewmodels.PetViewModel
@@ -27,94 +48,165 @@ fun CreateAccountScreen(
     navController: NavController,
     userViewModel: UserViewModel = hiltViewModel(),
     petViewModel: PetViewModel = hiltViewModel()
-    ) {
-    Column(
-        modifier = Modifier.fillMaxSize(),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(16.dp, Alignment.CenterVertically)
-    ) {
-        Text(text = "Create Profile", fontSize = 24.sp)
+) {
+    var selectedImageUri by remember { mutableStateOf<Uri?>(null) }
+    val context = LocalContext.current
 
-        TextField(
-            value = userViewModel.name,
-            onValueChange = userViewModel::onNameChange,
-            label = { Text("Name") },
-            isError = userViewModel.nameError != null
-        )
-        if (userViewModel.nameError != null) {
-            Text(userViewModel.nameError!!, color = androidx.compose.ui.graphics.Color.Red)
-        }
-
-        TextField(
-            value = userViewModel.surname,
-            onValueChange = userViewModel::onSurnameChange,
-            label = { Text("Surname") },
-            isError = userViewModel.surnameError != null
-        )
-        if (userViewModel.surnameError != null) {
-            Text(userViewModel.surnameError!!, color = androidx.compose.ui.graphics.Color.Red)
-        }
-
-        val petName = petViewModel.name.collectAsState().value
-        val petType = petViewModel.type.collectAsState().value
-        //val petNameError = petViewModel.nameError.collectAsState().value
-
-        TextField(
-            value = petName,
-            onValueChange = { petViewModel.name.value = it },
-            label = { Text("Pet Name") },
-            //isError = petNameError != null
-        )
-        /*
-        if (petNameError != null) {
-            Text(
-                text = petNameError,
-                color = androidx.compose.ui.graphics.Color.Red
+    val imagePickerLauncher = rememberLauncherForActivityResult(
+        ActivityResultContracts.GetContent()
+    ) { uri: Uri? ->
+        uri?.let {
+            // Copy the picked file to internal storage
+            selectedImageUri = copyUriToInternalStorage(
+                context,
+                it,
+                "pet_${System.currentTimeMillis()}.jpg"
             )
         }
-        */
+    }
 
+    // Wrapping content in a Box with a background and scrollable Column for a modern feel.
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(MaterialTheme.colorScheme.background)
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .verticalScroll(rememberScrollState())
+                .padding(horizontal = 24.dp, vertical = 16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(20.dp)
+        ) {
+            Text(
+                text = "Create Profile",
+                style = MaterialTheme.typography.headlineSmall,
+                color = MaterialTheme.colorScheme.primary
+            )
 
-        TextField(
-            value = petType,
-            onValueChange = { petViewModel.type.value = it },
-            label = { Text("Pet Type") }
-        )
-        /*
-        if (petViewModel.petNameError != null) {
-            Text(petViewModel.petNameError!!, color = androidx.compose.ui.graphics.Color.Red)
-        }
-        */
-
-
-        TextField(
-            value = userViewModel.email,
-            onValueChange = userViewModel::onEmailChange,
-            label = { Text("Email") },
-            isError = userViewModel.emailError != null
-        )
-        if (userViewModel.emailError != null) {
-            Text(userViewModel.emailError!!, color = androidx.compose.ui.graphics.Color.Red)
-        }
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        Button(onClick = {
-            if (userViewModel.isFormValid() && petViewModel.validateForm()) {
-                val user = User(
-                    name = userViewModel.name,
-                    surname = userViewModel.surname,
-                    email = userViewModel.email
+            OutlinedTextField(
+                value = userViewModel.name,
+                onValueChange = userViewModel::onNameChange,
+                label = { Text("Name") },
+                isError = userViewModel.nameError != null,
+                singleLine = true,
+                modifier = Modifier.fillMaxWidth()
+            )
+            if (userViewModel.nameError != null) {
+                Text(
+                    text = userViewModel.nameError!!,
+                    color = MaterialTheme.colorScheme.error,
+                    style = MaterialTheme.typography.bodySmall
                 )
-
-                userViewModel.addUser(user) { userId ->
-                    petViewModel.addPet(userId = userId)
-                    navController.navigate(Screen.Dashboard.route.replace("{userId}", "1"))
-                }
-
             }
-        }) {
-            Text("Create Profile")
+
+            OutlinedTextField(
+                value = userViewModel.surname,
+                onValueChange = userViewModel::onSurnameChange,
+                label = { Text("Surname") },
+                isError = userViewModel.surnameError != null,
+                singleLine = true,
+                modifier = Modifier.fillMaxWidth()
+            )
+            if (userViewModel.surnameError != null) {
+                Text(
+                    text = userViewModel.surnameError!!,
+                    color = MaterialTheme.colorScheme.error,
+                    style = MaterialTheme.typography.bodySmall
+                )
+            }
+
+            OutlinedTextField(
+                value = userViewModel.email,
+                onValueChange = userViewModel::onEmailChange,
+                label = { Text("Email") },
+                isError = userViewModel.emailError != null,
+                singleLine = true,
+                modifier = Modifier.fillMaxWidth()
+            )
+            if (userViewModel.emailError != null) {
+                Text(
+                    text = userViewModel.emailError!!,
+                    color = MaterialTheme.colorScheme.error,
+                    style = MaterialTheme.typography.bodySmall
+                )
+            }
+
+            val petName by petViewModel.name.collectAsState()
+            OutlinedTextField(
+                value = petName,
+                onValueChange = { petViewModel.name.value = it },
+                label = { Text("Pet Name") },
+                singleLine = true,
+                modifier = Modifier.fillMaxWidth()
+            )
+
+            val petType by petViewModel.type.collectAsState()
+            OutlinedTextField(
+                value = petType,
+                onValueChange = { petViewModel.type.value = it },
+                label = { Text("Pet Type") },
+                singleLine = true,
+                modifier = Modifier.fillMaxWidth()
+            )
+
+            Button(
+                onClick = { imagePickerLauncher.launch("image/*") },
+                modifier = Modifier.fillMaxWidth(),
+                shape = MaterialTheme.shapes.medium
+            ) {
+                Text("Upload Pet Photo")
+            }
+
+            if (selectedImageUri != null) {
+                AsyncImage(
+                    model = selectedImageUri,
+                    contentDescription = "Uploaded Pet Photo",
+                    modifier = Modifier
+                        .size(150.dp)
+                        .clip(MaterialTheme.shapes.medium)
+                )
+                Text(
+                    text = "Photo uploaded successfully!",
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.primary
+                )
+            }
+
+            Button(
+                onClick = {
+                    if (userViewModel.isFormValid() && petViewModel.validateForm()) {
+                        val user = User(
+                            name = userViewModel.name,
+                            surname = userViewModel.surname,
+                            email = userViewModel.email
+                        )
+
+                        userViewModel.addUser(user) { userId ->
+                            val pet = Pet(
+                                name = petName,
+                                type = petType,
+                                description = "",
+                                userId = userId,
+                                photoUri = selectedImageUri?.toString()
+                            )
+                            petViewModel.addPetObj(pet)
+                            navController.navigate(Screen.Dashboard.createRoute(userId))
+                        }
+                    }
+                },
+                modifier = Modifier.fillMaxWidth(),
+                shape = MaterialTheme.shapes.medium,
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = MaterialTheme.colorScheme.primary
+                )
+            ) {
+                Text(
+                    text = "Create Profile",
+                    color = MaterialTheme.colorScheme.onPrimary
+                )
+            }
         }
     }
 }
