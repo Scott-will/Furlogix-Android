@@ -1,0 +1,24 @@
+package com.furlogix.repositories
+
+import com.furlogix.Database.Entities.Reports
+import kotlinx.coroutines.flow.Flow
+
+interface IReportsRepository {
+
+    fun reportsForPetObservable(petId : Int) : List<Reports>
+
+    fun reportsObservable() : Flow<List<Reports>>
+
+    suspend fun getAllReports() : List<Reports>
+
+    fun getReportByIdFlow(id : Int): Flow<Reports>
+
+    suspend fun getReportById(id: Int) : Reports
+
+    suspend fun insertReport(report : Reports) : com.furlogix.Result
+
+    suspend fun updateReport(report : Reports) : com.furlogix.Result
+
+    suspend fun deleteReport(report : Reports)
+
+}
