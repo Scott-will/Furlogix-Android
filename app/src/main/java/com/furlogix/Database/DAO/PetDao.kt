@@ -13,6 +13,9 @@ interface PetDao {
     @Query("SELECT * FROM pet_table")
     fun getAll(): Flow<List<Pet>>
 
+    @Query("SELECT * FROM pet_table WHERE uid = :petId")
+    suspend fun getPetById(petId: Int): Pet?
+
     @Insert
     fun insert(pet: Pet): Long
 

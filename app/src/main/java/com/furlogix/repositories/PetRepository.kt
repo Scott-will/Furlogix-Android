@@ -34,4 +34,8 @@ class PetRepository @Inject constructor(
     override suspend fun deleteAllPets() {
         petDao.deleteAll()
     }
+
+    override suspend fun getPetById(petId: Int): Pet? {
+        return petDao.getPetById(petId)
+    }
 }

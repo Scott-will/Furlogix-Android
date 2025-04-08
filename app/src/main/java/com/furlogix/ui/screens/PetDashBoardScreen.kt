@@ -37,9 +37,12 @@ import com.furlogix.viewmodels.UserViewModel
 @Composable
 fun PetDashboardScreen(navController: NavController, petId : Int, userViewModel: UserViewModel = hiltViewModel(), petViewModel : PetViewModel = hiltViewModel(), reportViewModel: ReportViewModel = hiltViewModel()) {
     var favouriteReports = reportViewModel.favouriteReportTemplates.collectAsState()
+    val currentPet by petViewModel.currentPet.collectAsState()
+    
     LaunchedEffect(Unit) {
         reportViewModel.PopulateFavouriteReportTemplates(petId)
         userViewModel.populateCurrentUser()
+        petViewModel.loadPetById(petId)
     }
 
     val photoUri by petViewModel.photoUri.collectAsState()
@@ -61,7 +64,7 @@ fun PetDashboardScreen(navController: NavController, petId : Int, userViewModel:
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         Text(
-            text = "Dashboard ",
+            text = currentPet?.name ?: "Loading...",
             style = MaterialTheme.typography.headlineMedium
         )
 

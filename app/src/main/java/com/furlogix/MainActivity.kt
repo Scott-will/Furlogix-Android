@@ -14,6 +14,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.room.Room
 import androidx.work.PeriodicWorkRequest
 import androidx.work.WorkManager
+import com.furlogix.R
 import com.furlogix.Database.AppDatabase
 import com.furlogix.reminders.RequestCodeFactory
 import com.furlogix.ui.navigation.ComposeNavGraph

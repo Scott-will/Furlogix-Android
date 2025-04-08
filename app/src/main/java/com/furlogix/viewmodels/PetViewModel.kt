@@ -23,6 +23,8 @@ class PetViewModel @Inject constructor(
     val pets: StateFlow<List<Pet>> = _pets.asStateFlow()
     private val _photoUri = MutableStateFlow<String?>(null)
     val photoUri: StateFlow<String?> = _photoUri.asStateFlow()
+    private val _currentPet = MutableStateFlow<Pet?>(null)
+    val currentPet: StateFlow<Pet?> = _currentPet.asStateFlow()
 
     var name = MutableStateFlow("")
     var type = MutableStateFlow("")
@@ -90,6 +92,10 @@ class PetViewModel @Inject constructor(
         }
     }
 
-
-
+    fun loadPetById(petId: Int) {
+        viewModelScope.launch {
+            val pet = petRepository.getPetById(petId)
+            _currentPet.value = pet
+        }
+    }
 }

@@ -10,4 +10,5 @@ interface IPetRepository {
     suspend fun updatePet(pet: Pet)
     suspend fun deletePet(pet: Pet)
     suspend fun deleteAllPets()
+    suspend fun getPetById(petId: Int): Pet?
 }
