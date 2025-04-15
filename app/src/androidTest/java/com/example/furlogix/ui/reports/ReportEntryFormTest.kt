@@ -36,7 +36,7 @@ class ReportEntryFormTest {
                 name = "Template Field Test ${type}",
                 fieldType = type,
                 reportId = 0,
-                uid = i
+                icon="test", uid = i
             )
             i++
             fields.add(reportTemplateField)

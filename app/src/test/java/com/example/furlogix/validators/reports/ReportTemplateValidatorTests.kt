@@ -26,7 +26,7 @@ class ReportTemplateValidatorTest {
             val template = ReportTemplateField(
                 reportId = 1,
                 name = "Valid Template",
-                fieldType = FieldType.NUMBER
+                fieldType = FieldType.NUMBER, icon="test"
             )
 
             // When
@@ -39,7 +39,7 @@ class ReportTemplateValidatorTest {
     @Test
     fun `should return false when template name is empty`() = runTest {
         // Given
-        val template = ReportTemplateField(reportId = 1, name = "", fieldType = FieldType.NUMBER)
+        val template = ReportTemplateField(reportId = 1, name = "", fieldType = FieldType.NUMBER, icon="test")
         val result = reportTemplateValidator.ValidateTemplate(template)
 
         // Then

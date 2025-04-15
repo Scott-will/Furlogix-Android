@@ -1,10 +1,13 @@
 package com.furlogix.ui.screens
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Button
@@ -40,10 +43,10 @@ fun ManageReportScreen(navController: NavController, petId : Int, viewModel: Rep
     val errorMsg = viewModel.errorMsg.collectAsState()
     val isTooManyReports = viewModel.isTooManyReports.collectAsState()
 
-    // Button to show the dialog
     Column(
         modifier = Modifier
-            .fillMaxWidth()
+            .fillMaxWidth(),
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
         if(isTooManyReports.value){
             TooManyReportsWarning()
@@ -53,20 +56,23 @@ fun ManageReportScreen(navController: NavController, petId : Int, viewModel: Rep
             }
         }
         // Show the list of form items
-        TitleText("My Reports")
+        TitleText("Reports", modifier = Modifier.fillMaxWidth().align(Alignment.CenterHorizontally),)
         ReportsList(reports,
             onDeleteClick = {item -> viewModel.deleteReport(item)},
             onEditClick = {item -> navController.navigate(Screen.EditReport.route.replace("{reportId}", item.Id.toString()))},
             onSendClick = {item -> viewModel.gatherReportData(item.Id)},
             onClick = {data -> navController.navigate(Screen.ReportEntryHistory.route.replace("{reportId}", "${data.Id}"))})
         Spacer(modifier = Modifier.height(16.dp))
-        AddItemButton(onClick = {showDialog = true}, localModifier = Modifier
-            .size(56.dp)
-            .background(
-                color = Color.Gray,
-                shape = CircleShape
-            )
-            .align(Alignment.Start))
+    }
+    Box(modifier = Modifier.fillMaxSize()) {
+        // Your content goes here
+
+        AddItemButton(
+            onClick = { showDialog = true },
+            modifier = Modifier
+                .align(Alignment.BottomEnd)
+                .padding(16.dp)
+        )
     }
 
     if (showDialog) {

@@ -31,6 +31,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import com.furlogix.Database.Entities.ReportTemplateField
+import com.furlogix.R
 import com.furlogix.reports.FieldType
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -46,6 +47,7 @@ fun AddReportTemplateDialog(
     val fieldTypes = FieldType.values()
     var textFieldValue by remember { mutableStateOf(currentLabel) }
     var typeFieldValue by remember { mutableStateOf(selectedType) }
+    var selectedIconName by remember { mutableStateOf<String>(R.drawable.paw.toString()) }
     Dialog(onDismissRequest = onDismiss) {
         Surface(
             shape = MaterialTheme.shapes.medium,
@@ -110,7 +112,9 @@ fun AddReportTemplateDialog(
                     }
                 }
                 Spacer(modifier = Modifier.height(16.dp))
-
+                ReportTemplateIconSelector(selectedIconName,
+                    onIconSelected = { selectedIconName = it })
+                Spacer(modifier = Modifier.height(16.dp))
                 // Submit button to save the new field
                 Button(
                     onClick = {
@@ -124,6 +128,7 @@ fun AddReportTemplateDialog(
                             val newField = ReportTemplateField(
                                 reportId = reportId,
                                 name = textFieldValue,
+                                icon = selectedIconName,
                                 fieldType = FieldType.valueOf(typeFieldValue) // Convert string to FieldType
                             )
                             onSave(newField)

@@ -44,7 +44,7 @@ class ReportViewModel @Inject constructor(
     private var _reportsForPet = MutableStateFlow<List<Reports>>(emptyList())
     val reportsForPet : MutableStateFlow<List<Reports>> = _reportsForPet
 
-    private var _currentReportTemplate = MutableStateFlow(ReportTemplateField(0, 0, FieldType.TEXT, ""))
+    private var _currentReportTemplate = MutableStateFlow(ReportTemplateField(0, 0, FieldType.TEXT, "paw",false, "paw"))
     val currentReportTemplate : MutableStateFlow<ReportTemplateField> = _currentReportTemplate
 
     private var _reportTemplatesForCurrentReport = MutableStateFlow<List<ReportTemplateField>>(

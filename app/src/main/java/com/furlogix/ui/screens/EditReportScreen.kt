@@ -49,10 +49,10 @@ fun EditReportScreen(reportId : Int, viewModel: ReportViewModel = hiltViewModel(
                 newTemplateList.forEach(){
                         item ->
                     viewModel.insertReportTemplateField(item)
-                    //show saved successfully
                 }
                 existingTemplateList.value.forEach(){
                         item ->
+                    viewModel.updateReportTemplateField(item)
                     //update
                 }
                 viewModel.populateReportTemplatesForCurrentReport(reportId)}) {

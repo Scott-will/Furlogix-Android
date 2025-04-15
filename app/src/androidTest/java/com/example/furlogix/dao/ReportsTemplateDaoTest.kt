@@ -48,7 +48,7 @@ class ReportsTemplateDaoTest {
 
     @Test
     fun insertAndRetrieveTemplate() = runBlocking {
-        val reportTemplateField = ReportTemplateField(name = "Test", fieldType = FieldType.NUMBER, reportId = 1)
+        val reportTemplateField = ReportTemplateField(name = "Test", fieldType = FieldType.NUMBER, icon = "test", reportId = 1)
         reportTemplateDao.insert(reportTemplateField)
         val templates = reportTemplateDao.getAll()
         assertEquals(templates.count(), 1)
@@ -57,7 +57,7 @@ class ReportsTemplateDaoTest {
 
     @Test
     fun updateTemplate() = runBlocking {
-        val reportTemplateField = ReportTemplateField(name = "Original Name", fieldType = FieldType.TEXT, reportId = 1)
+        val reportTemplateField = ReportTemplateField(name = "Original Name", fieldType = FieldType.TEXT, icon="test", reportId = 1)
         reportTemplateDao.insert(reportTemplateField)
         val insertedTemplate = reportTemplateDao.getAll().firstOrNull()
         val updatedTemplate = insertedTemplate?.copy(name = "Updated Name")
@@ -69,7 +69,7 @@ class ReportsTemplateDaoTest {
 
     @Test
     fun deleteTemplate() = runBlocking {
-        val template = ReportTemplateField(name = "Test", fieldType = FieldType.CHECKBOX, reportId = 1)
+        val template = ReportTemplateField(name = "Test", fieldType = FieldType.CHECKBOX, icon="test", reportId = 1)
         reportTemplateDao.insert(template)
         val insertedUser = reportTemplateDao.getAll().first()
         reportTemplateDao.delete(insertedUser)

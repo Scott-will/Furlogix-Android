@@ -1,25 +1,34 @@
 package com.furlogix.ui.components.common
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun AddItemButton(onClick: () -> Unit, localModifier: Modifier) {
-    IconButton(
+fun AddItemButton(
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    FloatingActionButton(
         onClick = onClick,
-        modifier = localModifier
+        containerColor = MaterialTheme.colorScheme.primary,
+        modifier = modifier
     ) {
         Icon(
-            painter = painterResource(id = android.R.drawable.ic_input_add), // Grey plus sign (can use any other icon)
+            painter = painterResource(id = android.R.drawable.ic_input_add),
             contentDescription = "Add",
-            tint = Color.White, // Icon color (white)
-            modifier = Modifier.size(32.dp) // Size of the plus sign inside the button
+            tint = Color.White,
         )
     }
+
 }

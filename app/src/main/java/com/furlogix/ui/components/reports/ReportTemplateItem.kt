@@ -26,6 +26,7 @@ import com.furlogix.ui.components.common.BoxColourTheme
 import com.furlogix.ui.components.common.DeleteButton
 import com.furlogix.ui.components.common.DeleteWarning
 import com.furlogix.ui.components.common.EditButton
+import com.furlogix.ui.components.common.IconDisplayer
 
 
 @Composable
@@ -45,10 +46,10 @@ fun ReportTemplateItem(data: ReportTemplateField,
         Column(
             modifier = Modifier
                 .fillMaxSize(),
-                //.clickable{navController.navigate(Screen.ReportEntryHistory.route.replace("{reportTemplateId}", "${data.uid}"))},
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
+            IconDisplayer(data.icon)
             Text(
                 text = data.name,
                 modifier = Modifier.fillMaxWidth(),
@@ -56,8 +57,8 @@ fun ReportTemplateItem(data: ReportTemplateField,
                 textAlign = TextAlign.Center
             )
             Row(){
-                EditButton { showDialog = true }
-                DeleteButton {showDeleteWarning = true  }
+                EditButton { onUpdateClick(data); showDialog = true }
+                DeleteButton {onDeleteClick(data); showDeleteWarning = true }
             }
         }
         if (showDialog) {
@@ -74,7 +75,7 @@ fun ReportTemplateItem(data: ReportTemplateField,
             )
         }
         if(showDeleteWarning){
-            DeleteWarning({showDeleteWarning = false}, {onDeleteClick(data)}, "Deleting this report template will delete all associated data")
+            DeleteWarning({showDeleteWarning = false}, {onDeleteClick(data); showDeleteWarning = false}, "Deleting this report template will delete all associated data")
         }
     }
 }
