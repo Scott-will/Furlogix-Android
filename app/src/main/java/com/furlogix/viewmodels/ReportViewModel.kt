@@ -188,7 +188,7 @@ class ReportViewModel @Inject constructor(
         }
     }
 
-    fun insertReportEntry(valueMap: Map<Int, MutableState<String>>, reportId: Int) {
+    fun insertReportEntry(valueMap: Map<Int, MutableState<String>>, reportId: Int, timestamp : String) {
         var entries = mutableListOf<ReportEntry>()
         val time = Date()
         valueMap.forEach() { kvp ->
@@ -196,7 +196,7 @@ class ReportViewModel @Inject constructor(
                 value = kvp.value.value,
                 reportId = reportId,
                 templateId = kvp.key,
-                timestamp = time.toString()
+                timestamp = timestamp
             )
             entries.add(entry)
         }

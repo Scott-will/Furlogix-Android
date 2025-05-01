@@ -12,23 +12,32 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.furlogix.Database.Entities.ReportTemplateField
 import com.furlogix.ui.components.common.NoDataAvailable
+import com.furlogix.ui.components.common.SimpleDateTimePicker
 import com.furlogix.ui.components.reports.ReportEntry
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
 @Composable
 fun ReportEntryForm(
     reportName : String,
     fields : List<ReportTemplateField>,
-    templateValueMap : MutableMap<Int, MutableState<String>>) {
+    templateValueMap : MutableMap<Int, MutableState<String>>,
+    timestamp : MutableState<String>) {
     Surface(
     shape = MaterialTheme.shapes.medium,
     tonalElevation = 8.dp,
     modifier = Modifier.fillMaxWidth()
     )
     {
+        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")
         Column(
             modifier = Modifier
                 .padding(16.dp)
@@ -47,9 +56,18 @@ fun ReportEntryForm(
                             templateValueMap[fields[item].uid]!! // Bind each item to its corresponding state
                         )
                     }
+                    item {
+                        SimpleDateTimePicker { dateTime ->
+                            if (dateTime != null) {
+                                timestamp.value = dateTime.format(formatter)
+                            }
+                        }
+
+                        Text("Selected: ${timestamp.value ?: "No date selected"}", modifier = Modifier.padding(top = 8.dp))
+                        Spacer(modifier = Modifier.height(16.dp))
+                    }
                 }
             }
-
         }
     }
 }

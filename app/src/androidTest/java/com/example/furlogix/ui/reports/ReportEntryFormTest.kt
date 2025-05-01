@@ -18,10 +18,12 @@ class ReportEntryFormTest {
     fun ReportEntryFormTestContent(
         reportName : String,
         fields : List<ReportTemplateField>,
-        templateValueMap : MutableMap<Int, MutableState<String>>){
+        templateValueMap : MutableMap<Int, MutableState<String>>,
+        timestamp : MutableState<String>){
         ReportEntryForm(reportName = reportName,
             fields = fields,
-            templateValueMap = templateValueMap)
+            templateValueMap = templateValueMap,
+            timestamp = timestamp)
     }
 
     @get:Rule
@@ -48,8 +50,10 @@ class ReportEntryFormTest {
             2 to mutableStateOf("")
         )
 
+        val timestamp = mutableStateOf("")
+
         composeTestRule.setContent {
-            ReportEntryFormTestContent("Test", fields, map)
+            ReportEntryFormTestContent("Test", fields, map, timestamp)
         }
 
         FieldType.values().forEach { type ->

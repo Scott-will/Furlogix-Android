@@ -1,10 +1,12 @@
 package com.furlogix.ui.screens
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -15,6 +17,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.furlogix.Database.Entities.ReportTemplateField
 import com.furlogix.reports.FieldType
@@ -40,8 +43,12 @@ fun EditReportScreen(reportId : Int, viewModel: ReportViewModel = hiltViewModel(
             .fillMaxWidth()
     ) {
         Row(modifier = Modifier
-            .fillMaxWidth()){
-            Button(onClick = {showDialog = true}) {
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp),
+            horizontalArrangement = Arrangement.spacedBy(16.dp)){
+            Button(onClick = {showDialog = true},
+                modifier = Modifier.weight(1f)
+                    .padding(top = 8.dp) ) {
                 Text("Add report template")
             }
 
@@ -55,7 +62,9 @@ fun EditReportScreen(reportId : Int, viewModel: ReportViewModel = hiltViewModel(
                     viewModel.updateReportTemplateField(item)
                     //update
                 }
-                viewModel.populateReportTemplatesForCurrentReport(reportId)}) {
+                viewModel.populateReportTemplatesForCurrentReport(reportId)},
+                modifier = Modifier.weight(1f)
+                    .padding(top = 8.dp) ) {
                 Text("Save")
             }
         }
