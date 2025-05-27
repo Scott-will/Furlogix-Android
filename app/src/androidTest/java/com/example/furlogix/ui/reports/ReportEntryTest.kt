@@ -30,7 +30,7 @@ class ReportEntryTest {
         val reportTemplateField = ReportTemplateField(
             name = "Template Field Test",
             fieldType = FieldType.TEXT,
-            reportId = 0,
+            icon="test", reportId = 0,
         )
 
         val text = mutableStateOf("")
@@ -47,7 +47,7 @@ class ReportEntryTest {
         val reportTemplateField = ReportTemplateField(
             name = "Template Field Test",
             fieldType = FieldType.NUMBER,
-            reportId = 0,
+            icon="test", reportId = 0,
         )
 
         val text = mutableStateOf("")
@@ -71,7 +71,7 @@ class ReportEntryTest {
         val reportTemplateField = ReportTemplateField(
             name = "Template Field Test",
             fieldType = FieldType.TEXT,
-            reportId = 0,
+            icon="test", reportId = 0,
         )
 
         val text = mutableStateOf("")
@@ -95,7 +95,7 @@ class ReportEntryTest {
         val reportTemplateField = ReportTemplateField(
             name = "Template Field Test",
             fieldType = FieldType.CHECKBOX,
-            reportId = 0,
+            icon="test", reportId = 0,
         )
 
         val text = mutableStateOf(false.toString())

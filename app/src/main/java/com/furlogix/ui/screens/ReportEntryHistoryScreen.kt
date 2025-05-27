@@ -16,6 +16,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
@@ -27,14 +30,18 @@ import androidx.navigation.NavController
 import com.furlogix.ui.components.reports.ReportHistoryTableItem
 import com.furlogix.ui.navigation.Screen
 import com.furlogix.viewmodels.ReportViewModel
+import kotlinx.coroutines.delay
 
 @Composable
 fun ReportEntryHistoryScreen(navController: NavController, reportId: Int = 0, viewModel: ReportViewModel = hiltViewModel()) {
     val templates = viewModel.reportTemplatesForCurrentReport.collectAsState()
     val entries by viewModel.reportEntries.collectAsState() // entries are collected as a map
+    var showLoading by remember { mutableStateOf(true) }
 
     LaunchedEffect(reportId) {
         viewModel.populateReportTemplatesForCurrentReport(reportId)
+        delay(3000)
+        showLoading = false
     }
     templates.value.forEach { item ->
         viewModel.PopulateReportEntriesProperty(item.uid)
@@ -49,7 +56,7 @@ fun ReportEntryHistoryScreen(navController: NavController, reportId: Int = 0, vi
             Text("Add Data")
         }
         Spacer(modifier = Modifier.fillMaxWidth().padding(10.dp))
-        if (entries.isEmpty()) {
+        if (entries.isEmpty() && showLoading) {
             CircularProgressIndicator(modifier = Modifier.fillMaxSize()) // Show loading indicator
         } else {
             LazyColumn(modifier = Modifier.fillMaxSize()) {

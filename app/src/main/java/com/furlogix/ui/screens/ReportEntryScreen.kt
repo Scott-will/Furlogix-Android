@@ -28,6 +28,7 @@ fun ReportEntryScreen(navController: NavController, reportId : Int = 0, viewMode
 ) {
     val reportName = viewModel.getReportNameById(reportId).collectAsState("")//reportName.value.filter { it.Id == reportId }.first().name
     val templateValueMap = remember { mutableMapOf<Int, MutableState<String>>() }
+    val timestamp = remember { mutableStateOf<String>("") }
     val templates = viewModel.reportTemplatesForCurrentReport.collectAsState().value
     val isError = viewModel.isError.collectAsState()
     val errorMsg = viewModel.errorMsg.collectAsState()
@@ -54,11 +55,13 @@ fun ReportEntryScreen(navController: NavController, reportId : Int = 0, viewMode
         ReportEntryForm(
             reportName = reportName.value,
             fields = templates,
-            templateValueMap = templateValueMap
+            templateValueMap = templateValueMap,
+            timestamp = timestamp
         )
         Spacer(modifier = Modifier.height(16.dp))
         Button(onClick = {
-            viewModel.insertReportEntry(templateValueMap, reportId)
+            viewModel.insertReportEntry(templateValueMap, reportId, timestamp.value)
+            navController.popBackStack()
         }) {
             Text("Save")
         }

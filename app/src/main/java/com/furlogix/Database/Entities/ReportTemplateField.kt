@@ -24,6 +24,7 @@ data class ReportTemplateField(
     var fieldType : FieldType,
     var name : String,
     var favourite : Boolean = false,
+    var icon : String,
     var optional : Boolean = true
 
 )

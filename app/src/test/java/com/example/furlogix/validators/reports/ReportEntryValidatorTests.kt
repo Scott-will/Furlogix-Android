@@ -32,7 +32,7 @@ class ReportEntryValidatorTests {
         // Given
         val entry = ReportEntry(reportId = 1, templateId = 1, value = "Valid Value", timestamp = "")
         val mockReport = mockk<Reports>() // Mock the Report object
-        val mockTemplate = ReportTemplateField(uid = 1, reportId = 1, fieldType = FieldType.TEXT, name = "test")
+        val mockTemplate = ReportTemplateField(uid = 1, reportId = 1, fieldType = FieldType.TEXT, name = "test", icon="test")
 
 
         coEvery { reportRepository.getReportById(entry.reportId) } returns mockReport
@@ -80,7 +80,7 @@ class ReportEntryValidatorTests {
     fun `should return false when field type validation fails`() = runTest {
         // Given
         val entry = ReportEntry(reportId = 1, templateId = 1, value = "Invalid Value", timestamp = "")
-        val mockTemplate = ReportTemplateField(reportId = 1, fieldType = FieldType.NUMBER, name = "test")
+        val mockTemplate = ReportTemplateField(reportId = 1, fieldType = FieldType.NUMBER, name = "test", icon="test")
 
         coEvery { reportRepository.getReportById(entry.reportId) } returns mockk()
         coEvery { reportTemplateRepository.GetTemplateById(entry.templateId) } returns mockTemplate

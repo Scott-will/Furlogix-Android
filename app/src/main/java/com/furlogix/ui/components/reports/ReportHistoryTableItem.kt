@@ -30,8 +30,8 @@ fun ReportHistoryTableItem(timestamp : String, entry : List<String>){
 }
 
 fun DisplayFormattedDate(entryTimestamp: String) : String {
-    val originalFormat = SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.US)
-    val targetFormat = SimpleDateFormat("EEEE MMM d yyyy", Locale.US)
+    val originalFormat = SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.US)
+    val targetFormat = SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.US)
     val date = originalFormat.parse(entryTimestamp)
     return targetFormat.format(date)
 }
