@@ -40,7 +40,7 @@ fun AppHeader(navController: NavController, userViewModel: UserViewModel = hiltV
     println("Dashboard route: ${Screen.Dashboard.route}")
 
     TopAppBar(
-        title = { Text("VetApp", color = Color.White) },
+        title = { Text("Furlogix", color = Color.White) },
         navigationIcon = {
             if (currentRoute != Screen.Dashboard.route) { // Only show back button if not on Dashboard
                 IconButton(onClick = { navController.popBackStack() }) {

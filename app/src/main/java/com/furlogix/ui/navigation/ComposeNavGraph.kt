@@ -82,7 +82,7 @@ fun ComposeNavGraph(
             ) { backStackEntry ->
                 val reportId = backStackEntry.arguments?.getInt("reportId")
                 if (reportId != null) {
-                    EditReportScreen(reportId)
+                    EditReportScreen(navController, reportId)
                 }
             }
             composable(

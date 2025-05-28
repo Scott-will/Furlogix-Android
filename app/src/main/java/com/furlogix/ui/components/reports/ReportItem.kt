@@ -34,7 +34,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.furlogix.Database.Entities.Reports
 import com.furlogix.R
-import com.furlogix.ui.components.common.BoxColourTheme
 import com.furlogix.ui.components.common.DeleteWarning
 
 @Composable
@@ -42,14 +41,13 @@ fun ReportItem(data: Reports,
                onClick: (Reports) -> Unit,
                onEditClick: (Reports) -> Unit,
                onDeleteClick : (Reports) -> Unit,
-               onSendClick : (Reports) -> Unit,
-               index : Int = 0) {
+               onSendClick : (Reports) -> Unit) {
     var showDeleteWarning by remember { mutableStateOf(false) }
     var expanded by remember { mutableStateOf(false) }
     Surface(
         modifier = Modifier.size(140.dp).clickable(onClick = {onClick(data)}),
         shape = RoundedCornerShape(12.dp),
-        color = BoxColourTheme.GetColour(index),
+        color = Color(0XFF8BDEDA),
         shadowElevation = 12.dp,
 
     ) {
@@ -73,7 +71,7 @@ fun ReportItem(data: Reports,
                 DropdownMenuItem(onClick = {
                     onEditClick(data)
                     expanded = false
-                }, text = {Text("Edit")},
+                }, text = {Text("Edit Report")},
                     leadingIcon = {Icon(
                         imageVector = Icons.Default.Edit,
                         contentDescription = R.string.edit_text.toString(),
@@ -83,7 +81,7 @@ fun ReportItem(data: Reports,
                 DropdownMenuItem(onClick = {
                     showDeleteWarning = true
                     expanded = false
-                }, text = {Text("Delete")},
+                }, text = {Text("Delete Report")},
                     leadingIcon = {
                         Icon(
                             imageVector = Icons.Default.Delete,
@@ -95,7 +93,7 @@ fun ReportItem(data: Reports,
                 DropdownMenuItem(onClick = {
                     onSendClick(data)
                     expanded = false
-                }, text = {Text("Send")},
+                }, text = {Text("Send Report")},
                     leadingIcon = {
                         Icon(
                             imageVector = Icons.Default.Email,
@@ -151,7 +149,6 @@ fun ReportsList(dataList: List<Reports>,
                             onSendClick = onSendClick,
                             onDeleteClick = onDeleteClick,
                             onEditClick = onEditClick,
-                            index = dataList.indexOf(data)
                         )
                     }
 

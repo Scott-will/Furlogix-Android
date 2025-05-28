@@ -33,7 +33,6 @@ import com.furlogix.ui.components.common.IconDisplayer
 fun ReportTemplateItem(data: ReportTemplateField,
                        onDeleteClick : (ReportTemplateField) -> Unit,
                        onUpdateClick : (ReportTemplateField) -> Unit,
-                       onFavouriteClick : (ReportTemplateField) -> Unit,
                        index : Int = 0) {
     var showDialog by remember { mutableStateOf(false) }
     var showDeleteWarning by remember { mutableStateOf(false) }
@@ -83,8 +82,7 @@ fun ReportTemplateItem(data: ReportTemplateField,
 @Composable
 fun ReporttemplatesList(dataList: List<ReportTemplateField>,
                         onDeleteClick : (ReportTemplateField) -> Unit,
-                        onUpdateClick : (ReportTemplateField) -> Unit,
-                        onFavouriteClick : (ReportTemplateField) -> Unit) {
+                        onUpdateClick : (ReportTemplateField) -> Unit) {
     Column(modifier = Modifier.padding(16.dp).fillMaxSize()) {
         dataList.chunked(2).forEach { pair ->
             Row(
@@ -98,7 +96,6 @@ fun ReporttemplatesList(dataList: List<ReportTemplateField>,
                             data = data,
                             onUpdateClick = onUpdateClick,
                             onDeleteClick = onDeleteClick,
-                            onFavouriteClick = onFavouriteClick,
                             index = dataList.indexOf(data)
                         )
                     }
