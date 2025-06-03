@@ -253,23 +253,6 @@ class ReportViewModel @Inject constructor(
 
     }
 
-    fun updateFavouriteReportTemplateItem(reportTemplateId : Int){
-        viewModelScope.launch {
-            withContext(Dispatchers.IO){
-                reportTemplateRepository.flipFavouriteReportTemplateField(reportTemplateId)
-            }
-        }
-    }
-
-    fun PopulateFavouriteReportTemplates(petId : Int) {
-        viewModelScope.launch {
-            withContext(Dispatchers.IO) {
-                _favouriteReportTemplates.value =
-                    reportTemplateRepository.GetFavouriteReportTemplatesForPet(petId)
-            }
-        }
-    }
-
     private fun checkTooManyReportEntries() {
         viewModelScope.launch {
             withContext(Dispatchers.IO) {

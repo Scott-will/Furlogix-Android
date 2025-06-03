@@ -5,9 +5,9 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import androidx.core.app.NotificationCompat
+import com.furlogix.Furlogix
 import com.furlogix.MainActivity
 import com.furlogix.R
-import com.furlogix.Furlogix
 
 class ReportsNotificationFactory {
 

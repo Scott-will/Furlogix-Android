@@ -77,7 +77,7 @@ fun EditReportScreen(reportId : Int, viewModel: ReportViewModel = hiltViewModel(
                 ReporttemplatesList(reportsTemplates,
                     onDeleteClick = {item -> viewModel.deleteReportTemplateField(item)},
                     onUpdateClick = {item -> viewModel.updateReportTemplateField(item)},
-                    onFavouriteClick = {item -> viewModel.updateFavouriteReportTemplateItem(item.uid)})
+                    onFavouriteClick = {})
             }
         }
 

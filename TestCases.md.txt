@@ -1,32 +1,55 @@
 Users:
 - create user
+	* valid
+	* invalid
 - delete user
+	* show warning
+	* user removed
+	* data layer and repository layer and viewmodel layer
 
 Pets:
 
 Reports:
 - create report
+	* loooong name
+	* empty name
+	* valid name
+	* repository and viewmodel
 - show reports
 	- 1
 	- 10
 	- 1000
 - delete reports
+	* repository and viewmodel
+	* invalid id
+	* show warning
+
 - edit reports
+	* name, templates
+	* repo and viewmodel layer
 
 Report Templates:
 - create template
+	* looong name
+	* empty name
+	* repo and viewmodel layer
+
 - show templates
 	- 1
 	- 10
 	- 1000
+	- correct menus
 
 
 Report Entries:
 - create entry
+	* show warning
 - show entry
 	- 1
 	- 10
 	- 1000
+- delete entry
+	* show warning
 
 Send Reports:
 - as csv to gmail

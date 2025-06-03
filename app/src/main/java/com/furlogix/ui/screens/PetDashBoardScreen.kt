@@ -26,7 +26,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import coil3.compose.rememberAsyncImagePainter
 import com.furlogix.ui.components.common.NoDataAvailable
-import com.furlogix.ui.components.graphs.GraphsWidget
 import com.furlogix.ui.components.reports.PendingReportsDialog
 import com.furlogix.ui.navigation.Screen
 import com.furlogix.viewmodels.PetViewModel
@@ -38,7 +37,6 @@ import com.furlogix.viewmodels.UserViewModel
 fun PetDashboardScreen(navController: NavController, petId : Int, userViewModel: UserViewModel = hiltViewModel(), petViewModel : PetViewModel = hiltViewModel(), reportViewModel: ReportViewModel = hiltViewModel()) {
     var favouriteReports = reportViewModel.favouriteReportTemplates.collectAsState()
     LaunchedEffect(Unit) {
-        reportViewModel.PopulateFavouriteReportTemplates(petId)
         userViewModel.populateCurrentUser()
     }
 
@@ -85,7 +83,6 @@ fun PetDashboardScreen(navController: NavController, petId : Int, userViewModel:
                         .padding(bottom = 35.dp),
                     contentAlignment = Alignment.Center
                 ) {
-                    GraphsWidget(petId)
                 }
             }
         }

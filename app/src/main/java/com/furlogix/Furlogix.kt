@@ -7,7 +7,6 @@ import android.content.Context
 import android.os.Build
 import android.util.Log
 import androidx.work.Configuration
-import com.furlogix.R
 import com.furlogix.di.CustomHiltWorkerFactory
 import dagger.hilt.android.HiltAndroidApp
 import javax.inject.Inject
