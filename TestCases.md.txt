@@ -1,7 +1,4 @@
 Users:
-- create user
-	* valid
-	* invalid
 - delete user
 	* show warning
 	* user removed

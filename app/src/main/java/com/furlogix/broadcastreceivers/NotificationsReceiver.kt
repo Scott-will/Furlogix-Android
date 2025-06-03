@@ -5,13 +5,15 @@ import android.content.Context
 import android.content.Intent
 import android.util.Log
 import com.furlogix.Furlogix
+import com.furlogix.logger.ILogger
 import com.furlogix.reminders.ReportsNotificationFactory
 
-class NotificationReceiver : BroadcastReceiver() {
+class NotificationReceiver(
+    private val logger : ILogger,) : BroadcastReceiver() {
     private val TAG = "Furlogix:" + NotificationReceiver::class.qualifiedName
 
     override fun onReceive(context: Context, intent: Intent) {
-        Log.d(TAG, "Recieved notification")
+        logger.log(TAG, "Recieved notification")
         showNotification(context, intent)
     }
 

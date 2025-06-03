@@ -48,7 +48,7 @@ class UserViewModel @Inject constructor(private val logger : ILogger, private va
 
     fun updateUserProfile(name: String, email: String) {
         viewModelScope.launch {
-            Log.d(TAG, "Updating user ${name}")
+            logger.log(TAG, "Updating user ${name}")
             userRepository.updateUser(name, email)
         }
     }

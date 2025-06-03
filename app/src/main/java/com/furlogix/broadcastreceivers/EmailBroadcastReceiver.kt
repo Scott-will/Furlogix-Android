@@ -6,13 +6,15 @@ import android.content.Context
 import android.content.Intent
 import android.util.Log
 import androidx.core.content.ContextCompat
+import com.furlogix.logger.ILogger
 
-class EmailBroadcastReceiver : BroadcastReceiver() {
+class EmailBroadcastReceiver(
+    private val logger : ILogger) : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
         try {
             ContextCompat.startActivity(context, intent, null)
         } catch (ex: ActivityNotFoundException) {
-            Log.e(TAG, String.format("No activity found : %s", ex))
+            logger.logError(TAG, String.format("No activity found : %s", ex), ex)
         }
     }
     companion object {

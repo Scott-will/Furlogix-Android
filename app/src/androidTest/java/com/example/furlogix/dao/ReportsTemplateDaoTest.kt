@@ -70,8 +70,8 @@ class ReportsTemplateDaoTest {
     fun deleteTemplate() = runBlocking {
         val toDelete = reportTemplateDao.getTemplateById(1)
         reportTemplateDao.delete(toDelete)
-        val result = reportTemplateDao.getReportById(1)
-        assert(result.isEmpty())
+        val result = reportTemplateDao.getTemplateById(1)
+        assert(result == null)
     }
 
 }

@@ -62,8 +62,8 @@ class ReportEntryDaoTest {
     }
 
     @Test
-    fun TestMarkAsSent() = runTest {
-        val reportList: List<ReportEntry> = reportEntryDao.getAllReportEntriesById(1)
+    fun TestMarkAsSent_AndDelete() = runTest {
+        var reportList: List<ReportEntry> = reportEntryDao.getAllReportEntriesById(1)
         reportList.forEach { item ->
             item.sent = true
             reportEntryDao.updateReportEntries(item)
@@ -74,12 +74,8 @@ class ReportEntryDaoTest {
         reportListUpdate.forEach{item ->
             Assert.assertTrue(item.sent)
         }
-    }
-
-    @Test
-    fun TestDeleteSent() = runTest {
         reportEntryDao.deleteSentReportEntries()
-        val reportList = reportEntryDao.getAllReportEntriesById(1)
-        Assert.assertTrue(reportList.size == 0)
+        reportList = reportEntryDao.getAllReportEntriesById(1)
+        Assert.assertTrue(reportList.isEmpty())
     }
 }
