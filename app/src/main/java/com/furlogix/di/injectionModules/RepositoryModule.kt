@@ -14,11 +14,13 @@ import com.furlogix.repositories.IRemindersRepository
 import com.furlogix.repositories.IReportEntryRepository
 import com.furlogix.repositories.IReportTemplateRepository
 import com.furlogix.repositories.IReportsRepository
+import com.furlogix.repositories.IUserRepository
 import com.furlogix.repositories.PetRepository
 import com.furlogix.repositories.RemindersRepository
 import com.furlogix.repositories.ReportEntryRepository
 import com.furlogix.repositories.ReportTemplateRepository
 import com.furlogix.repositories.ReportsRepository
+import com.furlogix.repositories.UserRepository
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
@@ -44,6 +46,9 @@ abstract class RepositoryModule {
 
     @Binds
     abstract fun bindPetRepository(petRepository: PetRepository): IPetRepository
+
+    @Binds
+    abstract fun bindUserRepository(userRepository: UserRepository): IUserRepository
 
 
     companion object {

@@ -11,6 +11,7 @@ import androidx.lifecycle.viewModelScope
 import com.furlogix.Database.Entities.Reminder
 import com.furlogix.Furlogix
 import com.furlogix.broadcastreceivers.NotificationReceiver
+import com.furlogix.logger.ILogger
 import com.furlogix.reminders.RequestCodeFactory
 import com.furlogix.repositories.IRemindersRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -28,6 +29,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class RemindersViewModel @Inject constructor(
+private val logger : ILogger,
     private val remindersRepository: IRemindersRepository
 ) : ViewModel() {
 
@@ -41,7 +43,7 @@ class RemindersViewModel @Inject constructor(
     var errorMsg : StateFlow<String> = _errorMsg
 
     public fun scheduleReminder(date : String, time : String, recurrence : String, title: String, message : String){
-        Log.d(TAG, "Scheduling reminder")
+        logger.log(TAG, "Scheduling reminder")
         val dateTimeFormat = SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault())
         val calendar = Calendar.getInstance()
         val context = Furlogix.applicationContext()
@@ -54,7 +56,7 @@ class RemindersViewModel @Inject constructor(
             val dateTime = dateTimeFormat.parse(dateTimeString)
             calendar.time = dateTime
         } catch (e: Exception) {
-            Log.e(TAG, "Exception scheduling reminder: ${e.printStackTrace()}")
+            logger.logError(TAG, "Exception scheduling reminder:", e)
             return
         }
         when (recurrence) {
@@ -64,12 +66,12 @@ class RemindersViewModel @Inject constructor(
                         alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.timeInMillis, pendingIntent)
                     }
                     else{
-                        Log.e(TAG, "Dont have permissions to schedule exact alerms")
+                        logger.logError(TAG, "Dont have permissions to schedule exact alerms", null)
                         return
                     }
                 }
                 else{
-                    Log.e(TAG, "Exception scheduling reminder:")
+                    logger.logError(TAG, "Exception scheduling reminder:", null)
                     return
                 }
 
@@ -93,10 +95,10 @@ class RemindersViewModel @Inject constructor(
             // Add more recurrence types as needed
             else -> return
         }
-        Log.d(TAG, "Set a reminder for ${title}")
+        logger.log(TAG, "Set a reminder for ${title}")
         val reminder = Reminder(type = title, frequency = recurrence, startTime = time, requestCode = requestCode, title = title, message = message)
         insertReminder(reminder)
-        Log.d(TAG, "Saved reminder to database")
+        logger.log(TAG, "Saved reminder to database")
     }
 
     fun BuildReminderPendingIntent(context: Context, title : String, message : String, requestCode : Int) : PendingIntent{
@@ -138,7 +140,7 @@ class RemindersViewModel @Inject constructor(
                     remindersRepository.deleteReminder(reminder)
                 }
                 catch(e : Exception){
-                    Log.e(TAG, "Failed to delete notification from database ${e.message}")
+                    logger.logError(TAG, "Failed to delete notification from database ${e.message}", e)
                 }
             }
         }
@@ -155,7 +157,7 @@ class RemindersViewModel @Inject constructor(
             alarmManager.cancel(pendingIntent)
         }
         catch(e : Exception){
-            Log.e(TAG, "Failed to delete alarm for notification ${e.message}")
+            logger.logError(TAG, "Failed to delete alarm for notification ${e.message}", e)
             return false
         }
         return true

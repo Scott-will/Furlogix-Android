@@ -1,6 +1,5 @@
 package com.furlogix.viewmodels
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.furlogix.Database.DAO.UserDao
@@ -11,6 +10,7 @@ import com.furlogix.email.CsvBuilder
 import com.furlogix.email.EmailHandler
 import com.furlogix.email.EmailWrapper
 import com.furlogix.email.IEmailHandler
+import com.furlogix.logger.ILogger
 import com.furlogix.repositories.IReportEntryRepository
 import com.furlogix.repositories.IReportTemplateRepository
 import com.furlogix.repositories.IReportsRepository
@@ -28,6 +28,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ReportViewModel @Inject constructor(
+    private val logger : ILogger,
     private val reportTemplateRepository : IReportTemplateRepository,
     private val reportRepository : IReportsRepository,
     private val userDao: UserDao,
@@ -65,10 +66,10 @@ class ReportViewModel @Inject constructor(
         val report = Reports(name = name, petId = petId)
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
-                Log.d(TAG, "Inserting report ${report.Id}, ${report.name}")
+                logger.log(TAG, "Inserting report ${report.Id}, ${report.name}")
                 val result = reportRepository.insertReport(report)
                 UpdateErrorState(!result.result, result.msg)
-                Log.d(
+                logger.log(
                     TAG,
                     "Result of inserting report ${report.Id}, ${report.name} : ${result.result}"
                 )
@@ -87,7 +88,7 @@ class ReportViewModel @Inject constructor(
     fun deleteReport(report: Reports) {
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
-                Log.d(TAG, "Deleting report ${report.Id}, ${report.name}")
+                logger.log(TAG, "Deleting report ${report.Id}, ${report.name}")
                 reportRepository.deleteReport(report)
             }
 
@@ -97,10 +98,10 @@ class ReportViewModel @Inject constructor(
     fun updateReport(report: Reports) {
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
-                Log.d(TAG, "Updating report ${report.Id}, ${report.name}")
+                logger.log(TAG, "Updating report ${report.Id}, ${report.name}")
                 val result = reportRepository.updateReport(report)
                 UpdateErrorState(!result.result, result.msg)
-                Log.d(
+                logger.log(
                     TAG,
                     "Result of updating report ${report.Id}, ${report.name} : ${result.result}"
                 )
@@ -112,7 +113,7 @@ class ReportViewModel @Inject constructor(
     fun gatherReportData(reportId: Int) {
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
-                Log.d(TAG, "Gathering report data to send in email")
+                logger.log(TAG, "Gathering report data to send in email")
                 val reportName = reportRepository.getReportById(reportId).name
                 val templates = reportTemplateRepository.GetReportById(reportId)
                 val entries = reportEntryRepository.getAllReportEntriesById(reportId)
@@ -138,9 +139,9 @@ class ReportViewModel @Inject constructor(
 
     fun SendEmail(wrapper: EmailWrapper) {
         val emailHandler: IEmailHandler = EmailHandler(Furlogix.applicationContext(), userDao)
-        Log.d(TAG, "Starting process of sending email")
+        logger.log(TAG, "Starting process of sending email")
         emailHandler.CreateAndSendEmail(wrapper)
-        Log.d(TAG, "finished process of sending email")
+        logger.log(TAG, "finished process of sending email")
     }
 
     fun UpdateErrorState(isError: Boolean, errorMsg: String) {
@@ -166,14 +167,14 @@ class ReportViewModel @Inject constructor(
     fun PopulateReportEntriesProperty(reportTemplateId: Int) {
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
-                Log.d("ReportViewModel", "getting entries for ${reportTemplateId}")
+                logger.log("ReportViewModel", "getting entries for ${reportTemplateId}")
                 reportEntryRepository.getAllReportEntriesForTemplate(reportTemplateId)
                     .collect { entries ->
-                        Log.d("ReportViewModel", "got an entry for ${reportTemplateId}")
+                        logger.log("ReportViewModel", "got an entry for ${reportTemplateId}")
                         val updatedMap = _reportEntries.value.toMutableMap()
                         updatedMap[reportTemplateId] = entries
                         _reportEntries.value = updatedMap.toMutableMap()
-                        Log.d("ReportViewModel", reportEntries.value.size.toString() )
+                        logger.log("ReportViewModel", reportEntries.value.size.toString() )
                     }
             }
         }

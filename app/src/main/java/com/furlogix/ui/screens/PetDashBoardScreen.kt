@@ -24,6 +24,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import coil3.compose.rememberAsyncImagePainter
+import com.furlogix.ui.components.common.NoDataAvailable
 import com.furlogix.ui.components.reports.PendingReportsDialog
 import com.furlogix.ui.navigation.Screen
 import com.furlogix.viewmodels.PetViewModel

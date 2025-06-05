@@ -5,6 +5,7 @@ import android.content.Context
 import androidx.work.ListenableWorker
 import androidx.work.WorkerFactory
 import androidx.work.WorkerParameters
+import com.furlogix.logger.LogcatLogger
 import com.furlogix.repositories.IReportEntryRepository
 import javax.inject.Inject
 
@@ -16,5 +17,5 @@ class CustomHiltWorkerFactory @Inject constructor(
         appContext: Context,
         workerClassName: String,
         workerParameters: WorkerParameters
-    ): ListenableWorker? = ReportCleanerWorker(appContext, workerParameters, reportEntryRepository)
+    ): ListenableWorker = ReportCleanerWorker(LogcatLogger(), appContext, workerParameters, reportEntryRepository)
 }
