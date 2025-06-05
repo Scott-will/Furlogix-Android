@@ -53,4 +53,32 @@ class ReminderDaoTest {
         val result = reminderDao.getAllRemindersFlow().firstOrNull()
         assert(result!!.isEmpty())
     }
+
+    @Test
+    fun GetLargestRequestCode() = runBlocking{
+        val reminder1 = Reminder(frequency = "Once",
+            type="Send",
+            startTime = "abcd",
+            requestCode = 987,
+            title="test",
+            message="test")
+        val reminder2 = Reminder(frequency = "Once",
+            type="Send",
+            startTime = "abcd",
+            requestCode = 1001,
+            title="test2",
+            message="test")
+        val reminder3 = Reminder(frequency = "Once",
+            type="Send",
+            startTime = "abcd",
+            requestCode = 105,
+            title="test3",
+            message="test")
+        reminderDao.insert(reminder1)
+        reminderDao.insert(reminder2)
+        reminderDao.insert(reminder3)
+        val reminderLargest = reminderDao.getLargestRequestCode()
+        assert(reminderLargest.title == "test2")
+        assert(reminderLargest.requestCode == 1001)
+    }
 }

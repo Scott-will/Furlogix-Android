@@ -22,7 +22,6 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.furlogix.Database.Entities.ReportTemplateField
 import com.furlogix.reports.FieldType
-import com.furlogix.ui.components.common.SimpleDateTimePicker
 
 @Composable
 fun ReportEntry(reportTemplateField: ReportTemplateField, text : MutableState<String>) {

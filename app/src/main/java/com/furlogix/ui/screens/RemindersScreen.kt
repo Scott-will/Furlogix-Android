@@ -23,8 +23,8 @@ import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat.startActivity
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.furlogix.R
 import com.furlogix.Furlogix
+import com.furlogix.R
 import com.furlogix.ui.components.reminders.RemindersList
 import com.furlogix.ui.components.reminders.ReportsReminder
 import com.furlogix.viewmodels.RemindersViewModel

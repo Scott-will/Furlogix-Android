@@ -17,7 +17,6 @@ import java.util.Locale
 
 @Composable
 fun ReportHistoryTableItem(timestamp : String, entry : List<String>){
-    Log.d("ReportHistoryTableItem", "building entry")
     Row( modifier = Modifier
         .fillMaxWidth()
         .border(1.dp, Color.Black),

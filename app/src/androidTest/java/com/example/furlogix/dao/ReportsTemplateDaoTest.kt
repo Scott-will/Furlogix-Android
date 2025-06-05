@@ -4,18 +4,14 @@ import android.content.Context
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.example.furlogix.dao.ReportEntryTestHelper
 import com.furlogix.Database.AppDatabase
 import com.furlogix.Database.DAO.ReportTemplateDao
-import com.furlogix.Database.DAO.ReportsDao
-import com.furlogix.Database.Entities.Pet
-import com.furlogix.Database.Entities.ReportTemplateField
-import com.furlogix.Database.Entities.Reports
-import com.furlogix.Database.Entities.User
 import com.furlogix.R
-import com.furlogix.reports.FieldType
 import junit.framework.TestCase.assertEquals
 import kotlinx.coroutines.runBlocking
 import org.junit.After
+import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -25,20 +21,23 @@ class ReportsTemplateDaoTest {
 
     private lateinit var db: AppDatabase
     private lateinit var reportTemplateDao: ReportTemplateDao
-    private lateinit var reportDao: ReportsDao
+    private lateinit var testHelper : ReportEntryTestHelper
+    private val reportsCount : Int = 2
+    private val reportsTemplateCount : Int = 2
+    private val reportEntryPerTemplateCount = 5
 
     @Before
     fun createDb() {
         val context = ApplicationProvider.getApplicationContext<Context>()
         context.deleteDatabase(R.string.database_name.toString())
         db = Room.inMemoryDatabaseBuilder(context, AppDatabase::class.java).build()
+        val reportEntryDao = db.reportEntryDao()
         reportTemplateDao = db.reportTemplateDao()
-        reportDao = db.reportsDao()
-        val userDao = db.userDao()
+        val reportDao = db.reportsDao()
         val petDao = db.petDao()
-        userDao.insert(User(name = "abcd", surname = "abcd", email = "abcd"))
-        petDao.insert(Pet(name = "test", type = "cat", description = "", userId = 1))
-        reportDao.insert(Reports(name = "Test", petId = 1))
+        val userDao = db.userDao()
+        testHelper = ReportEntryTestHelper(userDao, petDao, reportDao, reportTemplateDao, reportEntryDao)
+        testHelper.Seed(2, 2, reportsCount, reportsTemplateCount, reportEntryPerTemplateCount)
     }
 
     @After
@@ -47,35 +46,32 @@ class ReportsTemplateDaoTest {
     }
 
     @Test
-    fun insertAndRetrieveTemplate() = runBlocking {
-        val reportTemplateField = ReportTemplateField(name = "Test", fieldType = FieldType.NUMBER, icon = "test", reportId = 1)
-        reportTemplateDao.insert(reportTemplateField)
-        val templates = reportTemplateDao.getAll()
-        assertEquals(templates.count(), 1)
-        assertEquals(templates.firstOrNull()?.name, "Test")
+    fun updateTemplate() = runBlocking {
+        val insertedTemplate = reportTemplateDao.getTemplateById(1)
+        val updatedTemplate = insertedTemplate.copy(name = "Updated Name")
+        reportTemplateDao.update(updatedTemplate)
+        val result = reportTemplateDao.getTemplateById(1)
+        assertEquals(result.name, "Updated Name")
     }
 
     @Test
-    fun updateTemplate() = runBlocking {
-        val reportTemplateField = ReportTemplateField(name = "Original Name", fieldType = FieldType.TEXT, icon="test", reportId = 1)
-        reportTemplateDao.insert(reportTemplateField)
-        val insertedTemplate = reportTemplateDao.getAll().firstOrNull()
-        val updatedTemplate = insertedTemplate?.copy(name = "Updated Name")
-        reportTemplateDao.update(updatedTemplate!!)
+    fun GetAllReportTemplateField() = runBlocking {
+        val reportTemplates = reportTemplateDao.getAll()
+        Assert.assertEquals(2*2*reportsCount*reportsTemplateCount, reportTemplates.size)
+    }
 
-        val result = reportTemplateDao.getAll().firstOrNull { x -> x.uid == insertedTemplate.uid }
-        assertEquals(result?.name, "Updated Name")
+    @Test
+    fun GetAllReportTemplateFieldForReport() = runBlocking {
+        val reportTemplates = reportTemplateDao.getReportById(1)
+        Assert.assertEquals(reportsTemplateCount, reportTemplates.size)
     }
 
     @Test
     fun deleteTemplate() = runBlocking {
-        val template = ReportTemplateField(name = "Test", fieldType = FieldType.CHECKBOX, icon="test", reportId = 1)
-        reportTemplateDao.insert(template)
-        val insertedUser = reportTemplateDao.getAll().first()
-        reportTemplateDao.delete(insertedUser)
-
-        val result = reportTemplateDao.getReportById(1)
-        assert(result.isEmpty())
+        val toDelete = reportTemplateDao.getTemplateById(1)
+        reportTemplateDao.delete(toDelete)
+        val result = reportTemplateDao.getTemplateById(1)
+        assert(result == null)
     }
 
 }
