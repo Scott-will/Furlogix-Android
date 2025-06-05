@@ -29,26 +29,30 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.furlogix.ui.components.reports.ReportHistoryTableItem
 import com.furlogix.ui.navigation.Screen
+import com.furlogix.viewmodels.ReportEntryHistoryViewModel
+import com.furlogix.viewmodels.ReportTemplatesViewModels
 import com.furlogix.viewmodels.ReportViewModel
 import kotlinx.coroutines.delay
 
 @Composable
-fun ReportEntryHistoryScreen(navController: NavController, reportId: Int = 0, viewModel: ReportViewModel = hiltViewModel()) {
-    val templates = viewModel.reportTemplatesForCurrentReport.collectAsState()
-    val entries by viewModel.reportEntries.collectAsState() // entries are collected as a map
+fun ReportEntryHistoryScreen(navController: NavController, reportId: Int = 0,
+                             reportViewModel: ReportViewModel = hiltViewModel(),
+                             reportTemplateViewModels: ReportTemplatesViewModels = hiltViewModel(),
+                             reportEntryHistoryViewModel: ReportEntryHistoryViewModel = hiltViewModel()) {
+    val templates = reportTemplateViewModels.reportTemplatesForCurrentReport.collectAsState()
+    val entries by reportViewModel.reportEntries.collectAsState() // entries are collected as a map
     var showLoading by remember { mutableStateOf(true) }
 
     LaunchedEffect(reportId) {
-        viewModel.populateReportTemplatesForCurrentReport(reportId)
+        reportTemplateViewModels.populateReportTemplatesForCurrentReport(reportId)
         delay(3000)
         showLoading = false
     }
     templates.value.forEach { item ->
-        viewModel.PopulateReportEntriesProperty(item.uid)
+        reportViewModel.PopulateReportEntriesProperty(item.uid)
     }
 
-    val groupedEntries = entries.flatMap { it.value }
-        .groupBy { it.timestamp }
+    val groupedEntries = entries.flatMap { it.value }.groupBy { it.timestamp }
 
     Column{
         Button(onClick =
@@ -85,7 +89,8 @@ fun ReportEntryHistoryScreen(navController: NavController, reportId: Int = 0, vi
                 }
                 groupedEntries.forEach { (timestamp, entryList) ->
                     item{
-                        ReportHistoryTableItem(timestamp, entryList.map{it.value})
+                        ReportHistoryTableItem(timestamp,
+                            entryList.map{it.value}, entryList.map{it.Id})
                     }
                 }
             }

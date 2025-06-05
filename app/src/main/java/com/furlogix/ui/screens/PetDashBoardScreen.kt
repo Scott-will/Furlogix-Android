@@ -2,7 +2,6 @@ package com.furlogix.ui.screens
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -35,14 +34,15 @@ import com.furlogix.viewmodels.UserViewModel
 
 @Composable
 fun PetDashboardScreen(navController: NavController, petId : Int, userViewModel: UserViewModel = hiltViewModel(), petViewModel : PetViewModel = hiltViewModel(), reportViewModel: ReportViewModel = hiltViewModel()) {
-    var favouriteReports = reportViewModel.favouriteReportTemplates.collectAsState()
     LaunchedEffect(Unit) {
         userViewModel.populateCurrentUser()
+        petViewModel.populateCurrentPet(petId)
     }
 
     val photoUri by petViewModel.photoUri.collectAsState()
     val currentUser by userViewModel.currentUser.collectAsState()
     val userId by userViewModel.userId.collectAsState(initial = 0L)
+    val currentPet = petViewModel.currentPet.collectAsState()
 
     if (currentUser != null && currentUser!!.pendingSentReports) {
         PendingReportsDialog(
@@ -59,33 +59,10 @@ fun PetDashboardScreen(navController: NavController, petId : Int, userViewModel:
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         Text(
-            text = "Dashboard ",
+            text = "${currentPet.value?.name} Dashboard",
             style = MaterialTheme.typography.headlineMedium
         )
 
-        if (favouriteReports.value.isEmpty()) {
-            androidx.compose.material3.Card(
-                modifier = Modifier.fillMaxWidth(),
-                shape = MaterialTheme.shapes.medium,
-                elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
-            ) {
-                NoDataAvailable("Favourite Report Templates", Modifier.padding(16.dp))
-            }
-        } else {
-            androidx.compose.material3.Card(
-                modifier = Modifier.fillMaxWidth(),
-                shape = MaterialTheme.shapes.medium,
-                elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
-            ) {
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(bottom = 35.dp),
-                    contentAlignment = Alignment.Center
-                ) {
-                }
-            }
-        }
         photoUri?.let { uriString ->
             androidx.compose.material3.Card(
                 modifier = Modifier.fillMaxWidth(),

@@ -33,4 +33,7 @@ interface ReportEntryDao {
 
     @Query("SELECT * FROM REPORTENTRY WHERE templateId = :reportTemplateId ORDER BY Id DESC")
     fun getAllReportEntriesForTemplateAsFlow(reportTemplateId : Int) : Flow<List<ReportEntry>>
+
+    @Query("DELETE From ReportEntry WHERE Id = :id")
+    fun deleteReportEntry(id : Int)
 }

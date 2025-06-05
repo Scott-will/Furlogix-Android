@@ -31,7 +31,6 @@ class ReportTemplateItemTest {
             data = data,
             onDeleteClick = onDeleteClick,
             onUpdateClick = onUpdateClick,
-            onFavouriteClick = onFavouriteClick
         )
     }
 

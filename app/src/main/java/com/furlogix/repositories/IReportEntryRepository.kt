@@ -23,4 +23,6 @@ interface IReportEntryRepository {
     suspend fun getAllEntriesForReportTemplate(reportTemplateId : Int) : List<ReportEntry>
 
     suspend fun getAllReportEntriesForTemplate(reportTemplateId : Int): Flow<List<ReportEntry>>
+
+    suspend fun deleteReportEntry(id : Int)
 }

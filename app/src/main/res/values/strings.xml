@@ -3,9 +3,5 @@
     <string name="database_name">VetApp</string>
     <string name="edit_text">Edit</string>
     <string name="delete_text">Delete</string>
-    <string name="favourite_text">Favourite</string>
-    <string name="report_template_not_exist">Report Template doesn\'t exist for report entry</string>
-    <string name="empty_value">Value is empty</string>
-    <string name="not_valid_value_template">Value entered is not valid according to the field type</string>
     <string name="notification_channel_id">vetapp-reminder-channel</string>
 </resources>

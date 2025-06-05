@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -44,24 +43,20 @@ fun ReportEntryForm(
                 NoDataAvailable("Templates", Modifier.fillMaxSize())
             }
             else{
-                LazyColumn(modifier = Modifier.padding(16.dp)) {
-                    items(fields.size) { item ->
-                        ReportEntry(
-                            fields[item],
-                            templateValueMap[fields[item].uid]!! // Bind each item to its corresponding state
-                        )
-                    }
-                    item {
-                        SimpleDateTimePicker { dateTime ->
-                            if (dateTime != null) {
-                                timestamp.value = dateTime.format(formatter)
-                            }
-                        }
-
-                        Text("Selected: ${timestamp.value ?: "No date selected"}", modifier = Modifier.padding(top = 8.dp))
-                        Spacer(modifier = Modifier.height(16.dp))
+                fields.forEach { field ->
+                    ReportEntry(
+                        reportTemplateField = field,
+                        text = templateValueMap[field.uid]!!
+                    )
+                }
+                SimpleDateTimePicker { dateTime ->
+                    if (dateTime != null) {
+                        timestamp.value = dateTime.format(formatter)
                     }
                 }
+
+                Text("Selected: ${timestamp.value ?: "No date selected"}", modifier = Modifier.padding(top = 8.dp))
+                Spacer(modifier = Modifier.height(16.dp))
             }
         }
     }

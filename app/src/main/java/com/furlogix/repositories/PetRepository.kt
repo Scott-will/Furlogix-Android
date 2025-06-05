@@ -15,6 +15,10 @@ class PetRepository @Inject constructor(
         return petDao.getAll()
     }
 
+    override suspend fun getPetById(id : Int) : Pet{
+        return petDao.getPetById(id)
+    }
+
     override suspend fun getPetsForUser(userId: Long): List<Pet> {
         return petDao.getPetsForUser(userId)
     }
