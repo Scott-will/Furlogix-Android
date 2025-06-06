@@ -4,11 +4,11 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
@@ -32,35 +32,69 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.furlogix.Database.Entities.Reports
-import com.furlogix.R
 import com.furlogix.ui.components.common.DeleteWarning
+import com.furlogix.ui.theme.ClickableItemRed
 
 @Composable
-fun ReportItem(data: Reports,
-               onClick: (Reports) -> Unit,
-               onEditClick: (Reports) -> Unit,
-               onDeleteClick : (Reports) -> Unit,
-               onSendClick : (Reports) -> Unit) {
+fun ReportItem(
+    data: Reports,
+    onClick: (Reports) -> Unit,
+    onEditClick: (Reports) -> Unit,
+    onDeleteClick: (Reports) -> Unit,
+    onSendClick: (Reports) -> Unit
+) {
     var showDeleteWarning by remember { mutableStateOf(false) }
     var expanded by remember { mutableStateOf(false) }
-    Surface(
-        modifier = Modifier.size(140.dp).clickable(onClick = {onClick(data)}),
-        shape = RoundedCornerShape(12.dp),
-        color = Color(0XFF8BDEDA),
-        shadowElevation = 12.dp,
 
+    Surface(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable { onClick(data) },
+        shape = RoundedCornerShape(12.dp),
+        color = ClickableItemRed,
+        shadowElevation = 8.dp,
     ) {
-        Box{
-            IconButton(
-                onClick = { expanded = !expanded },
+        Box(
+            modifier = Modifier
+                .padding(16.dp)
+        ) {
+            Column(
                 modifier = Modifier
-                    .padding(8.dp)
+                    .fillMaxWidth()
+                    .align(Alignment.CenterStart),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center
+            ) {
+                Text(
+                    text = data.name,
+                    modifier = Modifier.fillMaxWidth(),
+                    fontWeight = FontWeight.Bold,
+                    textAlign = TextAlign.Center,
+                    color = Color.Black,
+                    fontSize = 20.sp
+                )
+
+                if (showDeleteWarning) {
+                    Spacer(modifier = Modifier.height(8.dp))
+                    DeleteWarning(
+                        onDismiss = { showDeleteWarning = false },
+                        onConfirm = { onDeleteClick(data) },
+                        msg = "Deleting this report will delete all associated templates and data"
+                    )
+                }
+            }
+
+            IconButton(
+                onClick = { expanded = true },
+                modifier = Modifier
                     .align(Alignment.TopEnd)
             ) {
                 Icon(
                     imageVector = Icons.Filled.MoreVert,
-                    contentDescription = "More report options"
+                    contentDescription = "More report options",
+                    tint = Color.Black
                 )
             }
 
@@ -68,93 +102,75 @@ fun ReportItem(data: Reports,
                 expanded = expanded,
                 onDismissRequest = { expanded = false },
             ) {
-                DropdownMenuItem(onClick = {
-                    onEditClick(data)
-                    expanded = false
-                }, text = {Text("Edit Report")},
-                    leadingIcon = {Icon(
-                        imageVector = Icons.Default.Edit,
-                        contentDescription = R.string.edit_text.toString(),
-                        modifier = Modifier.size(24.dp),
-                        tint = Color(0xffdce21c)
-                    )})
-                DropdownMenuItem(onClick = {
-                    showDeleteWarning = true
-                    expanded = false
-                }, text = {Text("Delete Report")},
+                DropdownMenuItem(
+                    onClick = {
+                        onEditClick(data)
+                        expanded = false
+                    },
+                    text = { Text("Edit Report") },
+                    leadingIcon = {
+                        Icon(
+                            imageVector = Icons.Default.Edit,
+                            contentDescription = "Edit",
+                            tint = Color(0xffdce21c)
+                        )
+                    }
+                )
+                DropdownMenuItem(
+                    onClick = {
+                        showDeleteWarning = true
+                        expanded = false
+                    },
+                    text = { Text("Delete Report") },
                     leadingIcon = {
                         Icon(
                             imageVector = Icons.Default.Delete,
-                            contentDescription = R.string.delete_text.toString(),
-                            modifier = Modifier.size(24.dp),
+                            contentDescription = "Delete",
                             tint = Color.Gray
                         )
-                    })
-                DropdownMenuItem(onClick = {
-                    onSendClick(data)
-                    expanded = false
-                }, text = {Text("Send Report")},
+                    }
+                )
+                DropdownMenuItem(
+                    onClick = {
+                        onSendClick(data)
+                        expanded = false
+                    },
+                    text = { Text("Send Report") },
                     leadingIcon = {
                         Icon(
                             imageVector = Icons.Default.Email,
-                            contentDescription = "email",
-                            modifier = Modifier.size(24.dp),
+                            contentDescription = "Send",
                             tint = Color.Gray
                         )
-                    })
-            }
-        }
-        Column(
-            modifier = Modifier
-                .fillMaxSize(),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
-        ) {
-            Text(
-                text = data.name,
-                modifier = Modifier.fillMaxWidth(),
-                fontWeight = FontWeight.Bold ,
-                textAlign = TextAlign.Center
-            )
-            if (showDeleteWarning) {
-                DeleteWarning(
-                    { showDeleteWarning = false },
-                    {onDeleteClick(data)},
-                    "Deleting this report will delete all associated templates and data"
+                    }
                 )
             }
         }
     }
 }
 
-
 @Composable
-fun ReportsList(dataList: List<Reports>,
-                onSendClick :  (Reports) ->Unit,
-                onDeleteClick :  (Reports) ->Unit,
-                onEditClick :  (Reports) ->Unit,
-                onClick : (Reports) -> Unit) {
-    Column(modifier = Modifier.padding(16.dp).fillMaxSize()) {
-        dataList.chunked(2).forEach { pair ->
-            Row(
-                modifier = Modifier.fillMaxWidth()
-                    .padding(bottom = 16.dp),
-                horizontalArrangement = Arrangement.spacedBy(16.dp)
-            ) {
-                pair.forEachIndexed { index, data ->
-                    Box(modifier = Modifier.weight(1f)){
-                        ReportItem(
-                            data = data,
-                            onClick = onClick,
-                            onSendClick = onSendClick,
-                            onDeleteClick = onDeleteClick,
-                            onEditClick = onEditClick,
-                        )
-                    }
-
-                }
-
-            }
+fun ReportsList(
+    dataList: List<Reports>,
+    onSendClick: (Reports) -> Unit,
+    onDeleteClick: (Reports) -> Unit,
+    onEditClick: (Reports) -> Unit,
+    onClick: (Reports) -> Unit
+) {
+    Column(
+        modifier = Modifier
+            .padding(16.dp)
+            .fillMaxSize(),
+        verticalArrangement = Arrangement.spacedBy(16.dp)
+    ) {
+        dataList.forEach { data ->
+            ReportItem(
+                data = data,
+                onClick = onClick,
+                onSendClick = onSendClick,
+                onDeleteClick = onDeleteClick,
+                onEditClick = onEditClick
+            )
         }
     }
 }

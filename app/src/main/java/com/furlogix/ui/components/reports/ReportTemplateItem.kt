@@ -18,29 +18,29 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.furlogix.Database.Entities.ReportTemplateField
-import com.furlogix.ui.components.common.BoxColourTheme
 import com.furlogix.ui.components.common.DeleteButton
 import com.furlogix.ui.components.common.DeleteWarning
 import com.furlogix.ui.components.common.EditButton
 import com.furlogix.ui.components.common.IconDisplayer
+import com.furlogix.ui.theme.ClickableItemRed
 
 
 @Composable
 fun ReportTemplateItem(data: ReportTemplateField,
                        onDeleteClick : (ReportTemplateField) -> Unit,
-                       onUpdateClick : (ReportTemplateField) -> Unit,
-                       index : Int = 0) {
+                       onUpdateClick : (ReportTemplateField) -> Unit) {
     var showDialog by remember { mutableStateOf(false) }
     var showDeleteWarning by remember { mutableStateOf(false) }
 
     Surface(
         modifier = Modifier.size(140.dp),
         shape = RoundedCornerShape(12.dp),
-        color = BoxColourTheme.GetColour(index)
+        color = ClickableItemRed
     ) {
         Column(
             modifier = Modifier
@@ -95,8 +95,7 @@ fun ReporttemplatesList(dataList: List<ReportTemplateField>,
                         ReportTemplateItem(
                             data = data,
                             onUpdateClick = onUpdateClick,
-                            onDeleteClick = onDeleteClick,
-                            index = dataList.indexOf(data)
+                            onDeleteClick = onDeleteClick
                         )
                     }
 
