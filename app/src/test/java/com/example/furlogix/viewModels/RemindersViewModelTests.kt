@@ -4,6 +4,7 @@ import android.content.Context
 import com.furlogix.Database.Entities.Reminder
 import com.furlogix.Result
 import com.furlogix.logger.ILogger
+import com.furlogix.reminders.RequestCodeFactory
 import com.furlogix.repositories.IRemindersRepository
 import com.furlogix.viewmodels.RemindersViewModel
 import io.mockk.Runs
@@ -42,8 +43,9 @@ class RemindersViewModelTests {
         context = mockk(relaxed = true)
         every { logger.log(any(), any()) } just Runs
         every { logger.logError(any(), any(), any()) } just Runs
+        var requestCodeFactory : RequestCodeFactory = mockk()
 
-        viewModel = RemindersViewModel(logger, remindersRepository, testDispatcher)
+        viewModel = RemindersViewModel(logger, remindersRepository, requestCodeFactory, testDispatcher)
     }
 
     @After

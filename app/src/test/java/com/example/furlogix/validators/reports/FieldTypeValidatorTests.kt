@@ -4,12 +4,13 @@ import com.furlogix.reports.FieldType
 import com.furlogix.reports.FieldTypeValidator
 import junit.framework.TestCase.assertFalse
 import junit.framework.TestCase.assertTrue
+import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
 class FieldTypeValidatorTests {
 
     @Test
-    fun `should return true for TEXT type with any value`() {
+    fun `should return true for TEXT type with any value`() = runTest{
         // Given
         val type = FieldType.TEXT
         val value = "Any text"
@@ -22,7 +23,7 @@ class FieldTypeValidatorTests {
     }
 
     @Test
-    fun `should return true for BOOLEAN type with valid boolean value`() {
+    fun `should return true for BOOLEAN type with valid boolean value`() = runTest {
         // Given
         val type = FieldType.CHECKBOX
 
@@ -36,7 +37,7 @@ class FieldTypeValidatorTests {
     }
 
     @Test
-    fun `should return false for BOOLEAN type with invalid boolean value`() {
+    fun `should return false for BOOLEAN type with invalid boolean value`() = runTest{
         // Given
         val type = FieldType.CHECKBOX
 
@@ -48,7 +49,7 @@ class FieldTypeValidatorTests {
     }
 
     @Test
-    fun `should return true for NUMBER type with valid numeric value`() {
+    fun `should return true for NUMBER type with valid numeric value`() = runTest{
         // Given
         val type = FieldType.NUMBER
 
@@ -62,7 +63,7 @@ class FieldTypeValidatorTests {
     }
 
     @Test
-    fun `should return false for NUMBER type with invalid numeric value`() {
+    fun `should return false for NUMBER type with invalid numeric value`() = runTest {
         // Given
         val type = FieldType.NUMBER
 

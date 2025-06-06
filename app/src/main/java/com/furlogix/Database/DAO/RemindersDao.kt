@@ -19,5 +19,5 @@ interface RemindersDao {
     fun getAllRemindersFlow() : Flow<List<Reminder>>
 
     @Query("SELECT * FROM Reminder ORDER BY requestCode DESC LIMIT 1;")
-    fun getLargestRequestCode() : Reminder
+    fun getLargestRequestCode() : Reminder?
 }

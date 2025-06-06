@@ -5,7 +5,6 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.os.Build
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.furlogix.Database.Entities.Reminder
@@ -16,7 +15,6 @@ import com.furlogix.reminders.RequestCodeFactory
 import com.furlogix.repositories.IRemindersRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -30,8 +28,9 @@ import javax.inject.Inject
 
 @HiltViewModel
 class RemindersViewModel @Inject constructor(
-private val logger : ILogger,
+    private val logger : ILogger,
     private val remindersRepository: IRemindersRepository,
+    private val requestCodeFactory: RequestCodeFactory,
     private val ioDispatcher: CoroutineDispatcher
 ) : ViewModel() {
 
@@ -50,7 +49,7 @@ private val logger : ILogger,
         val calendar = Calendar.getInstance()
         val context = Furlogix.applicationContext()
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        val requestCode = RequestCodeFactory.GetRequestCode()
+        val requestCode = this.requestCodeFactory.getRequestCode()
         val pendingIntent = BuildReminderPendingIntent(context, title, message, requestCode)
         if(pendingIntent == null){
             return
