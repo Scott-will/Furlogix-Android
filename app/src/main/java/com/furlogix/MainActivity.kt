@@ -10,6 +10,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.lifecycleScope
 import androidx.room.Room
 import androidx.work.PeriodicWorkRequest
 import androidx.work.WorkManager
@@ -18,6 +19,9 @@ import com.furlogix.reminders.RequestCodeFactory
 import com.furlogix.ui.navigation.ComposeNavGraph
 import com.furlogix.ui.theme.VetAppTheme
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
@@ -63,7 +67,11 @@ class MainActivity : ComponentActivity() {
     }
 
     fun setUpAlarmData(){
-        requestCodeFactory.initRequestCode()
+        lifecycleScope.launch {
+            withContext(Dispatchers.IO){
+                requestCodeFactory.initRequestCode()
+            }
+        }
     }
 }
 

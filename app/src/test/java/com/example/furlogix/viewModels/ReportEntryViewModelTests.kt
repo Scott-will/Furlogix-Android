@@ -1,7 +1,6 @@
 package com.example.furlogix.viewModels
 
 import androidx.compose.runtime.mutableStateOf
-import com.furlogix.Database.Entities.ReportEntry
 import com.furlogix.Result
 import com.furlogix.logger.ILogger
 import com.furlogix.repositories.IReportEntryRepository
@@ -13,7 +12,6 @@ import io.mockk.just
 import io.mockk.mockk
 import io.mockk.unmockkObject
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.resetMain

@@ -3,7 +3,6 @@ package com.example.furlogix.viewModels
 import com.furlogix.logger.ILogger
 import com.furlogix.repositories.IReportEntryRepository
 import com.furlogix.viewmodels.ReportEntryHistoryViewModel
-import com.furlogix.viewmodels.ReportEntryViewModel
 import io.mockk.Runs
 import io.mockk.coEvery
 import io.mockk.every

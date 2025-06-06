@@ -2,7 +2,6 @@ package com.furlogix.viewmodels
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.furlogix.Database.DAO.UserDao
 import com.furlogix.Database.Entities.ReportEntry
 import com.furlogix.Database.Entities.Reports
 import com.furlogix.Furlogix
@@ -15,7 +14,6 @@ import com.furlogix.repositories.IReportEntryRepository
 import com.furlogix.repositories.IReportTemplateRepository
 import com.furlogix.repositories.IReportsRepository
 import com.furlogix.repositories.IUserRepository
-import com.furlogix.repositories.UserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -27,7 +25,6 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.util.Date
 import javax.inject.Inject
-import kotlin.math.log
 
 @HiltViewModel
 class ReportViewModel @Inject constructor(

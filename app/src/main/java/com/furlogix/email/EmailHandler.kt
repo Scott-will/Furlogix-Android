@@ -4,9 +4,7 @@ import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
 import android.widget.Toast
-import com.furlogix.Database.DAO.UserDao
 import com.furlogix.repositories.IUserRepository
-import com.furlogix.repositories.UserRepository
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import javax.inject.Inject

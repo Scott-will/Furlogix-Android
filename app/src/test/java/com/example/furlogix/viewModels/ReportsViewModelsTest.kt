@@ -8,7 +8,6 @@ import com.furlogix.repositories.IReportEntryRepository
 import com.furlogix.repositories.IReportTemplateRepository
 import com.furlogix.repositories.IReportsRepository
 import com.furlogix.repositories.IUserRepository
-import com.furlogix.ui.navigation.Screen
 import com.furlogix.viewmodels.ReportViewModel
 import io.mockk.Runs
 import io.mockk.coEvery

@@ -1,23 +1,17 @@
 package com.furlogix.viewmodels
 
-import android.util.Log
 import androidx.compose.runtime.MutableState
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.furlogix.Database.DAO.UserDao
 import com.furlogix.Database.Entities.ReportEntry
 import com.furlogix.logger.ILogger
 import com.furlogix.repositories.IReportEntryRepository
-import com.furlogix.repositories.IReportTemplateRepository
-import com.furlogix.repositories.IReportsRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.util.Date
 import javax.inject.Inject
 
 @HiltViewModel
