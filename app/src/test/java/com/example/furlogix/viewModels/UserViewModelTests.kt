@@ -17,6 +17,7 @@ import junit.framework.TestCase.assertEquals
 import junit.framework.TestCase.assertTrue
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
@@ -33,10 +34,11 @@ class UserViewModelTests {
     private lateinit var userRepository: IUserRepository
     private lateinit var viewModel: UserViewModel
     private lateinit var logger : ILogger
+    private val testDispatcher = StandardTestDispatcher()
 
     @Before
     fun setUp() {
-        Dispatchers.setMain(UnconfinedTestDispatcher())
+        Dispatchers.setMain(this.testDispatcher)
 
         userRepository = mockk()
         every { userRepository.getCurrentUserName() } returns liveData { "Alice" }
@@ -46,13 +48,14 @@ class UserViewModelTests {
         logger = mockk()
         every { logger.log(any(), any()) } just Runs
 
-        viewModel = UserViewModel(logger, userRepository)
+        viewModel = UserViewModel(logger, userRepository, this.testDispatcher)
     }
 
     @After
     fun tearDown() {
         unmockkObject(userRepository)
         unmockkObject(EmailValidator)
+        unmockkObject(logger)
     }
 
     @Test
@@ -92,22 +95,20 @@ class UserViewModelTests {
     }
 
     @Test
-    fun addUser_ValidUser_Success(){
+    fun addUser_ValidUser_Success() = runTest{
         val user = User(name = "tester",
             surname = "tester",
             email = "email123@gmail.com")
         mockkObject(EmailValidator.Companion)
         every { EmailValidator.ValidateEmail("email123@gmail.com") } returns true
         coEvery { userRepository.insert(user) } returns 1
-        val latch = CountDownLatch(1)
         var extractedUserId = -1
 
         viewModel.addUser(user) { userId ->
             extractedUserId = userId.toInt()
-            latch.countDown()
         }
+        advanceUntilIdle()
 
-        assertTrue("Callback not called in time", latch.await(1, TimeUnit.SECONDS))
         assertEquals(1, extractedUserId)
     }
 
