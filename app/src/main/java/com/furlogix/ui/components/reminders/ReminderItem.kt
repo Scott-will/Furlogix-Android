@@ -24,9 +24,9 @@ onDeleteClick : (Reminder) -> Unit) {
     Surface(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = 5.dp), // Box is clickable
-        shape = RoundedCornerShape(12.dp), // Rounded corners
-        color = Color.LightGray // Light blue background
+            .padding(vertical = 5.dp),
+        shape = RoundedCornerShape(12.dp),
+        color = Color.LightGray
     ) {
         Row(
             modifier = Modifier
@@ -37,18 +37,18 @@ onDeleteClick : (Reminder) -> Unit) {
             // Left-aligned text
             Text(
                 text = data.type,
-                modifier = Modifier.weight(1f), // Ensures text is left-aligned
-                fontWeight = FontWeight.Bold // Optional: Makes the text bold
+                modifier = Modifier.weight(1f),
+                fontWeight = FontWeight.Bold
             )
             Text(
                 text = data.startTime,
-                modifier = Modifier.weight(1f), // Ensures text is left-aligned
-                fontWeight = FontWeight.Bold // Optional: Makes the text bold
+                modifier = Modifier.weight(1f),
+                fontWeight = FontWeight.Bold
             )
             Text(
                 text = data.frequency,
-                modifier = Modifier.weight(1f), // Ensures text is left-aligned
-                fontWeight = FontWeight.Bold // Optional: Makes the text bold
+                modifier = Modifier.weight(1f),
+                fontWeight = FontWeight.Bold
             )
             Spacer(modifier = Modifier.width(8.dp))
             DeleteButton { onDeleteClick(data) }

@@ -1,5 +1,6 @@
 package com.furlogix.viewmodels
 
+import android.annotation.SuppressLint
 import android.app.AlarmManager
 import android.app.PendingIntent
 import android.content.Context
@@ -23,7 +24,10 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.text.SimpleDateFormat
+import java.time.LocalDateTime
+import java.time.ZoneId
 import java.util.Calendar
+import java.util.Date
 import java.util.Locale
 import javax.inject.Inject
 
@@ -42,19 +46,18 @@ private val logger : ILogger,
     var isError : StateFlow<Boolean> = _isError
     var errorMsg : StateFlow<String> = _errorMsg
 
-    public fun scheduleReminder(date : String, time : String, recurrence : String, title: String, message : String){
+    @SuppressLint("NewApi")
+    public fun scheduleReminder(dateTime : LocalDateTime, recurrence : String, title: String, message : String){
         logger.log(TAG, "Scheduling reminder")
-        val dateTimeFormat = SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault())
         val calendar = Calendar.getInstance()
         val context = Furlogix.applicationContext()
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
         val requestCode = RequestCodeFactory.GetRequestCode()
         val pendingIntent = BuildReminderPendingIntent(context, title, message, requestCode)
         try {
-            // Combine the date and time into a single string for parsing
-            val dateTimeString = "$date $time"
-            val dateTime = dateTimeFormat.parse(dateTimeString)
-            calendar.time = dateTime
+            val zoneId = ZoneId.systemDefault()
+            val instant = dateTime.atZone(zoneId).toInstant()
+            calendar.time =  Date.from(instant)
         } catch (e: Exception) {
             logger.logError(TAG, "Exception scheduling reminder:", e)
             return
@@ -96,7 +99,9 @@ private val logger : ILogger,
             else -> return
         }
         logger.log(TAG, "Set a reminder for ${title}")
-        val reminder = Reminder(type = title, frequency = recurrence, startTime = time, requestCode = requestCode, title = title, message = message)
+
+        val reminder = Reminder(type = title, frequency = recurrence, startTime = calendar.time.toString()
+            , requestCode = requestCode, title = title, message = message)
         insertReminder(reminder)
         logger.log(TAG, "Saved reminder to database")
     }
