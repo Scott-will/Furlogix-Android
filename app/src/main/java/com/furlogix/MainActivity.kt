@@ -23,9 +23,13 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.util.concurrent.TimeUnit
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+
+    @Inject
+    lateinit var requestCodeFactory: RequestCodeFactory
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -65,9 +69,8 @@ class MainActivity : ComponentActivity() {
     fun setUpAlarmData(){
         lifecycleScope.launch {
             withContext(Dispatchers.IO){
-                RequestCodeFactory.InitRequestCode()
+                requestCodeFactory.initRequestCode()
             }
-
         }
     }
 }

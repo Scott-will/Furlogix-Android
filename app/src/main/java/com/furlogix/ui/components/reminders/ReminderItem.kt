@@ -12,7 +12,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.furlogix.Database.Entities.Reminder
@@ -38,18 +37,18 @@ onDeleteClick : (Reminder) -> Unit) {
             // Left-aligned text
             Text(
                 text = data.type,
-                modifier = Modifier.weight(1f), // Ensures text is left-aligned
-                fontWeight = FontWeight.Bold // Optional: Makes the text bold
+                modifier = Modifier.weight(1f),
+                fontWeight = FontWeight.Bold
             )
             Text(
                 text = data.startTime,
-                modifier = Modifier.weight(1f), // Ensures text is left-aligned
-                fontWeight = FontWeight.Bold // Optional: Makes the text bold
+                modifier = Modifier.weight(1f),
+                fontWeight = FontWeight.Bold
             )
             Text(
                 text = data.frequency,
-                modifier = Modifier.weight(1f), // Ensures text is left-aligned
-                fontWeight = FontWeight.Bold // Optional: Makes the text bold
+                modifier = Modifier.weight(1f),
+                fontWeight = FontWeight.Bold
             )
             Spacer(modifier = Modifier.width(8.dp))
             DeleteButton { onDeleteClick(data) }

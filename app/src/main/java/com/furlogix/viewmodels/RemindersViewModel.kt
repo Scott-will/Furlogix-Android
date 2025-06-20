@@ -1,11 +1,11 @@
 package com.furlogix.viewmodels
 
+import android.annotation.SuppressLint
 import android.app.AlarmManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.os.Build
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.furlogix.Database.Entities.Reminder
@@ -15,22 +15,25 @@ import com.furlogix.logger.ILogger
 import com.furlogix.reminders.RequestCodeFactory
 import com.furlogix.repositories.IRemindersRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.text.SimpleDateFormat
+import java.time.LocalDateTime
+import java.time.ZoneId
 import java.util.Calendar
-import java.util.Locale
+import java.util.Date
 import javax.inject.Inject
 
 @HiltViewModel
 class RemindersViewModel @Inject constructor(
-private val logger : ILogger,
-    private val remindersRepository: IRemindersRepository
+    private val logger : ILogger,
+    private val remindersRepository: IRemindersRepository,
+    private val requestCodeFactory: RequestCodeFactory,
+    private val ioDispatcher: CoroutineDispatcher
 ) : ViewModel() {
 
     private val TAG = "Furlogix:" + ReportViewModel::class.qualifiedName
@@ -42,19 +45,21 @@ private val logger : ILogger,
     var isError : StateFlow<Boolean> = _isError
     var errorMsg : StateFlow<String> = _errorMsg
 
-    public fun scheduleReminder(date : String, time : String, recurrence : String, title: String, message : String){
+    @SuppressLint("NewApi")
+    public fun scheduleReminder(dateTime : LocalDateTime, recurrence : String, title: String, message : String){
         logger.log(TAG, "Scheduling reminder")
-        val dateTimeFormat = SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault())
         val calendar = Calendar.getInstance()
         val context = Furlogix.applicationContext()
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        val requestCode = RequestCodeFactory.GetRequestCode()
+        val requestCode = this.requestCodeFactory.getRequestCode()
         val pendingIntent = BuildReminderPendingIntent(context, title, message, requestCode)
+        if(pendingIntent == null){
+            return
+        }
         try {
-            // Combine the date and time into a single string for parsing
-            val dateTimeString = "$date $time"
-            val dateTime = dateTimeFormat.parse(dateTimeString)
-            calendar.time = dateTime
+            val zoneId = ZoneId.systemDefault()
+            val instant = dateTime.atZone(zoneId).toInstant()
+            calendar.time =  Date.from(instant)
         } catch (e: Exception) {
             logger.logError(TAG, "Exception scheduling reminder:", e)
             return
@@ -96,12 +101,24 @@ private val logger : ILogger,
             else -> return
         }
         logger.log(TAG, "Set a reminder for ${title}")
-        val reminder = Reminder(type = title, frequency = recurrence, startTime = time, requestCode = requestCode, title = title, message = message)
+
+        val reminder = Reminder(type = title, frequency = recurrence, startTime = calendar.time.toString()
+            , requestCode = requestCode, title = title, message = message)
         insertReminder(reminder)
         logger.log(TAG, "Saved reminder to database")
     }
 
-    fun BuildReminderPendingIntent(context: Context, title : String, message : String, requestCode : Int) : PendingIntent{
+    fun BuildReminderPendingIntent(context: Context, title : String, message : String, requestCode : Int) : PendingIntent? {
+        if (title.isBlank()) {
+            _isError.value = true
+            _errorMsg.value = "Please provide a title"
+            return null
+        }
+        if (message.isBlank()) {
+            _isError.value = true
+            _errorMsg.value = "Please provide a message"
+            return null
+        }
         var intent = Intent(context, NotificationReceiver::class.java)
         intent.putExtra("notification_title", title)
         intent.putExtra("notification_message", message)
@@ -122,7 +139,7 @@ private val logger : ILogger,
 
     fun insertReminder(reminder: Reminder){
         viewModelScope.launch {
-            withContext(Dispatchers.IO){
+            withContext(ioDispatcher){
                 val result = remindersRepository.insertReminder(reminder)
                 UpdateErrorState(!result.result, result.msg)
             }
@@ -131,7 +148,7 @@ private val logger : ILogger,
 
     fun deleteReminder(reminder: Reminder){
         viewModelScope.launch {
-            withContext(Dispatchers.IO){
+            withContext(ioDispatcher){
                 var result = cancelAlarmForReminder(reminder)
                 if(!result){
                     return@withContext

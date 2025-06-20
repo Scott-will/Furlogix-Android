@@ -4,14 +4,14 @@ import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
 import android.widget.Toast
-import com.furlogix.Database.DAO.UserDao
+import com.furlogix.repositories.IUserRepository
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class EmailHandler @Inject constructor(
     private val context: Context,
-    private val userDao: UserDao
+    private val userRepository: IUserRepository
 ) : IEmailHandler {
     val TAG: String = "EmailService"
     override fun SendEmail(email: EmailWrapper?) {
@@ -47,8 +47,8 @@ class EmailHandler @Inject constructor(
     override  fun CreateAndSendEmail(email: EmailWrapper){
         val emailIntent = this.CreateEmail(email)
         GlobalScope.launch {
-            val userId = userDao.getCurrentUserId()
-            userDao.setPendingReportsForUser(userId)
+            val userId = userRepository.getCurrentUserId()
+            userRepository.setPendingReportsForUser(userId)
         }
 
         this.SendEmail(emailIntent)
