@@ -1,16 +1,13 @@
 package com.furlogix.viewmodels
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.furlogix.Database.DAO.UserDao
 import com.furlogix.Database.Entities.ReportTemplateField
+import com.furlogix.logger.ILogger
 import com.furlogix.reports.FieldType
-import com.furlogix.repositories.IReportEntryRepository
 import com.furlogix.repositories.IReportTemplateRepository
-import com.furlogix.repositories.IReportsRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -20,12 +17,10 @@ import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
-class ReportTemplatesViewModels @Inject constructor(
-    private val reportTemplateRepository : IReportTemplateRepository,
-    private val reportRepository : IReportsRepository,
-    private val userDao: UserDao,
-    private val reportEntryRepository : IReportEntryRepository
-) : ViewModel() {
+class ReportTemplatesViewModels @Inject constructor(private val logger : ILogger,
+                                                    private val reportTemplateRepository : IReportTemplateRepository,
+    private val ioDispatcher: CoroutineDispatcher
+    ) : ViewModel() {
 
     private val TAG = "Furlogix:" + ReportTemplatesViewModels::class.qualifiedName
     //Error handling variables
@@ -45,58 +40,87 @@ class ReportTemplatesViewModels @Inject constructor(
     )
     val reportTemplatesForCurrentReport : MutableStateFlow<List<ReportTemplateField>> = _reportTemplatesForCurrentReport
 
-
     fun populateCurrentReportTemplate(reportTemplateId : Int) {
         viewModelScope.launch {
-            withContext(Dispatchers.IO) {
-                _currentReportTemplate.value =
-                    reportTemplateRepository.GetTemplateById(reportTemplateId)
+            withContext(ioDispatcher) {
+                try{
+                    _currentReportTemplate.value =
+                        reportTemplateRepository.GetTemplateById(reportTemplateId)
+                }
+                catch(e : Exception){
+                    UpdateErrorState(true, "Failed to get current template ${e.message}")
+                    logger.logError(TAG, "Failed to get current template ${e.message}", e)
+                }
             }
         }
     }
 
     fun populateReportTemplatesForCurrentReport(reportId : Int) {
         viewModelScope.launch {
-            withContext(Dispatchers.IO) {
-                _reportTemplatesForCurrentReport.value =
-                    reportTemplateRepository.GetReportById(reportId)
+            withContext(ioDispatcher) {
+                try{
+                    _reportTemplatesForCurrentReport.value =
+                        reportTemplateRepository.GetReportById(reportId)
+                }
+                catch(e : Exception){
+                    UpdateErrorState(true, "Failed to get current templates ${e.message}")
+                    logger.logError(TAG, "Failed to get current templates ${e.message}", e)
+                }
             }
         }
     }
 
     fun insertReportTemplateField(field: ReportTemplateField) {
         viewModelScope.launch {
-            withContext(Dispatchers.IO) {
-                Log.d(TAG, "Inserting report template field ${field.uid}, ${field.name}")
-                val result = reportTemplateRepository.insertReportTemplateField(field)
-                UpdateErrorState(!result.result, result.msg)
-                Log.d(
-                    TAG,
-                    "Result of inserting report template field ${field.uid}, ${field.name} : ${result.result}"
-                )
+            withContext(ioDispatcher) {
+                logger.log(TAG, "Inserting report template field ${field.uid}, ${field.name}")
+                try{
+                    val result = reportTemplateRepository.insertReportTemplateField(field)
+                    UpdateErrorState(!result.result, result.msg)
+                    logger.log(
+                        TAG,
+                        "Result of inserting report template field ${field.uid}, ${field.name} : ${result.result}"
+                    )
+                }
+                catch(e : Exception){
+                    UpdateErrorState(true, "Failed to insert report template ${e.message}")
+                    logger.logError(TAG, "Failed to insert report template ${e.message}", e)
+                }
             }
         }
     }
 
     fun deleteReportTemplateField(field: ReportTemplateField) {
         viewModelScope.launch {
-            withContext(Dispatchers.IO) {
-                Log.d(TAG, "Deleting report template field ${field.uid}, ${field.name}")
-                reportTemplateRepository.deleteReportTemplateField(field)
+            withContext(ioDispatcher) {
+                logger.log(TAG, "Deleting report template field ${field.uid}, ${field.name}")
+                try{
+                    reportTemplateRepository.deleteReportTemplateField(field)
+                }
+                catch(e : Exception){
+                    UpdateErrorState(true, "Failed to delete report template ${e.message}")
+                    logger.logError(TAG, "Failed to delete report template ${e.message}", e)
+                }
             }
         }
     }
 
     fun updateReportTemplateField(field: ReportTemplateField) {
         viewModelScope.launch {
-            withContext(Dispatchers.IO) {
-                Log.d(TAG, "Updating report template field ${field.uid}, ${field.name}")
-                val result = reportTemplateRepository.updateReportTemplateField(field)
-                UpdateErrorState(!result.result, result.msg)
-                Log.d(
-                    TAG,
-                    "Result of updating report template field ${field.uid}, ${field.name} : ${result.result}"
-                )
+            withContext(ioDispatcher) {
+                logger.log(TAG, "Updating report template field ${field.uid}, ${field.name}")
+                try{
+                    val result = reportTemplateRepository.updateReportTemplateField(field)
+                    UpdateErrorState(!result.result, result.msg)
+                    logger.log(
+                        TAG,
+                        "Result of updating report template field ${field.uid}, ${field.name} : ${result.result}"
+                    )
+                }
+                catch(e : Exception){
+                    UpdateErrorState(true, "Failed to update report template ${e.message}")
+                    logger.logError(TAG, "Failed to update report template ${e.message}", e)
+                }
             }
         }
     }

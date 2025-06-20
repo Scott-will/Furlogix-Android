@@ -5,7 +5,6 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.os.Build
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.furlogix.Database.Entities.Reminder
@@ -15,7 +14,7 @@ import com.furlogix.logger.ILogger
 import com.furlogix.reminders.RequestCodeFactory
 import com.furlogix.repositories.IRemindersRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -29,8 +28,10 @@ import javax.inject.Inject
 
 @HiltViewModel
 class RemindersViewModel @Inject constructor(
-private val logger : ILogger,
-    private val remindersRepository: IRemindersRepository
+    private val logger : ILogger,
+    private val remindersRepository: IRemindersRepository,
+    private val requestCodeFactory: RequestCodeFactory,
+    private val ioDispatcher: CoroutineDispatcher
 ) : ViewModel() {
 
     private val TAG = "Furlogix:" + ReportViewModel::class.qualifiedName
@@ -48,8 +49,11 @@ private val logger : ILogger,
         val calendar = Calendar.getInstance()
         val context = Furlogix.applicationContext()
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        val requestCode = RequestCodeFactory.GetRequestCode()
+        val requestCode = this.requestCodeFactory.getRequestCode()
         val pendingIntent = BuildReminderPendingIntent(context, title, message, requestCode)
+        if(pendingIntent == null){
+            return
+        }
         try {
             // Combine the date and time into a single string for parsing
             val dateTimeString = "$date $time"
@@ -101,7 +105,17 @@ private val logger : ILogger,
         logger.log(TAG, "Saved reminder to database")
     }
 
-    fun BuildReminderPendingIntent(context: Context, title : String, message : String, requestCode : Int) : PendingIntent{
+    fun BuildReminderPendingIntent(context: Context, title : String, message : String, requestCode : Int) : PendingIntent? {
+        if (title.isBlank()) {
+            _isError.value = true
+            _errorMsg.value = "Please provide a title"
+            return null
+        }
+        if (message.isBlank()) {
+            _isError.value = true
+            _errorMsg.value = "Please provide a message"
+            return null
+        }
         var intent = Intent(context, NotificationReceiver::class.java)
         intent.putExtra("notification_title", title)
         intent.putExtra("notification_message", message)
@@ -122,7 +136,7 @@ private val logger : ILogger,
 
     fun insertReminder(reminder: Reminder){
         viewModelScope.launch {
-            withContext(Dispatchers.IO){
+            withContext(ioDispatcher){
                 val result = remindersRepository.insertReminder(reminder)
                 UpdateErrorState(!result.result, result.msg)
             }
@@ -131,7 +145,7 @@ private val logger : ILogger,
 
     fun deleteReminder(reminder: Reminder){
         viewModelScope.launch {
-            withContext(Dispatchers.IO){
+            withContext(ioDispatcher){
                 var result = cancelAlarmForReminder(reminder)
                 if(!result){
                     return@withContext
