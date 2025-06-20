@@ -29,7 +29,7 @@ class CsvBuilderTests {
             entries.add(entry)
         }
         val templates = mutableListOf<ReportTemplateField>()
-        templates.add(ReportTemplateField(1, 1, FieldType.TEXT, "test Template", icon="test",))
+        templates.add(ReportTemplateField(1, 1, FieldType.TEXT, "test Template", icon="test", ""))
         val csvBuilder = CsvBuilder()
         csvBuilder.buildCsv(writer, entries, templates)
         writer.flush()
@@ -63,8 +63,35 @@ class CsvBuilderTests {
             entries.add(entry)
         }
         val templates = mutableListOf<ReportTemplateField>()
-        templates.add(ReportTemplateField(1, 1, FieldType.TEXT, "test Template", icon="test"))
-        templates.add(ReportTemplateField(2, 1, FieldType.CHECKBOX, "test Template2", icon="test"))
+        templates.add(ReportTemplateField(1, 1, FieldType.TEXT, "test Template", icon="test", ""))
+        templates.add(ReportTemplateField(2, 1, FieldType.CHECKBOX, "test Template2", icon="test", ""))
+        val csvBuilder = CsvBuilder()
+        csvBuilder.buildCsv(writer, entries, templates)
+        writer.flush()
+        val result = stringWriter.toString().trim()
+
+        assertEquals(expectedCsv, result)
+    }
+
+    @Test
+    fun TestCsvBuilderWithUnits(){
+        val expectedCsv = "test Template (g)\r\n" +
+                "\"test1\"\r\n" +
+                "\"test2\"\r\n" +
+                "\"test3\""
+        val stringWriter = StringWriter()
+        var writer = BufferedWriter(stringWriter)
+        val entries = mutableListOf<ReportEntry>()
+
+
+        for (i in 1..3) {
+            // Adjust timestamp by adding i hours to the current time
+            val timestamp = "Tue Jan 0${i} 22:18:15 EST 2024" // Convert the calendar time to string
+            val entry = ReportEntry(i, "test$i", i, 1, timestamp)
+            entries.add(entry)
+        }
+        val templates = mutableListOf<ReportTemplateField>()
+        templates.add(ReportTemplateField(1, 1, FieldType.TEXT, "test Template", icon="test", "g"))
         val csvBuilder = CsvBuilder()
         csvBuilder.buildCsv(writer, entries, templates)
         writer.flush()

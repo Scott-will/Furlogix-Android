@@ -24,9 +24,9 @@ import androidx.navigation.NavController
 import com.furlogix.ui.components.common.AddItemButton
 import com.furlogix.ui.components.common.ErrorDialog
 import com.furlogix.ui.components.common.TitleText
-import com.furlogix.ui.components.reports.AddReportDialog
-import com.furlogix.ui.components.reports.ReportsList
-import com.furlogix.ui.components.reports.TooManyReportsWarning
+import com.furlogix.ui.components.reports.write.AddReportDialog
+import com.furlogix.ui.components.reports.read.ReportsList
+import com.furlogix.ui.components.reports.read.TooManyReportsWarning
 import com.furlogix.ui.navigation.Screen
 import com.furlogix.viewmodels.PetViewModel
 import com.furlogix.viewmodels.ReportViewModel

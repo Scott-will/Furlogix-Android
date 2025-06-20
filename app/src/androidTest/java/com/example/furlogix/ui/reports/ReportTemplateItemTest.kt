@@ -12,7 +12,7 @@ import androidx.navigation.testing.TestNavHostController
 import com.furlogix.Database.Entities.ReportTemplateField
 import com.furlogix.R
 import com.furlogix.reports.FieldType
-import com.furlogix.ui.components.reports.ReportTemplateItem
+import com.furlogix.ui.components.reports.read.ReportTemplateItem
 import org.junit.Rule
 import org.junit.Test
 import java.lang.Thread.sleep
@@ -39,7 +39,7 @@ class ReportTemplateItemTest {
 
     @Test
     fun reportTemplateItem_displaysCorrectName(){
-        val template = ReportTemplateField(reportId = 1, name = "Test", icon="test", fieldType = FieldType.CHECKBOX)
+        val template = ReportTemplateField(reportId = 1, name = "Test", icon="test", fieldType = FieldType.CHECKBOX, units = "")
         composeTestRule.setContent {
             ReportTemplateItemTestContent(data = template)
         }
@@ -49,7 +49,7 @@ class ReportTemplateItemTest {
 
     @Test
     fun reportTemplateItem_showsDialogOnEditClick(){
-        val template = ReportTemplateField(reportId = 1, name = "Test", icon="test", fieldType = FieldType.CHECKBOX)
+        val template = ReportTemplateField(reportId = 1, name = "Test", icon="test", fieldType = FieldType.CHECKBOX, units = "")
         composeTestRule.setContent {
             ReportTemplateItemTestContent(
                 data = template,
@@ -65,7 +65,7 @@ class ReportTemplateItemTest {
 
     @Test
     fun reportTemplateItem_triggersOnDeleteClick(){
-        val template = ReportTemplateField(reportId = 1, name = "Test", icon="test", fieldType = FieldType.CHECKBOX)
+        val template = ReportTemplateField(reportId = 1, name = "Test", icon="test", fieldType = FieldType.CHECKBOX, units = "")
         var deletedTemplate: ReportTemplateField? = null
         val onDeleteClick: (ReportTemplateField) -> Unit = { deletedTemplate = it }
 
@@ -86,7 +86,7 @@ class ReportTemplateItemTest {
     @Test
     fun reportTemplateItem_triggersOnSaveFromDialog() {
         // Given
-        val template = ReportTemplateField(reportId = 1, name = "Test", icon="test", fieldType = FieldType.CHECKBOX)
+        val template = ReportTemplateField(reportId = 1, name = "Test", icon="test", fieldType = FieldType.CHECKBOX, units = "")
         var updatedTemplate: ReportTemplateField? = null
         val onUpdateClick: (ReportTemplateField) -> Unit = { updatedTemplate = it }
 
@@ -111,7 +111,7 @@ class ReportTemplateItemTest {
     @Test
     fun reportTemplateItem_dialogClosesOnDismiss() {
         // Given
-        val template = ReportTemplateField(reportId = 1, name = "Test", icon="test", fieldType = FieldType.CHECKBOX)
+        val template = ReportTemplateField(reportId = 1, name = "Test", icon="test", fieldType = FieldType.CHECKBOX, units = "")
 
         composeTestRule.setContent {
             ReportTemplateItemTestContent(data = template)
@@ -128,7 +128,7 @@ class ReportTemplateItemTest {
     @Test
     fun reportTemplateItem_togglesDialogVisibility() {
         // Given
-        val template = ReportTemplateField(reportId = 1, name = "Test", icon="test", fieldType = FieldType.CHECKBOX)
+        val template = ReportTemplateField(reportId = 1, name = "Test", icon="test", fieldType = FieldType.CHECKBOX, units = "")
 
         composeTestRule.setContent {
             ReportTemplateItemTestContent(

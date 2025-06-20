@@ -1,4 +1,4 @@
-package com.furlogix.ui.components.reports
+package com.furlogix.ui.components.reports.read
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -26,6 +26,7 @@ import com.furlogix.ui.components.common.DeleteButton
 import com.furlogix.ui.components.common.DeleteWarning
 import com.furlogix.ui.components.common.EditButton
 import com.furlogix.ui.components.common.IconDisplayer
+import com.furlogix.ui.components.reports.write.AddReportTemplateDialog
 import com.furlogix.ui.theme.ClickableItemRed
 
 
@@ -67,6 +68,7 @@ fun ReportTemplateItem(data: ReportTemplateField,
                 },
                 currentLabel = data.name,
                 selectedType = data.fieldType.toString(),
+                currentUnit = data.units,
                 reportId = data.reportId,
                 update = true,
                 reportField = data

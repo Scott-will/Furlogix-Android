@@ -78,7 +78,7 @@ class ReminderDaoTest {
         reminderDao.insert(reminder2)
         reminderDao.insert(reminder3)
         val reminderLargest = reminderDao.getLargestRequestCode()
-        assert(reminderLargest.title == "test2")
-        assert(reminderLargest.requestCode == 1001)
+        assert(reminderLargest?.title == "test2")
+        assert(reminderLargest?.requestCode == 1001)
     }
 }

@@ -52,8 +52,8 @@ class ReportTemplateViewModelTests {
             1,
             FieldType.TEXT,
             "test",
-            false,
-            "")
+            "",
+            units = "")
         coEvery { reportTemplateRepository.GetTemplateById(1) } returns reportTemplate
         viewModel.populateCurrentReportTemplate(1)
         advanceUntilIdle()
@@ -74,8 +74,8 @@ class ReportTemplateViewModelTests {
             1,
             FieldType.TEXT,
             "test",
-            false,
-            "")
+            "",
+            units = "")
         var mockList = listOf(reportTemplate)
         coEvery { reportTemplateRepository.GetReportById(1) } returns mockList
         viewModel.populateReportTemplatesForCurrentReport(1)
@@ -97,8 +97,8 @@ class ReportTemplateViewModelTests {
             1,
             FieldType.TEXT,
             "test",
-            false,
-            "")
+            "",
+            units = "")
         coEvery { reportTemplateRepository.insertReportTemplateField(reportTemplate) } returns Result(true, "")
         viewModel.insertReportTemplateField(reportTemplate)
         advanceUntilIdle()
@@ -112,8 +112,8 @@ class ReportTemplateViewModelTests {
             1,
             FieldType.TEXT,
             "test",
-            false,
-            "")
+            "",
+            units = "")
         coEvery { reportTemplateRepository.insertReportTemplateField(reportTemplate) } returns Result(false, "error")
         viewModel.insertReportTemplateField(reportTemplate)
         advanceUntilIdle()
@@ -127,8 +127,8 @@ class ReportTemplateViewModelTests {
             1,
             FieldType.TEXT,
             "test",
-            false,
-            "")
+            "",
+            units = "")
         coEvery { reportTemplateRepository.insertReportTemplateField(reportTemplate) } throws RuntimeException("Error")
         viewModel.insertReportTemplateField(reportTemplate)
         advanceUntilIdle()
@@ -142,8 +142,8 @@ class ReportTemplateViewModelTests {
             1,
             FieldType.TEXT,
             "test",
-            false,
-            "")
+            "",
+            units = "")
         coEvery { reportTemplateRepository.updateReportTemplateField(reportTemplate) } returns Result(true, "")
         viewModel.updateReportTemplateField(reportTemplate)
         advanceUntilIdle()
@@ -157,8 +157,8 @@ class ReportTemplateViewModelTests {
             1,
             FieldType.TEXT,
             "test",
-            false,
-            "")
+            "",
+            units = "")
         coEvery { reportTemplateRepository.updateReportTemplateField(reportTemplate) } returns Result(false, "error")
         viewModel.updateReportTemplateField(reportTemplate)
         advanceUntilIdle()
@@ -172,8 +172,8 @@ class ReportTemplateViewModelTests {
             1,
             FieldType.TEXT,
             "test",
-            false,
-            "")
+            "",
+            units = "")
         coEvery { reportTemplateRepository.updateReportTemplateField(reportTemplate) } throws RuntimeException("Error")
         viewModel.updateReportTemplateField(reportTemplate)
         advanceUntilIdle()

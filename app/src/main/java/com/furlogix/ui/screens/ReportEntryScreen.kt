@@ -19,8 +19,8 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.furlogix.ui.components.common.ErrorDialog
-import com.furlogix.ui.components.reports.TooManyReportsWarning
-import com.furlogix.ui.componets.reports.ReportEntryForm
+import com.furlogix.ui.components.reports.read.TooManyReportsWarning
+import com.furlogix.ui.components.reports.write.ReportEntryForm
 import com.furlogix.viewmodels.ReportEntryViewModel
 import com.furlogix.viewmodels.ReportTemplatesViewModels
 import com.furlogix.viewmodels.ReportViewModel
@@ -76,11 +76,6 @@ fun ReportEntryScreen(navController: NavController, reportId : Int = 0,
                 navController.popBackStack()
             }) {
                 Text("Save")
-            }
-        }
-        item{
-            Button(onClick = { reportViewModel.gatherReportData(reportId) }) {
-                Text("Send Reports")
             }
         }
     }

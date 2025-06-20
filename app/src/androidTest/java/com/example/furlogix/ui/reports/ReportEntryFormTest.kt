@@ -8,7 +8,7 @@ import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithText
 import com.furlogix.Database.Entities.ReportTemplateField
 import com.furlogix.reports.FieldType
-import com.furlogix.ui.componets.reports.ReportEntryForm
+import com.furlogix.ui.components.reports.write.ReportEntryForm
 import org.junit.Rule
 import org.junit.Test
 
@@ -38,7 +38,8 @@ class ReportEntryFormTest {
                 name = "Template Field Test ${type}",
                 fieldType = type,
                 reportId = 0,
-                icon="test", uid = i
+                icon="test", uid = i,
+                units = ""
             )
             i++
             fields.add(reportTemplateField)

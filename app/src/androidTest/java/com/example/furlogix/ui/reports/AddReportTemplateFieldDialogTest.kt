@@ -8,7 +8,7 @@ import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTextReplacement
 import com.furlogix.Database.Entities.ReportTemplateField
 import com.furlogix.reports.FieldType
-import com.furlogix.ui.components.reports.AddReportTemplateDialog
+import com.furlogix.ui.components.reports.write.AddReportTemplateDialog
 import org.junit.Rule
 import org.junit.Test
 
@@ -18,6 +18,7 @@ class AddReportTemplateFieldDialogTest {
         onDismiss: () -> Unit = {},
         onSave : (ReportTemplateField) -> Unit = {},
         currentLabel : String,
+        currentUnits : String,
         update : Boolean = false,
         report : ReportTemplateField,
         reportId : Int,
@@ -27,6 +28,7 @@ class AddReportTemplateFieldDialogTest {
             onDismiss = onDismiss,
             onSave = onSave,
             currentLabel = currentLabel,
+            currentUnit = currentUnits,
             selectedType = selectedType.toString(),
             update = update,
             reportField = report,
@@ -50,13 +52,14 @@ class AddReportTemplateFieldDialogTest {
 
     @Test
     fun AddReportTemplateFieldDialog_DisplaysRightName(){
-        var reportTemplate = ReportTemplateField(name = "Test", reportId = 1, icon="test", fieldType = FieldType.NUMBER)
+        var reportTemplate = ReportTemplateField(name = "Test", reportId = 1, icon="test", fieldType = FieldType.NUMBER, units = "")
 
         composeTestRule.setContent {
             AddReportTemplateFieldDialogTestContent(
                 report = reportTemplate,
                 reportId = reportTemplate.reportId,
                 currentLabel = reportTemplate.name,
+                currentUnits = "",
                 selectedType = reportTemplate.fieldType)
         }
 
@@ -65,13 +68,14 @@ class AddReportTemplateFieldDialogTest {
 
     @Test
     fun AddReportTemplateFieldDialog_DisplaysRightEnum() {
-        val reportTemplate = ReportTemplateField(name = "Test", reportId = 1, icon="test", fieldType = FieldType.CHECKBOX)
+        val reportTemplate = ReportTemplateField(name = "Test", reportId = 1, icon="test", fieldType = FieldType.CHECKBOX, units = "")
 
         composeTestRule.setContent {
             AddReportTemplateFieldDialogTestContent(
                 report = reportTemplate,
                 reportId = reportTemplate.reportId,
                 currentLabel = reportTemplate.name,
+                currentUnits = "",
                 selectedType = reportTemplate.fieldType
             )
         }
@@ -82,13 +86,14 @@ class AddReportTemplateFieldDialogTest {
 
     @Test
     fun AddReportTemplateFieldDialog_TypeDropDownShowsCorrect(){
-        var reportTemplate = ReportTemplateField(name = "Test", reportId = 1, icon="test", fieldType = FieldType.NUMBER)
+        var reportTemplate = ReportTemplateField(name = "Test", reportId = 1, icon="test", fieldType = FieldType.NUMBER, units = "")
 
         composeTestRule.setContent {
             AddReportTemplateFieldDialogTestContent(
                 report = reportTemplate,
                 reportId = reportTemplate.reportId,
                 currentLabel = reportTemplate.name,
+                currentUnits = "",
                 selectedType = reportTemplate.fieldType)
         }
         composeTestRule.onNodeWithText(reportTemplate.fieldType.toString()).performClick()
@@ -104,7 +109,7 @@ class AddReportTemplateFieldDialogTest {
 
     @Test
     fun AddReportTemplateFieldDialog_OnsaveTriggered(){
-        var reportTemplate = ReportTemplateField(name = "Test", reportId = 1, icon="test", fieldType = FieldType.NUMBER)
+        var reportTemplate = ReportTemplateField(name = "Test", reportId = 1, icon="test", fieldType = FieldType.NUMBER, units = "")
         var savedReportTemplate : ReportTemplateField? = null
         var onSave : (ReportTemplateField) -> Unit = {savedReportTemplate = it}
         composeTestRule.setContent {
@@ -112,6 +117,7 @@ class AddReportTemplateFieldDialogTest {
                 report = reportTemplate,
                 reportId = reportTemplate.reportId,
                 currentLabel = reportTemplate.name,
+                currentUnits = "",
                 selectedType = reportTemplate.fieldType,
                 onSave = onSave)
         }
@@ -122,13 +128,14 @@ class AddReportTemplateFieldDialogTest {
 
     @Test
     fun AddReportTemplateFieldDialog_UpdateTrue(){
-        var reportTemplate = ReportTemplateField(name = "Test", reportId = 1, icon="test", fieldType = FieldType.NUMBER)
+        var reportTemplate = ReportTemplateField(name = "Test", reportId = 1, icon="test", fieldType = FieldType.NUMBER, units = "")
         val onUpdate : (ReportTemplateField) -> Unit = {reportTemplate = it}
         composeTestRule.setContent {
             AddReportTemplateFieldDialogTestContent(
                 report = reportTemplate,
                 reportId = reportTemplate.reportId,
                 currentLabel = reportTemplate.name,
+                currentUnits = "",
                 selectedType = reportTemplate.fieldType,
                 onSave = onUpdate)
         }
@@ -143,7 +150,7 @@ class AddReportTemplateFieldDialogTest {
 
     @Test
     fun AddReportTemplateFieldDialog_UpdateFalse(){
-        var reportTemplate = ReportTemplateField(name = "Test", reportId = 1, icon="test", fieldType = FieldType.NUMBER)
+        var reportTemplate = ReportTemplateField(name = "Test", reportId = 1, icon="test", fieldType = FieldType.NUMBER, units = "")
         var savedTemplate : ReportTemplateField? = null
         val onUpdate : (ReportTemplateField) -> Unit = {savedTemplate = it}
         composeTestRule.setContent {
@@ -151,6 +158,7 @@ class AddReportTemplateFieldDialogTest {
                 report = reportTemplate,
                 reportId = reportTemplate.reportId,
                 currentLabel = reportTemplate.name,
+                currentUnits = "",
                 selectedType = reportTemplate.fieldType,
                 onSave = onUpdate)
         }
@@ -166,13 +174,14 @@ class AddReportTemplateFieldDialogTest {
 
     @Test
     fun AddReportTemplateFieldDialog_OnTextFieldChanges(){
-        var reportTemplate = ReportTemplateField(name = "Test", reportId = 1, icon="test", fieldType = FieldType.NUMBER)
+        var reportTemplate = ReportTemplateField(name = "Test", reportId = 1, icon="test", fieldType = FieldType.NUMBER, units = "")
 
         composeTestRule.setContent {
             AddReportTemplateFieldDialogTestContent(
                 report = reportTemplate,
                 reportId = reportTemplate.reportId,
                 currentLabel = reportTemplate.name,
+                currentUnits = "",
                 selectedType = reportTemplate.fieldType)
         }
         composeTestRule.onNodeWithText("Test").performTextReplacement("Changed It")
@@ -182,13 +191,14 @@ class AddReportTemplateFieldDialogTest {
 
     @Test
     fun AddReportTemplateFieldDialog_OnTypeFieldChanges(){
-        var reportTemplate = ReportTemplateField(name = "Test", reportId = 1, icon="test", fieldType = FieldType.NUMBER)
+        var reportTemplate = ReportTemplateField(name = "Test", reportId = 1, icon="test", fieldType = FieldType.NUMBER, units = "")
 
         composeTestRule.setContent {
             AddReportTemplateFieldDialogTestContent(
                 report = reportTemplate,
                 reportId = reportTemplate.reportId,
                 currentLabel = reportTemplate.name,
+                currentUnits = "",
                 selectedType = reportTemplate.fieldType)
         }
 

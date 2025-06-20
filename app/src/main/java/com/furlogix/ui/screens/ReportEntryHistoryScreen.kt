@@ -27,7 +27,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.furlogix.ui.components.reports.ReportHistoryTableItem
+import com.furlogix.ui.components.reports.read.ReportHistoryTableItem
 import com.furlogix.ui.navigation.Screen
 import com.furlogix.viewmodels.ReportEntryHistoryViewModel
 import com.furlogix.viewmodels.ReportTemplatesViewModels
@@ -55,9 +55,14 @@ fun ReportEntryHistoryScreen(navController: NavController, reportId: Int = 0,
     val groupedEntries = entries.flatMap { it.value }.groupBy { it.timestamp }
 
     Column{
-        Button(onClick =
-        {navController.navigate(Screen.ReportEntry.route.replace("{reportId}", reportId.toString()))}){
-            Text("Add Data")
+        Row{
+            Button(onClick =
+            {navController.navigate(Screen.ReportEntry.route.replace("{reportId}", reportId.toString()))}){
+                Text("Add Data")
+            }
+            Button(onClick = { reportViewModel.gatherReportData(reportId) }) {
+                Text("Send Reports")
+            }
         }
         Spacer(modifier = Modifier.fillMaxWidth().padding(10.dp))
         if (entries.isEmpty() && showLoading) {
@@ -76,8 +81,14 @@ fun ReportEntryHistoryScreen(navController: NavController, reportId: Int = 0,
                             textAlign = TextAlign.Center
                         )
                         templates.value.forEach { template ->
+                            val displayName = if (template.units.isNullOrBlank()) {
+                                template.name
+                            } else {
+                                "${template.name} (${template.units})"
+                            }
+
                             Text(
-                                text = template.name,
+                                text = displayName,
                                 modifier = Modifier.weight(1f),
                                 style = TextStyle(fontWeight = FontWeight.Bold, color = Color.Black),
                                 textAlign = TextAlign.Center
