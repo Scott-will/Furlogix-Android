@@ -64,7 +64,13 @@ class ReportViewModel @Inject constructor(
     fun populateCurrentReport(id: Int) {
         viewModelScope.launch {
             withContext(ioDispatcher){
-                _currentReport.value = reportRepository.getReportById(id)
+                try{
+                    _currentReport.value = reportRepository.getReportById(id)
+                }
+                catch (e : Exception){
+                    UpdateErrorState(true, "Failed to get report ${e.message}")
+                    logger.logError(TAG, "Failed to get report ${e.message}", e)
+                }
             }
         }
     }
@@ -143,9 +149,9 @@ class ReportViewModel @Inject constructor(
         viewModelScope.launch {
             withContext(ioDispatcher) {
                 logger.log(TAG, "Gathering report data to send in email")
-                val report = reportRepository.getReportById(reportId)
                 var entries = emptyList<ReportEntry>()
                 try{
+                    val report = reportRepository.getReportById(reportId)
                     val reportName = report.name
                     val templates = reportTemplateRepository.GetReportById(reportId)
                     entries = reportEntryRepository.getAllReportEntriesById(reportId)
