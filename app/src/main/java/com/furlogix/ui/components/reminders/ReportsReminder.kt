@@ -1,5 +1,6 @@
 package com.furlogix.ui.components.reminders
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -27,21 +28,21 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
+import com.furlogix.ui.components.common.SimpleDateTimePicker
 import com.furlogix.ui.componets.common.DatePickerDialog
 import com.furlogix.ui.componets.common.TimePickerDialog
 import com.furlogix.viewmodels.RemindersViewModel
+import java.time.LocalDateTime
 
 
+@SuppressLint("NewApi")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ReportsReminder(onDismiss : () -> Unit, remindersViewModel: RemindersViewModel) {
-    var selectedDate by remember { mutableStateOf("") }
-    var selectedTime by remember { mutableStateOf("") }
+    var selectedDateTime by remember { mutableStateOf(LocalDateTime.now()) }
     var recurrenceOption by remember { mutableStateOf("Once") }
     var reminderTitle by remember { mutableStateOf("") }
     var reminderText by remember { mutableStateOf("") }
-    var isDatePickerOpen by remember { mutableStateOf(false) }
-    var isTimePickerOpen by remember { mutableStateOf(false) }
     var recurrenceExpanded by remember { mutableStateOf(false) }
 
     val recurrenceOptions = listOf("Once", "Daily", "Weekly", "Monthly")
@@ -51,20 +52,7 @@ fun ReportsReminder(onDismiss : () -> Unit, remindersViewModel: RemindersViewMod
             shape = MaterialTheme.shapes.medium,
             tonalElevation = 8.dp,
             modifier = Modifier.fillMaxWidth()
-                .testTag("AddReportDialog")
-        ) {
-            if (isDatePickerOpen) {
-                DatePickerDialog(onDateSelected = { date ->
-                    selectedDate = date
-                    isDatePickerOpen = false
-                })
-            }
-            if (isTimePickerOpen) {
-            TimePickerDialog(onTimeSelected = { time ->
-                selectedTime = time
-                isTimePickerOpen = false
-            })
-        }
+                .testTag("AddReportDialog")) {
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -81,16 +69,6 @@ fun ReportsReminder(onDismiss : () -> Unit, remindersViewModel: RemindersViewMod
                     onValueChange = {reminderText = it},
                     label = { Text("Message") })
                 // Date Picker Button
-                OutlinedButton(onClick = { isDatePickerOpen = true }) {
-                    Text(text = if (selectedDate.isEmpty()) "Select Date" else "Date: $selectedDate")
-                }
-
-
-                // Time Picker Button
-                OutlinedButton(onClick = { isTimePickerOpen = true }) {
-                    Text(text = if (selectedTime.isEmpty()) "Select Time" else "Time: $selectedTime")
-                }
-
 
                 // Recurrence Option Dropdown
                 Text(text = "Frequency", style = MaterialTheme.typography.bodyMedium)
@@ -124,18 +102,15 @@ fun ReportsReminder(onDismiss : () -> Unit, remindersViewModel: RemindersViewMod
                     }
                 }
 
+                SimpleDateTimePicker() { item -> selectedDateTime = item }
 
                 // Schedule Button
                 Button(onClick = {
-                    if (selectedDate.isNotEmpty() && selectedTime.isNotEmpty()) {
-                        remindersViewModel.scheduleReminder(selectedDate, selectedTime, recurrenceOption, reminderTitle, reminderText)
-                        onDismiss()
-                    }
+                    remindersViewModel.scheduleReminder(selectedDateTime, recurrenceOption, reminderTitle, reminderText)
+                    onDismiss()
                 }) {
                     Text(text = "Schedule Reminder")
                 }
             } }
+        }
     }
-
-
-}

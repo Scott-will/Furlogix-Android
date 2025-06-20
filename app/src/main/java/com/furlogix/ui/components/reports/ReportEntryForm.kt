@@ -1,5 +1,6 @@
 package com.furlogix.ui.componets.reports
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -14,11 +15,13 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.furlogix.Database.Entities.ReportTemplateField
+import com.furlogix.helpers.DateTimeHelper
 import com.furlogix.ui.components.common.NoDataAvailable
 import com.furlogix.ui.components.common.SimpleDateTimePicker
 import com.furlogix.ui.components.reports.ReportEntry
 import java.time.format.DateTimeFormatter
 
+@SuppressLint("NewApi")
 @Composable
 fun ReportEntryForm(
     reportName : String,
@@ -31,7 +34,7 @@ fun ReportEntryForm(
     modifier = Modifier.fillMaxWidth()
     )
     {
-        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")
+        val dateTimeHelper = DateTimeHelper()
         Column(
             modifier = Modifier
                 .padding(16.dp)
@@ -51,7 +54,7 @@ fun ReportEntryForm(
                 }
                 SimpleDateTimePicker { dateTime ->
                     if (dateTime != null) {
-                        timestamp.value = dateTime.format(formatter)
+                        timestamp.value = dateTimeHelper.FormatDateTimeString(dateTime)
                     }
                 }
 
