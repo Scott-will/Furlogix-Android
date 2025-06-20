@@ -27,6 +27,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.furlogix.Database.Entities.Reports
+import com.furlogix.helpers.DateTimeHelper
 import com.furlogix.ui.components.reports.ReportHistoryTableItem
 import com.furlogix.ui.navigation.Screen
 import com.furlogix.viewmodels.ReportEntryHistoryViewModel
@@ -37,13 +39,14 @@ import kotlinx.coroutines.delay
 @Composable
 fun ReportEntryHistoryScreen(navController: NavController, reportId: Int = 0,
                              reportViewModel: ReportViewModel = hiltViewModel(),
-                             reportTemplateViewModels: ReportTemplatesViewModels = hiltViewModel(),
-                             reportEntryHistoryViewModel: ReportEntryHistoryViewModel = hiltViewModel()) {
+                             reportTemplateViewModels: ReportTemplatesViewModels = hiltViewModel()) {
+    val currentReport = reportViewModel.currentReport.collectAsState()
     val templates = reportTemplateViewModels.reportTemplatesForCurrentReport.collectAsState()
     val entries by reportViewModel.reportEntries.collectAsState() // entries are collected as a map
     var showLoading by remember { mutableStateOf(true) }
 
     LaunchedEffect(reportId) {
+        reportViewModel.populateCurrentReport(reportId)
         reportTemplateViewModels.populateReportTemplatesForCurrentReport(reportId)
         delay(3000)
         showLoading = false
@@ -64,6 +67,11 @@ fun ReportEntryHistoryScreen(navController: NavController, reportId: Int = 0,
             CircularProgressIndicator(modifier = Modifier.fillMaxSize()) // Show loading indicator
         } else {
             LazyColumn(modifier = Modifier.fillMaxSize()) {
+                item{
+                    if(currentReport.value != null && currentReport.value!!.lastSentTime.isNotEmpty()){
+                        Text("Report last sent at: ${currentReport.value!!.lastSentTime}")
+                    }
+                }
                 item{
                     Row(modifier = Modifier
                         .fillMaxWidth()
