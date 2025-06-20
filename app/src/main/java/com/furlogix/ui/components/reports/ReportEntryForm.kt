@@ -19,7 +19,6 @@ import com.furlogix.helpers.DateTimeHelper
 import com.furlogix.ui.components.common.NoDataAvailable
 import com.furlogix.ui.components.common.SimpleDateTimePicker
 import com.furlogix.ui.components.reports.ReportEntry
-import java.time.format.DateTimeFormatter
 
 @SuppressLint("NewApi")
 @Composable

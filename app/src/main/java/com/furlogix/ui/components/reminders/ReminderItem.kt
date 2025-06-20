@@ -12,11 +12,11 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.furlogix.Database.Entities.Reminder
 import com.furlogix.ui.components.common.DeleteButton
+import com.furlogix.ui.theme.ClickableItemRed
 
 @Composable
 fun ReminderItem(data: Reminder,
@@ -26,7 +26,7 @@ onDeleteClick : (Reminder) -> Unit) {
             .fillMaxWidth()
             .padding(vertical = 5.dp),
         shape = RoundedCornerShape(12.dp),
-        color = Color.LightGray
+        color = ClickableItemRed
     ) {
         Row(
             modifier = Modifier

@@ -4,9 +4,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import com.furlogix.Furlogix
-import com.furlogix.logger.ILogger
 import com.furlogix.reminders.ReportsNotificationFactory
-import javax.inject.Inject
 
 class NotificationReceiver : BroadcastReceiver() {
     private val TAG = "Furlogix:" + NotificationReceiver::class.qualifiedName

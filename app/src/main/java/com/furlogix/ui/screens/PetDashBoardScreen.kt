@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -19,6 +20,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -26,6 +28,7 @@ import androidx.navigation.NavController
 import coil3.compose.rememberAsyncImagePainter
 import com.furlogix.ui.components.reports.PendingReportsDialog
 import com.furlogix.ui.navigation.Screen
+import com.furlogix.ui.theme.ButtonBlue
 import com.furlogix.viewmodels.PetViewModel
 import com.furlogix.viewmodels.ReportViewModel
 import com.furlogix.viewmodels.UserViewModel
@@ -96,6 +99,10 @@ fun PetDashboardScreen(navController: NavController, petId : Int, userViewModel:
                     onClick = { navController.navigate(Screen.ManageReports.route.replace("{petId}", petId.toString())) },
                     shape = RoundedCornerShape(20.dp),
                     modifier = buttonModifier,
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = ButtonBlue,
+                        contentColor = Color.Black
+                    )
                 ) {
                     Text(
                         "Reports",
@@ -110,7 +117,11 @@ fun PetDashboardScreen(navController: NavController, petId : Int, userViewModel:
                 Button(
                     onClick = { navController.navigate(Screen.Reminders.route) },
                     shape = RoundedCornerShape(20.dp),
-                    modifier = buttonModifier
+                    modifier = buttonModifier,
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = ButtonBlue,
+                        contentColor = Color.Black
+                    )
                 ) {
                     Text(
                         "Setup Reminders",
@@ -120,7 +131,11 @@ fun PetDashboardScreen(navController: NavController, petId : Int, userViewModel:
                 Button(
                     onClick = { navController.navigate("pets/$userId") },
                     shape = RoundedCornerShape(20.dp),
-                    modifier = buttonModifier
+                    modifier = buttonModifier,
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = ButtonBlue,
+                        contentColor = Color.Black
+                    )
                 ) {
                     Text(
                         "Pets",

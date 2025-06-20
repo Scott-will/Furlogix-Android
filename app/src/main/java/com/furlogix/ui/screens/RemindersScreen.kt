@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -18,6 +19,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat.startActivity
@@ -27,6 +29,7 @@ import com.furlogix.Furlogix
 import com.furlogix.R
 import com.furlogix.ui.components.reminders.RemindersList
 import com.furlogix.ui.components.reminders.ReportsReminder
+import com.furlogix.ui.theme.ButtonBlue
 import com.furlogix.viewmodels.RemindersViewModel
 
 
@@ -49,7 +52,11 @@ fun RemindersScreen(navController: NavController, viewModel: RemindersViewModel 
         RemindersList(reminders.value,onDeleteClick = {item -> viewModel.deleteReminder(item)})
 
         if(isPermissionGranted){
-            Button(onClick = {addReminder = true}) {
+            Button(onClick = {addReminder = true}, colors = ButtonDefaults.buttonColors(
+                contentColor = Color.Black,
+                containerColor = ButtonBlue
+            )
+            ) {
                 Text("Add Reminder")
             }
             if(addReminder){
@@ -62,7 +69,12 @@ fun RemindersScreen(navController: NavController, viewModel: RemindersViewModel 
                 onClick = {
                     val intent = Intent(Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM).setFlags(FLAG_ACTIVITY_NEW_TASK)
                     startActivity(Furlogix.applicationContext(), intent, null) },
-                content = { Text("Enable Permissions") }
+                content = { Text("Enable Permissions")
+                },
+                colors = ButtonDefaults.buttonColors(
+                    contentColor = Color.Black,
+                    containerColor = ButtonBlue
+                )
             )
         }
 

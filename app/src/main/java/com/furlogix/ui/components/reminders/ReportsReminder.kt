@@ -13,7 +13,6 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -29,8 +28,6 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import com.furlogix.ui.components.common.SimpleDateTimePicker
-import com.furlogix.ui.componets.common.DatePickerDialog
-import com.furlogix.ui.componets.common.TimePickerDialog
 import com.furlogix.viewmodels.RemindersViewModel
 import java.time.LocalDateTime
 
