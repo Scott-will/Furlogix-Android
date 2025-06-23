@@ -1,5 +1,6 @@
 package com.furlogix.viewmodels
 
+import android.annotation.SuppressLint
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.furlogix.Database.Entities.ReportEntry
@@ -9,6 +10,7 @@ import com.furlogix.email.CsvBuilder
 import com.furlogix.email.EmailHandler
 import com.furlogix.email.EmailWrapper
 import com.furlogix.email.IEmailHandler
+import com.furlogix.helpers.DateTimeHelper
 import com.furlogix.logger.ILogger
 import com.furlogix.repositories.IReportEntryRepository
 import com.furlogix.repositories.IReportTemplateRepository
@@ -23,6 +25,7 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.time.LocalDateTime
 import java.util.Date
 import javax.inject.Inject
 
@@ -42,6 +45,8 @@ class ReportViewModel @Inject constructor(
     var isError : StateFlow<Boolean> = _isError
     var errorMsg : StateFlow<String> = _errorMsg
 
+    private var _currentReport = MutableStateFlow<Reports?>(null)
+    var currentReport : StateFlow<Reports?> = _currentReport
     val reports = reportRepository.reportsObservable()
         .stateIn(viewModelScope, SharingStarted.Lazily, emptyList())
 
@@ -54,6 +59,20 @@ class ReportViewModel @Inject constructor(
     //this is called everytime viewModel is created
     init {
         checkTooManyReportEntries()
+    }
+
+    fun populateCurrentReport(id: Int) {
+        viewModelScope.launch {
+            withContext(ioDispatcher){
+                try{
+                    _currentReport.value = reportRepository.getReportById(id)
+                }
+                catch (e : Exception){
+                    UpdateErrorState(true, "Failed to get report ${e.message}")
+                    logger.logError(TAG, "Failed to get report ${e.message}", e)
+                }
+            }
+        }
     }
 
     fun getReportNameById(id: Int) = flow {
@@ -125,13 +144,15 @@ class ReportViewModel @Inject constructor(
         }
     }
 
+    @SuppressLint("NewApi")
     fun gatherReportData(reportId: Int) {
         viewModelScope.launch {
             withContext(ioDispatcher) {
                 logger.log(TAG, "Gathering report data to send in email")
                 var entries = emptyList<ReportEntry>()
                 try{
-                    val reportName = reportRepository.getReportById(reportId).name
+                    val report = reportRepository.getReportById(reportId)
+                    val reportName = report.name
                     val templates = reportTemplateRepository.GetReportById(reportId)
                     entries = reportEntryRepository.getAllReportEntriesById(reportId)
                     var fileUri = CsvBuilder().buildAndWriteCsv(
@@ -148,6 +169,9 @@ class ReportViewModel @Inject constructor(
                     entries.forEach() { x ->
                         x.sent = true
                     }
+                    val helper = DateTimeHelper()
+                    report.lastSentTime = helper.FormatDateTimeString(LocalDateTime.now())
+                    reportRepository.updateReport(report)
                 }
                 catch(e : Exception){
                     UpdateErrorState(true, "Failed to send email: ${e.message}")

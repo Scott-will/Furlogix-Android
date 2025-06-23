@@ -42,6 +42,6 @@ class CsvBuilder {
     }
 
     fun getUriForFile(file: File): Uri {
-        return FileProvider.getUriForFile(Furlogix.applicationContext(), "com.example.vetapp.provider" , file)
+        return FileProvider.getUriForFile(Furlogix.applicationContext(), "com.furlogix.provider" , file)
     }
 }
