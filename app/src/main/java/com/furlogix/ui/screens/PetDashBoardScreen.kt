@@ -2,6 +2,7 @@ package com.furlogix.ui.screens
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -18,6 +19,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -27,6 +31,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import coil3.compose.rememberAsyncImagePainter
 import com.furlogix.ui.components.reports.PendingReportsDialog
+import com.furlogix.ui.help.HelpWizard
 import com.furlogix.ui.navigation.Screen
 import com.furlogix.ui.theme.ButtonBlue
 import com.furlogix.viewmodels.PetViewModel
@@ -45,11 +50,18 @@ fun PetDashboardScreen(navController: NavController, petId : Int, userViewModel:
     val currentUser by userViewModel.currentUser.collectAsState()
     val userId by userViewModel.userId.collectAsState(initial = 0L)
     val currentPet = petViewModel.currentPet.collectAsState()
+    var showHelp by remember { mutableStateOf(false) }
 
     if (currentUser != null && currentUser!!.pendingSentReports) {
         PendingReportsDialog(
             onConfirm = { userViewModel.setNoPendingReportsForUser() },
             onDismiss = { navController.navigate(Screen.Reports.route.replace("{petId}", petId.toString())) }
+        )
+    }
+
+    if(showHelp){
+        HelpWizard(
+            onFinish = {showHelp = false}
         )
     }
 
@@ -139,6 +151,25 @@ fun PetDashboardScreen(navController: NavController, petId : Int, userViewModel:
                 ) {
                     Text(
                         "Pets",
+                        fontSize = 17.sp
+                    )
+                }
+            }
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(16.dp)
+            ){
+                Button(
+                    onClick = {showHelp = true},
+                    shape = RoundedCornerShape(20.dp),
+                    modifier = buttonModifier,
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = ButtonBlue,
+                        contentColor = Color.Black
+                    )
+                ){
+                    Text(
+                        "Help",
                         fontSize = 17.sp
                     )
                 }
