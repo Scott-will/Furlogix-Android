@@ -1,4 +1,4 @@
-package com.furlogix.ui.components.reports
+package com.furlogix.ui.components.reports.write
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box

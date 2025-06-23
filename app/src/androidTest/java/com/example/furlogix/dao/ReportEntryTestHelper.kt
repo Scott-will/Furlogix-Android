@@ -48,7 +48,8 @@ class ReportEntryTestHelper(val userDao: UserDao,
         val reportTemplate = ReportTemplateField(name = name,
             reportId = reportId,
             fieldType = FieldType.TEXT,
-            icon = "")
+            icon = "",
+            units = "")
         reportTemplateDao.insert(reportTemplate)
         return reportTemplateDao.getReportById(reportId).last().uid
     }

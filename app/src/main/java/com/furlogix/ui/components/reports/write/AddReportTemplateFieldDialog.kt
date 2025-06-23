@@ -1,4 +1,4 @@
-package com.furlogix.ui.components.reports
+package com.furlogix.ui.components.reports.write
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -41,12 +41,14 @@ fun AddReportTemplateDialog(
     onSave: (ReportTemplateField) -> Unit,
     currentLabel: String,
     selectedType: String,
+    currentUnit: String,
     reportId : Int,
     update : Boolean = false,
     reportField : ReportTemplateField? = null){
-    val fieldTypes = FieldType.values()
+    val fieldTypes = FieldType.entries.toTypedArray()
     var textFieldValue by remember { mutableStateOf(currentLabel) }
     var typeFieldValue by remember { mutableStateOf(selectedType) }
+    var unitsFieldValue by remember { mutableStateOf(currentUnit) }
     var selectedIconName by remember { mutableStateOf<String>(R.drawable.paw.toString()) }
     Dialog(onDismissRequest = onDismiss) {
         Surface(
@@ -112,9 +114,27 @@ fun AddReportTemplateDialog(
                     }
                 }
                 Spacer(modifier = Modifier.height(16.dp))
+
+                //units
+                Text("Field Units: ")
+                OutlinedTextField(
+                    value = unitsFieldValue,
+                    onValueChange = { unitsFieldValue = it },
+                    label = { Text("Enter Units if desired") },
+                    keyboardOptions = KeyboardOptions.Default.copy(
+                        keyboardType = KeyboardType.Text
+                    ),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(8.dp),
+                )
+
+                Spacer(modifier = Modifier.height(8.dp))
+
                 ReportTemplateIconSelector(selectedIconName,
                     onIconSelected = { selectedIconName = it })
                 Spacer(modifier = Modifier.height(16.dp))
+
                 // Submit button to save the new field
                 Button(
                     onClick = {
@@ -128,6 +148,7 @@ fun AddReportTemplateDialog(
                             val newField = ReportTemplateField(
                                 reportId = reportId,
                                 name = textFieldValue,
+                                units = unitsFieldValue,
                                 icon = selectedIconName,
                                 fieldType = FieldType.valueOf(typeFieldValue) // Convert string to FieldType
                             )

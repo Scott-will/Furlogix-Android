@@ -23,8 +23,8 @@ data class ReportTemplateField(
     var reportId: Int,
     var fieldType : FieldType,
     var name : String,
-    var favourite : Boolean = false,
     var icon : String,
-    var optional : Boolean = true
+    var units : String
+
 
 )

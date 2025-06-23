@@ -1,4 +1,4 @@
-package com.furlogix.ui.components.reports
+package com.furlogix.ui.components.reports.read
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer

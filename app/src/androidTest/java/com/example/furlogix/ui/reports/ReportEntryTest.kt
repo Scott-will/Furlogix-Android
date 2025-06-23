@@ -11,7 +11,7 @@ import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTextReplacement
 import com.furlogix.Database.Entities.ReportTemplateField
 import com.furlogix.reports.FieldType
-import com.furlogix.ui.components.reports.ReportEntry
+import com.furlogix.ui.components.reports.read.ReportEntry
 import org.junit.Rule
 import org.junit.Test
 
@@ -31,6 +31,7 @@ class ReportEntryTest {
             name = "Template Field Test",
             fieldType = FieldType.TEXT,
             icon="test", reportId = 0,
+            units = ""
         )
 
         val text = mutableStateOf("")
@@ -48,6 +49,7 @@ class ReportEntryTest {
             name = "Template Field Test",
             fieldType = FieldType.NUMBER,
             icon="test", reportId = 0,
+            units = ""
         )
 
         val text = mutableStateOf("")
@@ -72,6 +74,7 @@ class ReportEntryTest {
             name = "Template Field Test",
             fieldType = FieldType.TEXT,
             icon="test", reportId = 0,
+            units = ""
         )
 
         val text = mutableStateOf("")
@@ -96,6 +99,7 @@ class ReportEntryTest {
             name = "Template Field Test",
             fieldType = FieldType.CHECKBOX,
             icon="test", reportId = 0,
+            units = ""
         )
 
         val text = mutableStateOf(false.toString())

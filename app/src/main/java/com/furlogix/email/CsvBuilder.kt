@@ -25,7 +25,11 @@ class CsvBuilder {
     }
 
     fun buildCsv( writer : BufferedWriter, entries : List<ReportEntry>, templates : List<ReportTemplateField>){
-        writer.write(templates.joinToString(",") { it.name })
+        writer.write(
+            templates.joinToString(",") {
+                if (!it.units.isNullOrBlank()) "${it.name} (${it.units})" else it.name
+            }
+        )
         writer.newLine()
         val reportMap: Map<String, List<ReportEntry>> = entries.groupBy { it.timestamp }
 

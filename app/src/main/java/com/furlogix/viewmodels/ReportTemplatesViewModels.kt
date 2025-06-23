@@ -32,7 +32,7 @@ class ReportTemplatesViewModels @Inject constructor(private val logger : ILogger
     val reportTemplateFields = reportTemplateRepository.ReportTemplateObservable()
         .stateIn(viewModelScope, SharingStarted.Lazily, emptyList())
 
-    private var _currentReportTemplate = MutableStateFlow(ReportTemplateField(0, 0, FieldType.TEXT, "paw",false, "paw"))
+    private var _currentReportTemplate = MutableStateFlow(ReportTemplateField(0, 0, FieldType.TEXT, "paw", "paw", ""))
     val currentReportTemplate : MutableStateFlow<ReportTemplateField> = _currentReportTemplate
 
     private var _reportTemplatesForCurrentReport = MutableStateFlow<List<ReportTemplateField>>(

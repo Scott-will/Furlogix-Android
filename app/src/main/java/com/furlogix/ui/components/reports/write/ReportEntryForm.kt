@@ -1,4 +1,4 @@
-package com.furlogix.ui.componets.reports
+package com.furlogix.ui.components.reports.write
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Column
@@ -18,7 +18,7 @@ import com.furlogix.Database.Entities.ReportTemplateField
 import com.furlogix.helpers.DateTimeHelper
 import com.furlogix.ui.components.common.NoDataAvailable
 import com.furlogix.ui.components.common.SimpleDateTimePicker
-import com.furlogix.ui.components.reports.ReportEntry
+import com.furlogix.ui.components.reports.read.ReportEntry
 
 @SuppressLint("NewApi")
 @Composable

@@ -7,7 +7,7 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTextReplacement
 import com.furlogix.Database.Entities.Reports
-import com.furlogix.ui.components.reports.AddReportDialog
+import com.furlogix.ui.components.reports.write.AddReportDialog
 import org.junit.Rule
 import org.junit.Test
 

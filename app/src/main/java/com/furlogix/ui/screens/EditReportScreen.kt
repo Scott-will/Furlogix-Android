@@ -26,8 +26,8 @@ import androidx.navigation.NavController
 import com.furlogix.Database.Entities.ReportTemplateField
 import com.furlogix.reports.FieldType
 import com.furlogix.ui.components.common.NoDataAvailable
-import com.furlogix.ui.components.reports.AddReportTemplateDialog
-import com.furlogix.ui.components.reports.ReporttemplatesList
+import com.furlogix.ui.components.reports.write.AddReportTemplateDialog
+import com.furlogix.ui.components.reports.read.ReporttemplatesList
 import com.furlogix.viewmodels.ReportTemplatesViewModels
 import com.furlogix.viewmodels.ReportViewModel
 
@@ -136,6 +136,7 @@ fun EditReportScreen(navController: NavController, reportId : Int,
                 selectedType = FieldType.entries.first().toString()
             },
             currentLabel = label,
+            currentUnit = "",
             selectedType = selectedType,
             reportId = reportId
         )
