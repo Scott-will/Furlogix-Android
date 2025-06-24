@@ -1,5 +1,6 @@
 package com.furlogix.ui.components.common
 
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -11,12 +12,17 @@ import androidx.compose.ui.unit.sp
 
 @Composable
 fun TitleText(text : String, modifier : Modifier) {
-    Text(text, fontWeight = FontWeight.Bold,
-        fontSize = 32.sp,
-        modifier = modifier,
-        style = MaterialTheme.typography.headlineMedium,
-        textAlign = TextAlign.Center,
-        color = Color.DarkGray
-        )
-
+    Text(
+        text = text,
+        style = MaterialTheme.typography.headlineMedium.copy(
+            fontWeight = FontWeight.Bold,
+            fontSize = 32.sp,
+            letterSpacing = 1.5.sp,
+            color = Color.DarkGray
+        ),
+        modifier = modifier
+            .fillMaxWidth(),
+        textAlign = TextAlign.Center
+    )
 }
+

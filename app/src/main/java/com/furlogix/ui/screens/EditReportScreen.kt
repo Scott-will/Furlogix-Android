@@ -4,8 +4,10 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
@@ -19,8 +21,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.furlogix.Database.Entities.ReportTemplateField
@@ -59,16 +63,15 @@ fun EditReportScreen(navController: NavController, reportId : Int,
         modifier = Modifier
             .fillMaxWidth()
     ) {
-
+        Spacer(modifier = Modifier.height(16.dp))
         Row(modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 16.dp),
             horizontalArrangement = Arrangement.spacedBy(16.dp)){
-
             Button(onClick = {showDialog = true},
                 modifier = Modifier.weight(1f)
                     .padding(top = 8.dp) ) {
-                Text("Add report template")
+                Text("Add report template", fontSize = 16.sp)
             }
 
             Button(onClick = {
@@ -90,10 +93,11 @@ fun EditReportScreen(navController: NavController, reportId : Int,
             },
                 modifier = Modifier.weight(1f)
                     .padding(top = 8.dp) ) {
-                Text("Save")
+                Text("Save", fontSize = 16.sp)
             }
         }
         if (report != null) {
+            Spacer(modifier = Modifier.height(16.dp))
             Text("Report Name: ")
             if (report.name.isEmpty()) {
                 Text("Loading report...")
@@ -106,12 +110,14 @@ fun EditReportScreen(navController: NavController, reportId : Int,
                     keyboardOptions = KeyboardOptions.Default.copy(
                         keyboardType = KeyboardType.Text
                     ),
+                    textStyle = TextStyle(fontSize = 20.sp),
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(8.dp)
                 )
             }
         }
+        Spacer(modifier = Modifier.height(16.dp))
         Box(modifier = Modifier
             .fillMaxSize()){
             if(reportsTemplates.size == 0 ){

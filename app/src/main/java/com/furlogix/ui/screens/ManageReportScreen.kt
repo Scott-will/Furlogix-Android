@@ -61,7 +61,8 @@ fun ManageReportScreen(navController: NavController, petId : Int,
             }
         }
         // Show the list of form items
-        TitleText("${currentPet.value?.name} Reports", modifier = Modifier.fillMaxWidth().align(Alignment.CenterHorizontally),)
+        Spacer(modifier = Modifier.height(16.dp))
+        TitleText("${currentPet.value?.name} Reports", modifier = Modifier.fillMaxWidth().align(Alignment.CenterHorizontally))
         ReportsList(reports,
             onDeleteClick = {item -> reportViewModel.deleteReport(item)},
             onEditClick = {item -> navController.navigate(Screen.EditReport.route.replace("{reportId}", item.Id.toString()))},

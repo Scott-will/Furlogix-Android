@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -30,6 +31,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import coil3.compose.rememberAsyncImagePainter
+import com.furlogix.ui.components.common.TitleText
 import com.furlogix.ui.components.reports.PendingReportsDialog
 import com.furlogix.ui.help.HelpWizard
 import com.furlogix.ui.navigation.Screen
@@ -72,10 +74,8 @@ fun PetDashboardScreen(navController: NavController, petId : Int, userViewModel:
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        Text(
-            text = "${currentPet.value?.name} Dashboard",
-            style = MaterialTheme.typography.headlineMedium
-        )
+        Spacer(modifier = Modifier.height(16.dp))
+        currentPet.value?.name?.let { TitleText("$it Dashboard", modifier = Modifier.fillMaxWidth().align(Alignment.CenterHorizontally)) }
 
         photoUri?.let { uriString ->
             androidx.compose.material3.Card(

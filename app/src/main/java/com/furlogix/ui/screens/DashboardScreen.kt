@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
@@ -24,11 +25,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import coil3.compose.rememberAsyncImagePainter
+import com.furlogix.R
 import com.furlogix.ui.navigation.Screen
 import com.furlogix.viewmodels.PetViewModel
 import com.furlogix.viewmodels.UserViewModel
@@ -76,22 +81,30 @@ fun DashboardScreen(navController: NavController, userId : Long, userViewModel: 
                     horizontalArrangement = Arrangement.spacedBy(16.dp)
                 ) {
                     // Display the pet image, with a placeholder if no image is available.
-                    Image(
-                        painter = rememberAsyncImagePainter(
-                            model = pet.photoUri ?: "https://via.placeholder.com/150"
-                        ),
-                        contentDescription = "Pet Image",
-                        contentScale = ContentScale.Crop,
-                        modifier = Modifier
-                            .size(100.dp)
-                            .clip(CircleShape)
-                    )
+                    if(pet.photoUri != null){
+                        Image(
+                            painter = rememberAsyncImagePainter(
+                                model = pet.photoUri
+                            ),
+                            contentDescription = "Pet Image",
+                            contentScale = ContentScale.Crop,
+                            modifier = Modifier
+                                .size(100.dp)
+                                .clip(CircleShape)
+                        )
+                    }
+
                     // Display the pet's name.
                     Text(
                         text = pet.name,
-                        style = MaterialTheme.typography.titleMedium,
-                        modifier = Modifier.weight(1f)
+                        style = MaterialTheme.typography.titleMedium.copy(fontSize = MaterialTheme.typography.titleMedium.fontSize * 2),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .wrapContentHeight(),
+                        textAlign = TextAlign.Center,
+                        fontFamily = FontFamily(Font(R.font.rubik_bold))
                     )
+
                 }
             }
         }

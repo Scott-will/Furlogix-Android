@@ -21,6 +21,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.furlogix.Database.Entities.ReportTemplateField
 import com.furlogix.ui.components.common.DeleteButton
 import com.furlogix.ui.components.common.DeleteWarning
@@ -53,6 +54,7 @@ fun ReportTemplateItem(data: ReportTemplateField,
                 text = data.name,
                 modifier = Modifier.fillMaxWidth(),
                 fontWeight = FontWeight.Bold,
+                fontSize = 20.sp,
                 textAlign = TextAlign.Center
             )
             Row(){

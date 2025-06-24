@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -64,13 +65,21 @@ fun ReportEntryHistoryScreen(navController: NavController, reportId: Int = 0,
     val groupedEntries = entries.flatMap { it.value }.groupBy { it.timestamp }
 
     Column{
-        Row{
+        Spacer(modifier = Modifier.height(16.dp))
+        Row(modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp),
+            horizontalArrangement = Arrangement.spacedBy(16.dp)){
             Button(onClick =
-            {navController.navigate(Screen.ReportEntry.route.replace("{reportId}", reportId.toString()))}){
-                Text("Add Data")
+            {navController.navigate(Screen.ReportEntry.route.replace("{reportId}", reportId.toString()))},
+                modifier = Modifier.weight(1f)
+                    .padding(top = 8.dp)){
+                Text("Add Data", fontSize = 18.sp)
             }
-            Button(onClick = { reportViewModel.gatherReportData(reportId) }) {
-                Text("Send Reports")
+            Button(onClick = { reportViewModel.gatherReportData(reportId) },
+                modifier = Modifier.weight(1f)
+                    .padding(top = 8.dp)) {
+                Text("Send Reports", fontSize = 18.sp)
             }
         }
         Spacer(modifier = Modifier.fillMaxWidth().padding(10.dp))
