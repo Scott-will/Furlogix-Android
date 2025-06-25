@@ -40,7 +40,8 @@ androidx-runtime-livedata = { group = "androidx.compose.runtime", name = "runtim
 work-runtime-ktx = { module = "androidx.work:work-runtime-ktx", version.ref = "workerWersion" }
 androidx-hilt-common = { group = "androidx.hilt", name = "hilt-common", version.ref = "hiltCommon" }
 androidx-hilt-work = { group = "androidx.hilt", name = "hilt-work", version.ref = "hiltWork" }
-io-mockk = {group = "io.mockk", name = "mockk", version.ref = "mockkVersion"}
+io-mockk = { group = "io.mockk", name = "mockk", version.ref = "mockkVersion" }
+io-mockk-android = { group = "io.mockk", name = "mockk-android", version.ref = "mockkVersion" }
 androidx-navigation = {group = "androidx.navigation", name = "navigation-compose", version.ref = "navigationComposeVersion"}
 androidx-room-runtime = {group = "androidx.room", name = "room-runtime", version.ref = "roomVersion"}
 androidx-room-ktx = {group = "androidx.room", name = "room-ktx", version.ref = "roomVersion"}

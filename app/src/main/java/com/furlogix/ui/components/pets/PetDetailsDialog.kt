@@ -123,6 +123,7 @@ fun PetDetailsDialog(
 
         },
         confirmButton = {
+            val isValid = name.isNotBlank() && type.isNotBlank()
             Button(onClick = {
                 onDismiss();
                 val updatedPet = pet.copy(
@@ -135,20 +136,26 @@ fun PetDetailsDialog(
                 } else {
                     petViewModel.updatePet(updatedPet)
                 }
-            }) {
+            },
+                enabled = isValid) {
                 Text("Save")
             }
         },
         dismissButton = {
+            val dismissText = if (isNewPet) "Close" else "Delete"
+            val dismissAction = if (isNewPet) onDismiss else onDelete
+
             Button(
-                onClick = onDelete,
-                colors = ButtonDefaults.buttonColors(
+                onClick = dismissAction,
+                colors = if (isNewPet) ButtonDefaults.buttonColors()
+                else ButtonDefaults.buttonColors(
                     containerColor = Color.Red,
                     contentColor = Color.White
                 )
             ) {
-                Text("Delete")
+                Text(dismissText)
             }
         }
+
     )
 }
