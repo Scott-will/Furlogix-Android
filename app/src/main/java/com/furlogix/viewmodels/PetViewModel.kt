@@ -115,4 +115,16 @@ class PetViewModel @Inject constructor(
         }
     }
 
+    fun updatePet(pet : Pet){
+        viewModelScope.launch(ioDispatcher) {
+            try{
+                petRepository.updatePet(pet)
+                _pets.value = petRepository.getPetsForUser(pet.userId)
+            }
+            catch (e : Exception) {
+                logger.logError(TAG, "Failed to update pet ${pet.userId} ${e.message}", e)
+            }
+        }
+    }
+
 }

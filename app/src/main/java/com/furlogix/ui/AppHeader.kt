@@ -16,10 +16,12 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.map
 import androidx.navigation.NavController
 import com.furlogix.ui.navigation.Screen
 import com.furlogix.viewmodels.UserViewModel
@@ -30,7 +32,7 @@ import kotlinx.coroutines.flow.map
 @Composable
 fun AppHeader(navController: NavController, userViewModel: UserViewModel = hiltViewModel()) {
     val userNameFlow = userViewModel.userName.map { it ?: "Guest" }
-    val userName by userNameFlow.collectAsState(initial = "Guest")
+    val userName by userNameFlow.observeAsState(initial = "Guest")
     val userId by userViewModel.userId.collectAsState(initial = 0L)
 
     val currentBackStackEntry by navController.currentBackStackEntryFlow.collectAsState(null)

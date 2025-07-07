@@ -43,6 +43,14 @@ android {
     buildFeatures {
         compose = true
     }
+    packaging {
+        resources {
+            excludes += setOf(
+                "META-INF/LICENSE.md",
+                "META-INF/LICENSE-notice.md"
+            )
+        }
+    }
 }
 
 dependencies {
@@ -63,6 +71,7 @@ dependencies {
     implementation(libs.androidx.navigation.testing)
     testImplementation(libs.junit)
     testImplementation(libs.io.mockk)
+    androidTestImplementation(libs.io.mockk.android)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.ui.test.junit4)

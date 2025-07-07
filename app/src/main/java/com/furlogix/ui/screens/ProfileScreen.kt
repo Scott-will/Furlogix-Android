@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.OutlinedTextField
@@ -16,6 +17,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -42,11 +44,11 @@ fun ProfileScreen(
     petViewModel: PetViewModel = hiltViewModel(),
     navController: NavController
 ) {
-    val userName by viewModel.userName.collectAsState(initial = "Guest")
-    val userEmail by viewModel.userEmail.collectAsState(initial = "example@example.com")
+    val userName by viewModel.userName.observeAsState(initial = "")
+    val userEmail by viewModel.userEmail.observeAsState(initial = "")
 
-    var name by remember { mutableStateOf(userName.ifBlank { "Guest" }) }
-    var email by remember { mutableStateOf(userEmail.ifBlank { "example@example.com" }) }
+    var name = userName.ifBlank { "" }
+    var email = userEmail.ifBlank { "" }
     var selectedPet by remember { mutableStateOf<Pet?>(null) }
     var showConfirmDelete by remember { mutableStateOf(false) }
     val pets by petViewModel.pets.collectAsState()
@@ -54,6 +56,7 @@ fun ProfileScreen(
 
     LaunchedEffect(userId) {
         if (userId != 0L) {
+            viewModel.populateCurrentUser()
             petViewModel.loadPetsForUser(userId)
         }
     }
@@ -101,6 +104,13 @@ fun ProfileScreen(
                     selectedPet = pet
                 })
             }
+        }
+
+        Button(
+            onClick = { selectedPet = Pet(userId = userId, name = "", type = "", description = "", photoUri = null) },
+            modifier = Modifier.align(Alignment.End),
+        ) {
+            Text("Add Pet")
         }
 
         HorizontalDivider(
@@ -152,7 +162,10 @@ fun ProfileScreen(
     if (selectedPet != null && !showConfirmDelete) {
         PetDetailsDialog(
             pet = selectedPet!!,
-            onDismiss = { selectedPet = null },
+            onDismiss = {
+                selectedPet = null;
+                petViewModel.loadPetsForUser(userId)
+            },
             onDelete = { showConfirmDelete = true }
         )
     }
@@ -165,7 +178,10 @@ fun ProfileScreen(
                 showConfirmDelete = false
                 selectedPet = null
             },
-            onDismiss = { showConfirmDelete = false }
+            onDismiss = {
+                showConfirmDelete = false
+                petViewModel.loadPetsForUser(userId)
+            }
         )
     }
 }

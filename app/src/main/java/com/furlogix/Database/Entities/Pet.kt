@@ -17,9 +17,9 @@ import androidx.room.PrimaryKey
 )
 data class Pet(
     @PrimaryKey(autoGenerate = true) val uid: Int = 0,
-    val name: String,
-    val type: String,
+    var name: String,
+    var type: String,
     val description: String,
     val userId: Long,
-    val photoUri: String? = null
+    var photoUri: String? = null
 )

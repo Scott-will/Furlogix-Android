@@ -27,8 +27,8 @@ class UserViewModel @Inject constructor(private val logger : ILogger,
     private var _currentUser = MutableStateFlow<User?>(null);
     val currentUser : StateFlow<User?> = _currentUser
 
-    val userName = userRepository.getCurrentUserName().asFlow()
-    val userEmail = userRepository.getCurrentUserEmail().asFlow()
+    val userName = userRepository.getCurrentUserName()
+    val userEmail = userRepository.getCurrentUserEmail()
     val userId: Flow<Long> = userRepository.getCurrentUserIdAsFlow()
 
     private val TAG = "Furlogix:" + ReportViewModel::class.qualifiedName
