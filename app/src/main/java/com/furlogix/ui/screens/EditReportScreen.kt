@@ -30,8 +30,8 @@ import androidx.navigation.NavController
 import com.furlogix.Database.Entities.ReportTemplateField
 import com.furlogix.reports.FieldType
 import com.furlogix.ui.components.common.NoDataAvailable
-import com.furlogix.ui.components.reports.write.AddReportTemplateDialog
 import com.furlogix.ui.components.reports.read.ReporttemplatesList
+import com.furlogix.ui.components.reports.write.AddReportTemplateDialog
 import com.furlogix.viewmodels.ReportTemplatesViewModels
 import com.furlogix.viewmodels.ReportViewModel
 

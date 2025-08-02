@@ -25,7 +25,6 @@ import androidx.lifecycle.map
 import androidx.navigation.NavController
 import com.furlogix.ui.navigation.Screen
 import com.furlogix.viewmodels.UserViewModel
-import kotlinx.coroutines.flow.map
 
 
 @OptIn(ExperimentalMaterial3Api::class)
