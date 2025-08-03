@@ -51,6 +51,14 @@ class ReminderItemTest {
 
         composeTestRule.onNodeWithContentDescription(R.string.delete_text.toString()).performClick()
 
+        composeTestRule
+            .onNodeWithText("Are you sure you want to delete this reminder?")
+            .assertIsDisplayed()
+
+        composeTestRule
+            .onNodeWithText("OK")
+            .performClick()
+
         assert(deleteCalled) { "Delete button did not trigger the callback" }
     }
 
@@ -62,12 +70,10 @@ class ReminderItemTest {
             ReminderItem(data = reminder, onDeleteClick = {})
         }
 
-        // Assert that all texts are rendered within a Row (you can check this by checking the presence of 'Row' in the hierarchy)
         composeTestRule.onNode(hasText("Send")).assertIsDisplayed()
         composeTestRule.onNode(hasText("10:00 AM")).assertIsDisplayed()
         composeTestRule.onNode(hasText("Daily")).assertIsDisplayed()
 
-        // Check if the surface is displayed with correct background color
         composeTestRule.onNodeWithText("Send").assertIsDisplayed()
     }
 

@@ -58,7 +58,6 @@ import com.furlogix.Furlogix
 import com.furlogix.R
 import com.furlogix.ui.components.reminders.RemindersList
 import com.furlogix.ui.components.reminders.ReportsReminder
-import com.furlogix.ui.theme.ButtonBlue
 import com.furlogix.viewmodels.RemindersViewModel
 
 
