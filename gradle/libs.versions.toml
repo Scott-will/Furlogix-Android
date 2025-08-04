@@ -19,6 +19,7 @@ roomVersion = "2.6.1"
 daggerVersion = "2.52"
 hiltNavigationVersion = "1.2.0"
 navigationTesting = "2.8.5"
+roomRuntimeAndroid = "2.7.2"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -51,6 +52,7 @@ com-google-dagger = {group = "com.google.dagger", name = "hilt-android", version
 com-google-dagger-compiler = {group = "com.google.dagger", name = "hilt-compiler", version.ref = "daggerVersion"}
 androidx-hilt-navigation = {group = "androidx.hilt", name = "hilt-navigation-compose", version.ref = "hiltNavigationVersion"}
 androidx-navigation-testing = { group = "androidx.navigation", name = "navigation-testing", version.ref = "navigationTesting" }
+androidx-room-runtime-android = { group = "androidx.room", name = "room-runtime-android", version.ref = "roomRuntimeAndroid" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

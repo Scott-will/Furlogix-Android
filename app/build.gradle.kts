@@ -69,6 +69,7 @@ dependencies {
     implementation(libs.androidx.hilt.common)
     implementation(libs.androidx.hilt.work)
     implementation(libs.androidx.navigation.testing)
+    implementation(libs.androidx.room.runtime.android)
     testImplementation(libs.junit)
     testImplementation(libs.io.mockk)
     androidTestImplementation(libs.io.mockk.android)
