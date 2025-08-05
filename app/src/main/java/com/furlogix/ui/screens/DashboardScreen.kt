@@ -38,7 +38,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
@@ -54,15 +53,14 @@ import androidx.navigation.NavController
 import coil3.compose.rememberAsyncImagePainter
 import com.furlogix.Database.Entities.Pet
 import com.furlogix.R
+import com.furlogix.ui.components.common.Header
 import com.furlogix.ui.navigation.Screen
 import com.furlogix.viewmodels.PetViewModel
-import com.furlogix.viewmodels.UserViewModel
 
 @Composable
 fun DashboardScreen(
     navController: NavController,
     userId: Long,
-    userViewModel: UserViewModel = hiltViewModel(),
     petViewModel: PetViewModel = hiltViewModel()
 ) {
     val pets by petViewModel.pets.collectAsState()
@@ -95,45 +93,7 @@ fun DashboardScreen(
         ) {
             // Header Section
             item {
-                Column(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    // Animated header icon
-                    val scale by animateFloatAsState(
-                        targetValue = 1f,
-                        animationSpec = tween(1000),
-                        label = "headerScale"
-                    )
-
-                    Icon(
-                        imageVector = Icons.Default.Favorite,
-                        contentDescription = "Pets",
-                        tint = Color(0xFF6366F1),
-                        modifier = Modifier
-                            .size(48.dp)
-                            .scale(scale)
-                    )
-
-                    Spacer(modifier = Modifier.height(12.dp))
-
-                    Text(
-                        text = "My Furry Family",
-                        fontSize = 32.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = Color(0xFF1E293B),
-                        textAlign = TextAlign.Center,
-                        fontFamily = FontFamily(Font(R.font.rubik_bold))
-                    )
-
-                    Text(
-                        text = "${pets.size} adorable companion${if (pets.size != 1) "s" else ""}",
-                        fontSize = 16.sp,
-                        color = Color(0xFF64748B),
-                        textAlign = TextAlign.Center,
-                        modifier = Modifier.padding(top = 4.dp)
-                    )
-                }
+                Header("My Furry Family", "${pets.size} adorable companion${if (pets.size != 1) "s" else ""}")
             }
 
             // Pet Cards
@@ -159,7 +119,7 @@ fun DashboardScreen(
 }
 
 @Composable
-private fun ModernPetCard(
+fun ModernPetCard(
     pet: Pet, // Replace with your Pet data class
     onClick: () -> Unit
 ) {
@@ -289,14 +249,6 @@ private fun ModernPetCard(
                     )
 
                     Spacer(modifier = Modifier.height(4.dp))
-
-                    Text(
-                        text = "Tap to view details",
-                        style = MaterialTheme.typography.bodyMedium.copy(
-                            color = Color(0xFF64748B),
-                            fontSize = 14.sp
-                        )
-                    )
                 }
 
                 // Arrow indicator
