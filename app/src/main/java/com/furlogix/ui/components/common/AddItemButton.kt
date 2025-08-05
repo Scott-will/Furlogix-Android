@@ -1,12 +1,16 @@
 package com.furlogix.ui.components.common
 
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.FloatingActionButtonDefaults
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.dp
 
 @Composable
 fun AddItemButton(
@@ -15,14 +19,19 @@ fun AddItemButton(
 ) {
     FloatingActionButton(
         onClick = onClick,
-        containerColor = MaterialTheme.colorScheme.primary,
-        modifier = modifier
+        modifier = Modifier
+            .padding(24.dp),
+        containerColor = Color(0xFF059669),
+        contentColor = Color.White,
+        elevation = FloatingActionButtonDefaults.elevation(
+            defaultElevation = 12.dp,
+            pressedElevation = 16.dp
+        )
     ) {
         Icon(
-            painter = painterResource(id = android.R.drawable.ic_input_add),
+            imageVector = Icons.Default.Add,
             contentDescription = "Add",
-            tint = Color.White,
+            modifier = Modifier.size(24.dp)
         )
     }
-
 }

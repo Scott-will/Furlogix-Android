@@ -65,7 +65,7 @@ fun ComposeNavGraph(
                 Screen.Dashboard.route,
                 arguments = listOf(navArgument("userId") { type = NavType.LongType })
             ) {
-                DashboardScreen(navController, userId, userViewModel, petViewModel)
+                DashboardScreen(navController, userId, petViewModel)
             }
             composable(
                 Screen.PetDashboard.route,
